@@ -1,11 +1,14 @@
 package fi.tuni.swdesign.group3;
 
+import javafx.stage.Stage;
+
 /**
  *
  * Placeholder for main
  */
 public class Main {
-    public static void main(String args[]){
-    System.out.println("Just a dummy class");
+    public static void main(String args[]) throws Exception{
+        MainView mainView = new MainView();
+        mainView.initGUI();
     }
 }
