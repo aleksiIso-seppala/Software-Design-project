@@ -1,7 +1,5 @@
 package fi.tuni.swdesign.group3;
 
-import javafx.stage.Stage;
-
 /**
  *
  * Placeholder for main
