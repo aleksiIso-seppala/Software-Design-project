@@ -4,6 +4,9 @@
  */
 package fi.tuni.swdesign.group3;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import javafx.application.Application;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
@@ -14,6 +17,7 @@ import javafx.stage.Stage;
 public class MainView extends Application {
 
     private TabPane tabPane;
+    private ArrayList<String> locations;
 
     @Override
     public void start(Stage stage) {
@@ -22,10 +26,23 @@ public class MainView extends Application {
         StartMenuView startMenuView = new StartMenuView(this, this.tabPane);
         stage.setScene(startMenuView.getScene());
         stage.show();
+        
+        // Hardcode implementation for prototype.
+        this.locations = new ArrayList<>();
+        this.locations.add("Tampere");
+        this.locations.add("Helsinki");
+        this.locations.add("Oulu");
+        this.locations.add("Rovaniemi");
+        this.locations.add("Kuopio");
+        Collections.sort(this.locations);
     }
     
-    TabPane getTabPane() {
+    public TabPane getTabPane() {
         return this.tabPane;
+    }
+    
+    public ArrayList<String> getLocations() {
+        return this.locations;
     }
     
     public void initGUI() {

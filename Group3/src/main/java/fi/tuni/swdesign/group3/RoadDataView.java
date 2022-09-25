@@ -9,10 +9,13 @@ import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -55,6 +58,7 @@ public class RoadDataView {
         
         ChoiceBox locationBox = new ChoiceBox();
         locationBox.setPrefWidth(MED_ELEMENT_WIDTH);
+        locationBox.getItems().addAll(this.mainView.getLocations());
         
         Label timelineLabel = new Label("Timeline");
         
@@ -86,6 +90,7 @@ public class RoadDataView {
         
         TreeView checkBoxTree = new TreeView();
         checkBoxTree.setPrefSize(CHECK_BOX_TREE_WIDTH, CHECK_BOX_TREE_HEIGHT);
+        populateCheckBoxTree(checkBoxTree);
         
         Button calculateButton = new Button("Calculate");
         calculateButton.setPrefWidth(SHORT_ELEMENT_WIDTH);
@@ -119,6 +124,47 @@ public class RoadDataView {
         gridPane.add(trafficMsgButton, 2, 3);
         
         roadDataTab.setContent(gridPane);
+    }
+    
+    private void populateCheckBoxTree(TreeView checkBoxTree) {
+        TreeItem root = new TreeItem();
+        checkBoxTree.setRoot(root);
+        checkBoxTree.setShowRoot(false);
+        TreeItem maintenanceItem = new TreeItem("Maintenance");
+        TreeItem conditionItem = new TreeItem("Condition forecast");
+        root.getChildren().addAll(maintenanceItem, conditionItem);
+        
+        // Hardcode implementation for prototype.
+        for (int i = 1; i < 6; i++) {
+            CheckBox checkBox = new CheckBox("Maintenance task " + i);
+            TreeItem checkBoxItem = new TreeItem(checkBox);
+            maintenanceItem.getChildren().add(checkBoxItem);
+        }
+        
+        CheckBox visibilityCheckBox = new CheckBox("Visibility");
+        TreeItem visibilityItem = new TreeItem(visibilityCheckBox);
+        CheckBox frictionCheckBox = new CheckBox("Friction");
+        TreeItem frictionItem = new TreeItem(frictionCheckBox);
+        CheckBox precipitationCheckBox = new CheckBox("Precipitation");
+        TreeItem precipitationItem = new TreeItem(precipitationCheckBox);
+        CheckBox slipperinessCheckBox = new CheckBox("Winter slipperiness");
+        TreeItem slipperinessItem = new TreeItem(slipperinessCheckBox);
+        CheckBox overallCheckBox = new CheckBox("Overall");
+        TreeItem overallItem = new TreeItem(overallCheckBox);
+        conditionItem.getChildren().addAll(visibilityItem, frictionItem, 
+                precipitationItem, slipperinessItem, overallItem);
+        
+        TreeItem timeItem = new TreeItem("Time (hours)");
+        Slider timeSlider = new Slider(2, 12, 2);
+        timeSlider.setShowTickMarks(true);
+        timeSlider.setShowTickLabels(true);
+        timeSlider.setMajorTickUnit(2);
+        timeSlider.setMinorTickCount(0);
+        timeSlider.setBlockIncrement(2);
+        timeSlider.setSnapToTicks(true);
+        TreeItem sliderItem = new TreeItem(timeSlider);
+        conditionItem.getChildren().add(timeItem);
+        conditionItem.getChildren().add(sliderItem);
     }
     
 }
