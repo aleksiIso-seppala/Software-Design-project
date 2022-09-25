@@ -18,9 +18,11 @@ public class MainView extends Application {
 
     private TabPane tabPane;
     private ArrayList<String> locations;
+    private Stage stage;
 
     @Override
     public void start(Stage stage) {
+        this.stage = stage;
         stage.setTitle("RoadCast");
         this.tabPane = new TabPane();
         StartMenuView startMenuView = new StartMenuView(this, this.tabPane);
@@ -43,6 +45,10 @@ public class MainView extends Application {
     
     public ArrayList<String> getLocations() {
         return this.locations;
+    }
+    
+    public Stage getStage() {
+        return this.stage;
     }
     
     public void initGUI() {
