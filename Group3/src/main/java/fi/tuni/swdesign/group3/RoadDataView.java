@@ -118,7 +118,7 @@ public class RoadDataView {
         buttonHBox.getChildren().addAll(calculateButton, errorInfoLabel, 
                 dataButton, prefButton);
         
-        Button trafficMsgButton = new Button("Traffic messages (#)");
+        Button trafficMsgButton = new Button("Traffic messages (5)");
         trafficMsgButton.setPrefWidth(LONG_ELEMENT_WIDTH);
         
         gridPane.add(locationLabel, 0, 0);
