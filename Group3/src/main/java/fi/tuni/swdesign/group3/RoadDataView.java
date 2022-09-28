@@ -4,7 +4,6 @@
  */
 package fi.tuni.swdesign.group3;
 
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -136,21 +135,27 @@ public class RoadDataView {
         dataButton.setOnAction(new EventHandler<>() {
             @Override
             public void handle(ActionEvent t) {
-                RoadDataView.this.initDataMenu();
+                DataMenuView dataMenuView = new DataMenuView(RoadDataView.this.
+                        mainView);
+                dataMenuView.show();
             }
         });
         
         prefButton.setOnAction(new EventHandler<>() {
             @Override
             public void handle(ActionEvent t) {
-                RoadDataView.this.initPrefMenu();
+                PreferencesMenuView prefMenuView = new PreferencesMenuView(
+                        RoadDataView.this.mainView);
+                prefMenuView.show();
             }
         });
         
         trafficMsgButton.setOnAction(new EventHandler<>() {
             @Override
             public void handle(ActionEvent t) {
-                RoadDataView.this.initTrafficMessagesView();
+                TrafficMessageView trafMsgView = new TrafficMessageView(
+                        RoadDataView.this.mainView);
+                trafMsgView.show();
             }
         });
     }
@@ -194,86 +199,5 @@ public class RoadDataView {
         TreeItem sliderItem = new TreeItem(timeSlider);
         conditionItem.getChildren().add(timeItem);
         conditionItem.getChildren().add(sliderItem);
-    }
-    
-    public void initDataMenu() {
-        Stage dataStage = new Stage();
-        
-        dataStage.initOwner(this.mainView.getStage());
-        dataStage.initModality(Modality.WINDOW_MODAL);
-        dataStage.setResizable(false);
-        
-        dataStage.setTitle("Data menu");
-        GridPane gridPane = new GridPane();
-        gridPane.setAlignment(Pos.CENTER);
-        gridPane.setVgap(V_GAP);
-        gridPane.setHgap(SHORT_H_GAP);
-        Label infoLabel = new Label("Save or load data:");
-        infoLabel.setFont(new Font(16));
-        Button saveButton = new Button("Save");
-        saveButton.setPrefWidth(SHORT_ELEMENT_WIDTH);
-        Button loadButton = new Button("Load");
-        loadButton.setPrefWidth(SHORT_ELEMENT_WIDTH);
-        gridPane.add(infoLabel, 0, 0, 2, 1);
-        gridPane.add(saveButton, 0, 1);
-        gridPane.add(loadButton, 1, 1);
-        Scene dataScene = new Scene(gridPane, MENU_WIDTH, MENU_HEIGHT);
-        dataStage.setScene(dataScene);
-        dataStage.show();
-    }
-    
-    public void initPrefMenu() {
-        Stage prefStage = new Stage();
-        
-        prefStage.initOwner(this.mainView.getStage());
-        prefStage.initModality(Modality.WINDOW_MODAL);
-        prefStage.setResizable(false);
-        
-        prefStage.setTitle("Preferences menu");
-        GridPane gridPane = new GridPane();
-        gridPane.setAlignment(Pos.CENTER);
-        gridPane.setVgap(V_GAP);
-        gridPane.setHgap(SHORT_H_GAP);
-        Label infoLabel = new Label("Save or load preferences:");
-        infoLabel.setFont(new Font(16));
-        Button saveButton = new Button("Save");
-        saveButton.setPrefWidth(SHORT_ELEMENT_WIDTH);
-        Button loadButton = new Button("Load");
-        loadButton.setPrefWidth(SHORT_ELEMENT_WIDTH);
-        gridPane.add(infoLabel, 0, 0, 2, 1);
-        gridPane.add(saveButton, 0, 1);
-        gridPane.add(loadButton, 1, 1);
-        Scene prefScene = new Scene(gridPane, MENU_WIDTH, MENU_HEIGHT);
-        prefStage.setScene(prefScene);
-        prefStage.show();
-    }
-    
-    public void initTrafficMessagesView() {
-        Stage trafficMsgStage = new Stage();
-        
-        trafficMsgStage.initOwner(this.mainView.getStage());
-        trafficMsgStage.setResizable(false);
-        
-        trafficMsgStage.setTitle("Traffic messages");
-        
-        TreeView treeView = new TreeView();
-        TreeItem root = new TreeItem();
-        treeView.setRoot(root);
-        treeView.setShowRoot(false);
-        
-        for (int i = 1; i < 6; i++) {
-            TreeItem trafficMsgItem = new TreeItem("Traffic message " + i);
-            TreeItem trafficMsgDesc = new TreeItem("Description of traffic message");
-            trafficMsgItem.getChildren().add(trafficMsgDesc);
-            root.getChildren().add(trafficMsgItem);
-        }
-        
-        GridPane gridPane = new GridPane();
-        gridPane.setAlignment(Pos.CENTER);
-        gridPane.add(treeView, 0, 0);
-        
-        Scene trafficMsgScene = new Scene(gridPane, MENU_WIDTH, CHECK_BOX_TREE_HEIGHT);
-        trafficMsgStage.setScene(trafficMsgScene);
-        trafficMsgStage.show();
     }
 }
