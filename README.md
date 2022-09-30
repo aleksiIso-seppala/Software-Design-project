@@ -49,13 +49,13 @@ Make sure you have Java JDK installed
  ```sh
  git clone git@course-gitlab.tuni.fi:comp-se-110-software-design_2022-2023/group-3.git nameyouwanttouse
  ```
- 3. Run the tests to check that everything is ok
+ 3. Run the tests to check that everything is ok and compile the package
  ```sh
- mvn clean test
+ mvn compile
  ```
  4. Start the program in the commandline by using
  ```sh
- java -jar Group3-1.0.jar
+ java -jar Group3/target/Group3-1.0.one-jar.jar
  ```
  Or open the project in your chosen IDE compatible with Java and Maven
 
