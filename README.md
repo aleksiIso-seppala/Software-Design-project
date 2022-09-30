@@ -4,9 +4,9 @@ Group assignment
 
 
 ## Description
-A program for parsing weather and maintenance data from\ 
-[Fintraffic](https://www.fintraffic.fi/en) and [Finnish Meteorological Institute public](https://en.ilmatieteenlaitos.fi/)\ 
-APIs and visualizing them with in a desktop application\
+A program for parsing weather and maintenance data from 
+[Fintraffic](https://www.fintraffic.fi/en) and [Finnish Meteorological Institute public](https://en.ilmatieteenlaitos.fi/) 
+APIs and visualizing them with in a desktop application 
 \
 More info for the assignment @ https://moodle.tuni.fi/pluginfile.php/2680373/mod_resource/content/0/group_assignment_specification.pdf.
 
