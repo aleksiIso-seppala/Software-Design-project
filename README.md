@@ -5,7 +5,7 @@ Group assignment
 
 ## Description
 A program for parsing weather and maintenance data from\ 
-[Fintraffic] (https://www.fintraffic.fi/en) and [Finnish Meteorological Institute public] (https://en.ilmatieteenlaitos.fi/)\
+[Fintraffic](https://www.fintraffic.fi/en) and [Finnish Meteorological Institute public](https://en.ilmatieteenlaitos.fi/)\ 
 APIs and visualizing them with in a desktop application\
 \
 More info for the assignment @ https://moodle.tuni.fi/pluginfile.php/2680373/mod_resource/content/0/group_assignment_specification.pdf.
@@ -16,9 +16,9 @@ More info for the assignment @ https://moodle.tuni.fi/pluginfile.php/2680373/mod
 * [JavaFX](https://openjfx.io/)
 
 ### Frameworks used
-* [GSON] (https://github.com/google/gson)
-* [JDOM2] (http://www.jdom.org/)
-* [JUnit5] (https://junit.org/junit5/)
+* [GSON](https://github.com/google/gson)
+* [JDOM2](http://www.jdom.org/)
+* [JUnit5](https://junit.org/junit5/)
 
 
 ## Getting started
