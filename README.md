@@ -63,19 +63,19 @@ Make sure you have Java JDK installed
 ## Usage
  When the app is up and running you can see the mainwindow
  
- ![esim2] (www.google.com)
+ ![esim1] (https://course-gitlab.tuni.fi/comp-se-110-software-design_2022-2023/group-3/-/blob/main/Documents/Pictures/mainwindow.png)
  
  Start by selecting the data you want to view
  
- ![esim1](www.google.com)
+ ![esim2](https://course-gitlab.tuni.fi/comp-se-110-software-design_2022-2023/group-3/-/blob/main/Documents/Pictures/selectdata.png)
  
  Update parameters you want and enjoy your RoadCast!
  
- ![esim2](www.google.com)
+ ![esim3](https://course-gitlab.tuni.fi/comp-se-110-software-design_2022-2023/group-3/-/blob/main/Documents/Pictures/parameters.png)
  
 
 ## Contact
-Amanda Dieuaide - amanda.dieuaide@tuni.fi
-Aleksi Iso-Seppälä - aleksi.iso-seppala@tuni.fi
-Jukka Pelli - jukka.pelli@tuni.fi
+Amanda Dieuaide - amanda.dieuaide@tuni.fi\
+Aleksi Iso-Seppälä - aleksi.iso-seppala@tuni.fi\
+Jukka Pelli - jukka.pelli@tuni.fi\
 Lauri Puoskari - lauri.puoskari@tuni.fi
