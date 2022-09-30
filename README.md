@@ -67,11 +67,11 @@ Make sure you have Java JDK installed
  
  Start by selecting the data you want to view
  
- ![esim2](https://course-gitlab.tuni.fi/comp-se-110-software-design_2022-2023/group-3/-/blob/main/Documents/Pictures/selectdata.png)
+ ![esim2] (https://course-gitlab.tuni.fi/comp-se-110-software-design_2022-2023/group-3/-/blob/main/Documents/Pictures/selectdata.png)
  
  Update parameters you want and enjoy your RoadCast!
  
- ![esim3](https://course-gitlab.tuni.fi/comp-se-110-software-design_2022-2023/group-3/-/blob/main/Documents/Pictures/parameters.png)
+ ![esim3] (https://course-gitlab.tuni.fi/comp-se-110-software-design_2022-2023/group-3/-/blob/main/Documents/Pictures/parameters.png)
  
 
 ## Contact
