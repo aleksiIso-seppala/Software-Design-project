@@ -50,9 +50,7 @@ public class RoadDataParser {
             String nameEn = task.get("nameEn").getAsString();
             
         }
-        
-        
-     
+
     }
     
     private static void readMaintenanceTasks(String minX, String maxX,String minY, String maxY) throws MalformedURLException, IOException{
@@ -128,8 +126,62 @@ public class RoadDataParser {
         }
     }
     
+    public static void readTrafficMessages(String sType) throws MalformedURLException, IOException{
+        
+        String sUrl = "https://tie.digitraffic.fi/api/traffic-message/v1/messages?"
+                + "inactiveHours=0&includeAreaGeometry=true&situationType=";
+        String fullUrl = sUrl+sType;
+        
+        URL url = new URL(fullUrl);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+        con.setRequestProperty("accept", "*/*");
+        con.setRequestProperty("Accept-Encoding", "gzip");
+        
+        GZIPInputStream gzipInput = new GZIPInputStream(con.getInputStream());
+        InputStreamReader reader = new InputStreamReader(gzipInput, "UTF-8");
+        
+        Gson gson = new Gson();
+        JsonObject response = gson.fromJson(reader, JsonObject.class);
+        JsonArray trafficMessages = response.getAsJsonArray("features");
+        
+        for(var element : trafficMessages){
+            JsonObject trafficMessage = (JsonObject) element;
+            
+            JsonObject geometry = trafficMessage.get("geometry").getAsJsonObject();
+            JsonArray coordinates = geometry.get("coordinates").getAsJsonArray();
+            for(var coordinate : coordinates){
+                
+            }
+            
+            JsonObject properties = trafficMessage.get("properties").getAsJsonObject();
+            String situationType = properties.get("situationType").getAsString();
+            JsonArray announcements = properties.get("announcements").getAsJsonArray();
+            
+            for (var object : announcements){
+                JsonObject announcement = (JsonObject) object;
+                
+                String title = announcement.get("title").getAsString();
+                JsonObject location = announcement.get("location").getAsJsonObject();
+                String description = location.get("description").getAsString();
+                
+                JsonArray features = announcement.get("features").getAsJsonArray();
+                
+                for(var feature : features){
+                    JsonObject featureO = (JsonObject) feature;
+                    String name = featureO.get("name").getAsString(); 
+                    System.out.println(name);
+                }
+                
+
+                
+            }
+        }
+    }
+    
     public static void main(String args[]) throws IOException {
         // TODO code application logic here
-        readRoadConditions("19","32","59","72");
+        // readRoadConditions("19","32","59","72");
+        readTrafficMessages("TRAFFIC_ANNOUNCEMENT");
     }
 }
