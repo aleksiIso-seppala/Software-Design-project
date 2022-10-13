@@ -12,15 +12,17 @@ package fi.tuni.swdesign.group3;
 abstract class RoadData {
     protected String location;
     protected String coordinates;
+    protected String time;
     
     /*
     * Default constructor for a RoadData
     * @param location The location of the data as in place/town/city
     * @param coordinates The coordinates of the location
     */
-    public RoadData(String location, String coordinates){
+    public RoadData(String location, String coordinates, String time){
         this.location = location;
         this.coordinates = coordinates;
+        this.time = time;
     }
     
     @Override

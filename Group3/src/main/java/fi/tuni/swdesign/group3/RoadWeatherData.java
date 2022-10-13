@@ -10,7 +10,7 @@ package fi.tuni.swdesign.group3;
  */
 public class RoadWeatherData extends RoadData{
 
-    public RoadWeatherData(String location, String coordinates){
-        super(location, coordinates);
+    public RoadWeatherData(String location, String coordinates, String time){
+        super(location, coordinates, time);
     }
 }
