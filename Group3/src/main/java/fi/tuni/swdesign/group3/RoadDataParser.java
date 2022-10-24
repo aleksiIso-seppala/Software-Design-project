@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.zip.GZIPInputStream;
 
 
@@ -115,7 +116,7 @@ public class RoadDataParser {
                 String overallRoadCondition = condition.get("overallRoadCondition").getAsString();
                 String weatherSymbol = condition.get("weatherSymbol").getAsString();
 
-                if(condition.get("type").getAsString() != "OBSERVATION"){
+                if(condition.get("type").getAsString().equals("FORECAST")){
                     JsonObject forecastCondition = condition.getAsJsonObject("forecastConditionReason");
 
                     forecastCondition.get("precipitationCondition").getAsString();
@@ -124,6 +125,82 @@ public class RoadDataParser {
                 }
             }
         }
+    }
+    
+    public static RoadTrafficData readFirstCondition(String location, String minX, String maxX,
+            String minY, String maxY) throws MalformedURLException, IOException{
+        
+        String sUrl = "https://tie.digitraffic.fi/api/v3/data/road-conditions/";        
+        String coordinates = minX+"/"+minY+"/"+maxX+"/"+maxY; 
+        String fullUrl = sUrl+coordinates;
+        URL url = new URL(fullUrl);
+        
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+        con.setRequestProperty("accept", "*/*");
+        con.setRequestProperty("Accept-Encoding", "gzip");
+        
+        GZIPInputStream gzipInput = new GZIPInputStream(con.getInputStream());
+        InputStreamReader reader = new InputStreamReader(gzipInput, "UTF-8");
+        
+        Gson gson = new Gson();
+        JsonObject response = gson.fromJson(reader, JsonObject.class);
+        JsonArray weatherData = response.getAsJsonArray("weatherData");
+        
+        var data = weatherData.get(0);
+        JsonObject allData = (JsonObject) data;
+        JsonArray roadConditions = allData.getAsJsonArray("roadConditions");
+
+        RoadTrafficData trafficData = new RoadTrafficData(location, coordinates,"0h");
+        HashMap<String, RoadTrafficDataForecast> forecasts = new HashMap<>();
+
+        for(var road : roadConditions){
+
+            JsonObject condition = road.getAsJsonObject();
+            String type = condition.get("type").getAsString();
+
+            String time = condition.get("forecastName").getAsString(); 
+            String overallRoadCondition = condition.get("overallRoadCondition").getAsString();
+            String weatherSymbol = condition.get("weatherSymbol").getAsString();
+            String temperature = condition.get("temperature").getAsString();
+            double windSpeed = condition.get("windSpeed").getAsDouble();
+
+            if(type.equals("OBSERVATION")){
+                
+                trafficData.setOverAllCondition(overallRoadCondition);
+                trafficData.setWeatherSymbol(weatherSymbol);
+                trafficData.setTemperature(temperature);
+                trafficData.setWindSpeed(windSpeed);                
+            }
+            else if(type.equals("FORECAST")){
+                RoadTrafficDataForecast trafficForecast = 
+                        new RoadTrafficDataForecast(location,coordinates,time);                    
+
+                trafficForecast.setOverAllCondition(overallRoadCondition);
+                trafficForecast.setWeatherSymbol(weatherSymbol);
+                trafficForecast.setTemperature(temperature);
+                trafficForecast.setWindSpeed(windSpeed);  
+
+                JsonObject forecastCondition = 
+                        condition.getAsJsonObject("forecastConditionReason");
+
+                if(forecastCondition.has("precipitationCondition")){
+                    String precipitation = forecastCondition.get("precipitationCondition").getAsString();
+                    trafficForecast.setPrecipitation(precipitation);              
+                }
+
+                if(forecastCondition.has("roadCondition")){
+                    String roadCondition = forecastCondition.get("roadCondition").getAsString();
+                    trafficForecast.setOverAllCondition(roadCondition); 
+                }
+
+                forecasts.put(time, trafficForecast);
+
+            }
+        }
+        trafficData.setForecasts(forecasts);
+        return trafficData;
+         
     }
     
     public static void readTrafficMessages(String sType) throws MalformedURLException, IOException{
@@ -170,11 +247,8 @@ public class RoadDataParser {
                 for(var feature : features){
                     JsonObject featureO = (JsonObject) feature;
                     String name = featureO.get("name").getAsString(); 
-                    System.out.println(name);
                 }
-                
 
-                
             }
         }
     }
@@ -182,6 +256,8 @@ public class RoadDataParser {
     public static void main(String args[]) throws IOException {
         // TODO code application logic here
         // readRoadConditions("19","32","59","72");
-        readTrafficMessages("TRAFFIC_ANNOUNCEMENT");
+        readFirstCondition("Suomi","19","32","59","72");
+        //readTrafficMessages("TRAFFIC_ANNOUNCEMENT");
+        
     }
 }
