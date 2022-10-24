@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 /**
@@ -15,6 +17,9 @@ import javafx.stage.Stage;
  * @author Lauri Puoskari
  */
 public class MainView extends Application {
+    
+    private final static int WINDOW_WIDTH = 800;
+    private final static int WINDOW_HEIGHT = 500;
 
     private TabPane tabPane;
     private ArrayList<String> locations;
@@ -25,8 +30,11 @@ public class MainView extends Application {
         this.stage = stage;
         stage.setTitle("RoadCast");
         this.tabPane = new TabPane();
-        StartMenuView startMenuView = new StartMenuView(this, this.tabPane);
-        stage.setScene(startMenuView.getScene());
+        
+        this.tabPane.getTabs().add(new StartMenuTab(this));
+        stage.setScene(new Scene(tabPane, WINDOW_WIDTH, WINDOW_HEIGHT));
+//        StartMenuView startMenuView = new StartMenuView(this, this.tabPane);
+//        stage.setScene(startMenuView.getScene());
         stage.show();
         
         // Hardcode implementation for prototype.
