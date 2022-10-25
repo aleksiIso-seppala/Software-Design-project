@@ -13,7 +13,7 @@ import java.util.HashMap;
  * 
  */
 public class RoadTrafficData extends RoadData{
-    private ArrayList<String> maintenanceTasks;
+    private HashMap<String,Integer> maintenanceTasks;
     private ArrayList<String> trafficMessages;
     private int numberOfTrafficMessages;
     private double windSpeed;
@@ -27,16 +27,16 @@ public class RoadTrafficData extends RoadData{
     
     public RoadTrafficData(String location, String coordinates, String time){
         super(location, coordinates, time);
-        this.maintenanceTasks = new ArrayList<>();
+        this.maintenanceTasks = new HashMap<>();
         this.trafficMessages = new ArrayList<>();
         this.forecasts = new HashMap<>();
     }
 
-    public ArrayList<String> getMaintenanceTasks() {
+    public HashMap<String,Integer> getMaintenanceTasks() {
         return maintenanceTasks;
     }
 
-    public void setMaintenanceTasks(ArrayList<String> maintenanceTasks) {
+    public void setMaintenanceTasks(HashMap<String,Integer> maintenanceTasks) {
         this.maintenanceTasks = maintenanceTasks;
     }
 
