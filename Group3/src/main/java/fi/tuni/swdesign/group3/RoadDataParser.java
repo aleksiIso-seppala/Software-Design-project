@@ -10,10 +10,13 @@ import com.google.gson.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 
 
@@ -27,7 +30,24 @@ public class RoadDataParser {
      * @param args the command line arguments
      */
     
-    private static void readAllMaintenanceTasks() throws MalformedURLException, IOException{
+    public static RoadTrafficData getRoadData(String location, String minX, String maxX,
+            String minY, String maxY) throws IOException{
+        
+        var roadData = readFirstCondition(location, minX, maxX, minY, maxY);
+        var maintenanceTasks = readMaintenanceTasks(minX, maxX, minY, maxY);
+        roadData.setMaintenanceTasks(maintenanceTasks);
+        
+        int messages = readTrafficMessages("TRAFFIC_ANNOUNCEMENT");
+        messages += readTrafficMessages("EXEMPTED_TRANSPORT");
+        messages += readTrafficMessages("WEIGHT_RESTRICTION");
+        messages += readTrafficMessages("ROAD_WORK");
+        roadData.setNumberOfTrafficMessages(messages);
+        
+        return roadData;
+    }
+    
+    
+    private static ArrayList<String> readAllMaintenanceTasks() throws MalformedURLException, IOException{
         
         String sUrl = "https://tie.digitraffic.fi/api/maintenance/v1/tracking/tasks";        
 
@@ -42,23 +62,26 @@ public class RoadDataParser {
         
         Gson gson = new Gson();
         JsonArray response = gson.fromJson(reader, JsonArray.class);
-    
+        
+        ArrayList<String> tasks = new ArrayList<>();
         for(var object: response){
             JsonObject task = (JsonObject) object;
             String id = task.get("id").getAsString();
             String nameFi = task.get("nameFi").getAsString();
             String nameSv = task.get("nameSv").getAsString();
             String nameEn = task.get("nameEn").getAsString();
-            
+            tasks.add(nameEn);
         }
+        return tasks;
 
     }
     
-    private static void readMaintenanceTasks(String minX, String maxX,String minY, String maxY) throws MalformedURLException, IOException{
+    private static HashMap<String, Integer> readMaintenanceTasks(String minX, String maxX,
+            String minY, String maxY) throws MalformedURLException, IOException{
         
         String sUrl = "https://tie.digitraffic.fi/api/maintenance/v1/tracking/routes/latest?";        
         String coordinates = "xMin="+minX+"&yMin="+minY+"&xMax"+maxX+"&yMax"+maxY; 
-        String fullUrl = sUrl+coordinates+"&domain=state-roads";
+        String fullUrl = sUrl+coordinates+"&domain=all";
         
         URL url = new URL(fullUrl);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -73,18 +96,19 @@ public class RoadDataParser {
         JsonObject response = gson.fromJson(reader, JsonObject.class);
         JsonArray features = response.getAsJsonArray("features");
         
+        HashMap<String, Integer> taskTypes = new HashMap<>();
         for(var feature : features){
             JsonObject task = (JsonObject) feature;
             JsonObject properties = task.getAsJsonObject("properties");
             String id = properties.get("id").getAsString();
             JsonArray taskNames = properties.getAsJsonArray("tasks");
             
-            ArrayList<String> tasks = new ArrayList<String>();
             for(var inner : taskNames){
                 String taskName = inner.getAsString();
-                tasks.add(taskName);
+                taskTypes.merge(taskName, 1, Integer::sum);
             }
         }
+        return taskTypes;
         
     }
     
@@ -203,61 +227,72 @@ public class RoadDataParser {
          
     }
     
-    public static void readTrafficMessages(String sType) throws MalformedURLException, IOException{
+    public static int readTrafficMessages(String sType) throws MalformedURLException, IOException{
         
         String sUrl = "https://tie.digitraffic.fi/api/traffic-message/v1/messages?"
                 + "inactiveHours=0&includeAreaGeometry=true&situationType=";
         String fullUrl = sUrl+sType;
-        
         URL url = new URL(fullUrl);
+        
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
         con.setRequestProperty("accept", "*/*");
         con.setRequestProperty("Accept-Encoding", "gzip");
         
-        GZIPInputStream gzipInput = new GZIPInputStream(con.getInputStream());
+        GZIPInputStream gzipInput = null;
+        try {
+            gzipInput = new GZIPInputStream(con.getInputStream());
+        } catch (IOException ex) {
+            return 0;
+
+        }
+        
         InputStreamReader reader = new InputStreamReader(gzipInput, "UTF-8");
         
         Gson gson = new Gson();
         JsonObject response = gson.fromJson(reader, JsonObject.class);
         JsonArray trafficMessages = response.getAsJsonArray("features");
         
-        for(var element : trafficMessages){
-            JsonObject trafficMessage = (JsonObject) element;
-            
-            JsonObject geometry = trafficMessage.get("geometry").getAsJsonObject();
-            JsonArray coordinates = geometry.get("coordinates").getAsJsonArray();
-            for(var coordinate : coordinates){
-                
-            }
-            
-            JsonObject properties = trafficMessage.get("properties").getAsJsonObject();
-            String situationType = properties.get("situationType").getAsString();
-            JsonArray announcements = properties.get("announcements").getAsJsonArray();
-            
-            for (var object : announcements){
-                JsonObject announcement = (JsonObject) object;
-                
-                String title = announcement.get("title").getAsString();
-                JsonObject location = announcement.get("location").getAsJsonObject();
-                String description = location.get("description").getAsString();
-                
-                JsonArray features = announcement.get("features").getAsJsonArray();
-                
-                for(var feature : features){
-                    JsonObject featureO = (JsonObject) feature;
-                    String name = featureO.get("name").getAsString(); 
-                }
-
-            }
-        }
+        return trafficMessages.size();
+        
+//        for(var element : trafficMessages){
+//            JsonObject trafficMessage = (JsonObject) element;
+//            
+//            JsonObject geometry = trafficMessage.get("geometry").getAsJsonObject();
+//            JsonArray coordinates = geometry.get("coordinates").getAsJsonArray();
+//            for(var coordinate : coordinates){
+//                
+//            }
+//            
+//            JsonObject properties = trafficMessage.get("properties").getAsJsonObject();
+//            String situationType = properties.get("situationType").getAsString();
+//            JsonArray announcements = properties.get("announcements").getAsJsonArray();
+//            
+//            for (var object : announcements){
+//                JsonObject announcement = (JsonObject) object;
+//                
+//                String title = announcement.get("title").getAsString();
+//                JsonObject location = announcement.get("location").getAsJsonObject();
+//                String description = location.get("description").getAsString();
+//                
+//                JsonArray features = announcement.get("features").getAsJsonArray();
+//                
+//                for(var feature : features){
+//                    JsonObject featureO = (JsonObject) feature;
+//                    String name = featureO.get("name").getAsString(); 
+//                }
+//
+//            }
+//        }
     }
     
     public static void main(String args[]) throws IOException {
         // TODO code application logic here
+        // readMaintenanceTasks("19","32","59","72");
         // readRoadConditions("19","32","59","72");
-        readFirstCondition("Suomi","19","32","59","72");
-        //readTrafficMessages("TRAFFIC_ANNOUNCEMENT");
+        // readFirstCondition("Suomi","19","32","59","72");
+        // readTrafficMessages("TRAFFIC_ANNOUNCEMENT");
+        getRoadData("Suomi","19","32","59","72");
         
     }
 }
