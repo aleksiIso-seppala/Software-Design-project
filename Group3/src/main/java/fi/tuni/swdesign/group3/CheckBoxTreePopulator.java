@@ -5,15 +5,19 @@
 package fi.tuni.swdesign.group3;
 
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.Slider;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.layout.HBox;
 
 /**
  *
  * @author Lauri Puoskari
  */
 public class CheckBoxTreePopulator {
+    
+    private static final int SHORT_H_GAP = 10;
     
     CheckBoxTreePopulator() {
     }
@@ -44,16 +48,23 @@ public class CheckBoxTreePopulator {
                     precipitationItem, slipperinessItem, overallItem);
 
             TreeItem timeItem = new TreeItem("Time (hours)");
-            Slider timeSlider = new Slider(2, 12, 2);
-            timeSlider.setShowTickMarks(true);
-            timeSlider.setShowTickLabels(true);
-            timeSlider.setMajorTickUnit(2);
-            timeSlider.setMinorTickCount(0);
-            timeSlider.setBlockIncrement(2);
-            timeSlider.setSnapToTicks(true);
-            TreeItem sliderItem = new TreeItem(timeSlider);
+
+            RadioButton radioButton1 = new RadioButton("2");
+            RadioButton radioButton2 = new RadioButton("4");
+            RadioButton radioButton3 = new RadioButton("6");
+            RadioButton radioButton4 = new RadioButton("12");
+            ToggleGroup toggleGroup = new ToggleGroup();
+            toggleGroup.getToggles().addAll(radioButton1, radioButton2, 
+                    radioButton3, radioButton4);
+            radioButton1.setSelected(true);
+            HBox timeHBox = new HBox();
+            timeHBox.getChildren().addAll(radioButton1, radioButton2, 
+                    radioButton3, radioButton4);
+            timeHBox.setSpacing(SHORT_H_GAP);
+            TreeItem timeHBoxItem = new TreeItem(timeHBox);
+
             conditionItem.getChildren().add(timeItem);
-            conditionItem.getChildren().add(sliderItem);
+            timeItem.getChildren().add(timeHBoxItem);
         }
         if (tabName.equals("Weather data") | tabName.equals("Combined data")) {
             TreeItem temperatureItem = new TreeItem("Temperature");

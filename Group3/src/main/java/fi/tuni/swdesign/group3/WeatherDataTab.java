@@ -4,9 +4,6 @@
  */
 package fi.tuni.swdesign.group3;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.Button;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.GridPane;
 

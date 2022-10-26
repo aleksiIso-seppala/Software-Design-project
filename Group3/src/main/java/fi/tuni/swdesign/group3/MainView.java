@@ -6,10 +6,8 @@ package fi.tuni.swdesign.group3;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 /**
@@ -33,8 +31,6 @@ public class MainView extends Application {
         
         this.tabPane.getTabs().add(new StartMenuTab(this));
         stage.setScene(new Scene(tabPane, WINDOW_WIDTH, WINDOW_HEIGHT));
-//        StartMenuView startMenuView = new StartMenuView(this, this.tabPane);
-//        stage.setScene(startMenuView.getScene());
         stage.show();
         
         // Hardcode implementation for prototype.

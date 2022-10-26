@@ -61,6 +61,7 @@ public class DataTab extends Tab {
         ChoiceBox locationBox = new ChoiceBox();
         locationBox.setPrefWidth(MED_ELEMENT_WIDTH);
         locationBox.getItems().addAll(this.mainView.getLocations());
+        locationBox.getSelectionModel().selectFirst();
         
         Label timelineLabel = new Label("Timeline");
         
