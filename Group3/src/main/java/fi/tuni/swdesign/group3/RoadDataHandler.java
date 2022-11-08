@@ -24,8 +24,7 @@ public class RoadDataHandler {
     public void fetchData(){
         try {
             JsonObject roadConditions = RoadDataGetter.getRoadConditionData("Suomi","19","32","59","72");
-            
-            
+                     
             JsonObject maintenanceTasks = RoadDataGetter.getMaintenanceTaskData("19","32","59","72");
             
             RoadTrafficData data = RoadDataParser.getRoadData("Suomi","19","32","59","72", roadConditions, maintenanceTasks);
