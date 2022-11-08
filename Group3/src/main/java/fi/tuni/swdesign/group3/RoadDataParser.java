@@ -31,11 +31,14 @@ public class RoadDataParser {
      */
     
     public static RoadTrafficData getRoadData(String location, String minX, String maxX,
-            String minY, String maxY) throws IOException{
+            String minY, String maxY, JsonObject condition, JsonObject tasks) throws IOException{
         
-        var roadData = readFirstCondition(location, minX, maxX, minY, maxY);
-        var maintenanceTasks = readMaintenanceTasks(minX, maxX, minY, maxY);
-        roadData.setMaintenanceTasks(maintenanceTasks);
+        var roadData = readFirstCondition(location, minX, maxX, minY, maxY, condition);
+        
+        if(tasks != null){
+            var maintenanceTasks = readMaintenanceTasks(tasks);
+            roadData.setMaintenanceTasks(maintenanceTasks);
+        }
         
         int messages = readTrafficMessages("TRAFFIC_ANNOUNCEMENT");
         messages += readTrafficMessages("EXEMPTED_TRANSPORT");

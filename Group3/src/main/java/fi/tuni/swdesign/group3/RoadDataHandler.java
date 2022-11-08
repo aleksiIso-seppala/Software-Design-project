@@ -7,6 +7,8 @@ package fi.tuni.swdesign.group3;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import com.google.gson.JsonObject;
+import java.io.IOException;
 
 /**
  *
@@ -17,6 +19,22 @@ public class RoadDataHandler {
     
     RoadDataHandler(){
         database = new HashMap<>();
+    }
+    
+    public void fetchData(){
+        try {
+            JsonObject roadConditions = RoadDataGetter.getRoadConditionData("Suomi","19","32","59","72");
+            
+            
+            JsonObject maintenanceTasks = RoadDataGetter.getMaintenanceTaskData("19","32","59","72");
+            
+            RoadTrafficData data = RoadDataParser.getRoadData("Suomi","19","32","59","72", roadConditions, maintenanceTasks);
+            
+            System.out.print("windspeed:"+data.getWindSpeed()+" ; @"+data.getCoordinates());
+            
+        } catch (IOException e){
+            System.out.print("error");
+        }
     }
     
     public void addData(String time, String location, RoadData data){
