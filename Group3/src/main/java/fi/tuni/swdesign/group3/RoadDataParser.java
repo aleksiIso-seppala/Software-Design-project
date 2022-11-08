@@ -47,21 +47,7 @@ public class RoadDataParser {
     }
     
     
-    private static ArrayList<String> readAllMaintenanceTasks() throws MalformedURLException, IOException{
-        
-        String sUrl = "https://tie.digitraffic.fi/api/maintenance/v1/tracking/tasks";        
-
-        URL url = new URL(sUrl);
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
-        con.setRequestProperty("accept", "*/*");
-        con.setRequestProperty("Accept-Encoding", "gzip");
-
-        GZIPInputStream gzipInput = new GZIPInputStream(con.getInputStream());
-        InputStreamReader reader = new InputStreamReader(gzipInput, "UTF-8");
-        
-        Gson gson = new Gson();
-        JsonArray response = gson.fromJson(reader, JsonArray.class);
+    private static ArrayList<String> readMaintenanceTaskNames(JsonArray response) throws MalformedURLException, IOException{
         
         ArrayList<String> tasks = new ArrayList<>();
         for(var object: response){
@@ -76,24 +62,9 @@ public class RoadDataParser {
 
     }
     
-    private static HashMap<String, Integer> readMaintenanceTasks(String minX, String maxX,
-            String minY, String maxY) throws MalformedURLException, IOException{
+    public static HashMap<String, Integer> readMaintenanceTasks(JsonObject response)
+            throws MalformedURLException, IOException{
         
-        String sUrl = "https://tie.digitraffic.fi/api/maintenance/v1/tracking/routes/latest?";        
-        String coordinates = "xMin="+minX+"&yMin="+minY+"&xMax"+maxX+"&yMax"+maxY; 
-        String fullUrl = sUrl+coordinates+"&domain=all";
-        
-        URL url = new URL(fullUrl);
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
-        con.setRequestProperty("accept", "*/*");
-        con.setRequestProperty("Accept-Encoding", "gzip");
-
-        GZIPInputStream gzipInput = new GZIPInputStream(con.getInputStream());
-        InputStreamReader reader = new InputStreamReader(gzipInput, "UTF-8");
-        
-        Gson gson = new Gson();
-        JsonObject response = gson.fromJson(reader, JsonObject.class);
         JsonArray features = response.getAsJsonArray("features");
         
         HashMap<String, Integer> taskTypes = new HashMap<>();
@@ -152,23 +123,10 @@ public class RoadDataParser {
     }
     
     public static RoadTrafficData readFirstCondition(String location, String minX, String maxX,
-            String minY, String maxY) throws MalformedURLException, IOException{
+            String minY, String maxY, JsonObject response) throws MalformedURLException, IOException{
         
-        String sUrl = "https://tie.digitraffic.fi/api/v3/data/road-conditions/";        
         String coordinates = minX+"/"+minY+"/"+maxX+"/"+maxY; 
-        String fullUrl = sUrl+coordinates;
-        URL url = new URL(fullUrl);
         
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
-        con.setRequestProperty("accept", "*/*");
-        con.setRequestProperty("Accept-Encoding", "gzip");
-        
-        GZIPInputStream gzipInput = new GZIPInputStream(con.getInputStream());
-        InputStreamReader reader = new InputStreamReader(gzipInput, "UTF-8");
-        
-        Gson gson = new Gson();
-        JsonObject response = gson.fromJson(reader, JsonObject.class);
         JsonArray weatherData = response.getAsJsonArray("weatherData");
         
         var data = weatherData.get(0);
@@ -292,7 +250,9 @@ public class RoadDataParser {
         // readRoadConditions("19","32","59","72");
         // readFirstCondition("Suomi","19","32","59","72");
         // readTrafficMessages("TRAFFIC_ANNOUNCEMENT");
-        getRoadData("Suomi","19","32","59","72");
+        // getRoadData("Suomi","19","32","59","72");
+        var response = RoadDataGetter.getRoadConditionData("Suomi","10","10","10","10");
+        readFirstCondition("Suomi", "10","10","10","10", response);
         
     }
 }
