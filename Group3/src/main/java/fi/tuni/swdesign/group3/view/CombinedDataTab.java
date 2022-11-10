@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package fi.tuni.swdesign.group3;
+package fi.tuni.swdesign.group3.view;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -14,11 +14,10 @@ import javafx.scene.layout.GridPane;
  *
  * @author Lauri Puoskari
  */
-public class RoadDataTab extends DataTab {
-    
-    RoadDataTab(MainView mainView) {
+public class CombinedDataTab extends DataTab{
+    CombinedDataTab(MainView mainView) {
         super(mainView);
-        this.setText("Road data");
+        this.setText("Combined data");
         GridPane gridPane = (GridPane) super.getContent();
         
         Button trafficMsgButton = new Button("Traffic messages (5)");
@@ -37,10 +36,9 @@ public class RoadDataTab extends DataTab {
             @Override
             public void handle(ActionEvent t) {
                 TrafficMessageView trafMsgView = new TrafficMessageView(
-                        RoadDataTab.this.mainView);
+                        CombinedDataTab.this.mainView);
                 trafMsgView.show();
             }
         });
-        
     }
 }

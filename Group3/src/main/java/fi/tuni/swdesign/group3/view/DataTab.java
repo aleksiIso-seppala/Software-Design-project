@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package fi.tuni.swdesign.group3;
+package fi.tuni.swdesign.group3.view;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -27,7 +27,7 @@ import javafx.scene.paint.Color;
  *
  * @author Lauri Puoskari
  */
-public class DataTab extends Tab {
+public abstract class DataTab extends Tab {
     
     private final static int WINDOW_WIDTH = 800;
     private final static int WINDOW_HEIGHT = 500;

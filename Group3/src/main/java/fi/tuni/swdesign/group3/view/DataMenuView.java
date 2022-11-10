@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package fi.tuni.swdesign.group3;
+package fi.tuni.swdesign.group3.view;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -17,7 +17,7 @@ import javafx.stage.Stage;
  *
  * @author Lauri Puoskari
  */
-public class PreferencesMenuView {
+public class DataMenuView {
     
     private final static int WINDOW_WIDTH = 800;
     private final static int WINDOW_HEIGHT = 500;
@@ -37,7 +37,7 @@ public class PreferencesMenuView {
     private MainView mainView;
     private Stage stage;
     
-    PreferencesMenuView(MainView mainView) {
+    DataMenuView(MainView mainView) {
         this.mainView = mainView;
         this.stage = new Stage();
         
@@ -45,12 +45,12 @@ public class PreferencesMenuView {
         this.stage.initModality(Modality.WINDOW_MODAL);
         this.stage.setResizable(false);
         
-        this.stage.setTitle("Preferences menu");
+        this.stage.setTitle("Data menu");
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
         gridPane.setVgap(V_GAP);
         gridPane.setHgap(SHORT_H_GAP);
-        Label infoLabel = new Label("Save or load preferences:");
+        Label infoLabel = new Label("Save or load data:");
         infoLabel.setFont(new Font(16));
         Button saveButton = new Button("Save");
         saveButton.setPrefWidth(SHORT_ELEMENT_WIDTH);
@@ -59,8 +59,8 @@ public class PreferencesMenuView {
         gridPane.add(infoLabel, 0, 0, 2, 1);
         gridPane.add(saveButton, 0, 1);
         gridPane.add(loadButton, 1, 1);
-        Scene prefScene = new Scene(gridPane, MENU_WIDTH, MENU_HEIGHT);
-        this.stage.setScene(prefScene);
+        Scene dataScene = new Scene(gridPane, MENU_WIDTH, MENU_HEIGHT);
+        this.stage.setScene(dataScene);
     }
     
     public void show() {
