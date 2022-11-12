@@ -7,6 +7,7 @@ package fi.tuni.swdesign.group3.view;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.GridPane;
 
@@ -15,6 +16,9 @@ import javafx.scene.layout.GridPane;
  * @author Lauri Puoskari
  */
 public class CombinedDataTab extends DataTab{
+    
+    private TreeView checkBoxTree;
+    
     CombinedDataTab(MainView mainView) {
         super(mainView);
         this.setText("Combined data");
@@ -23,14 +27,14 @@ public class CombinedDataTab extends DataTab{
         Button trafficMsgButton = new Button("Traffic messages (5)");
         trafficMsgButton.setPrefWidth(DataTab.LONG_ELEMENT_WIDTH);
         
-        TreeView checkBoxTree = new TreeView();
-        checkBoxTree.setPrefSize(DataTab.CHECK_BOX_TREE_WIDTH, DataTab.CHECK_BOX_TREE_HEIGHT);
+        this.checkBoxTree = new TreeView();
+        this.checkBoxTree.setPrefSize(DataTab.CHECK_BOX_TREE_WIDTH, DataTab.CHECK_BOX_TREE_HEIGHT);
         
         gridPane.add(trafficMsgButton, 2, 3);
-        gridPane.add(checkBoxTree, 2, 1, 1, 2);
+        gridPane.add(this.checkBoxTree, 2, 1, 1, 2);
         
         CheckBoxTreePopulator cbtPopulator = new CheckBoxTreePopulator();
-        cbtPopulator.populateCheckBoxTree(checkBoxTree, this.getText());
+        cbtPopulator.populateCheckBoxTree(this.checkBoxTree, this.getText());
         
         trafficMsgButton.setOnAction(new EventHandler<>() {
             @Override
@@ -41,9 +45,9 @@ public class CombinedDataTab extends DataTab{
             }
         });
     }
-
+    
     @Override
-    void populateQuery(DataQuery query) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    TreeItem getCbTreeRoot() {
+        return this.checkBoxTree.getRoot();
     }
 }

@@ -4,8 +4,6 @@
  */
 package fi.tuni.swdesign.group3.view;
 
-import java.util.HashMap;
-import javafx.scene.control.TreeItem;
 
 /**
  *
@@ -13,10 +11,10 @@ import javafx.scene.control.TreeItem;
  */
 public abstract class DataQuery {
     
-    private String dataType;
-    private String location;
-    private String[] timelineStart;
-    private String[] timelineEnd;
+    protected String dataType;
+    protected String location;
+    protected String[] timelineStart;
+    protected String[] timelineEnd;
     
     DataQuery(String dataType) {
         this.dataType = dataType;
@@ -24,15 +22,9 @@ public abstract class DataQuery {
         timelineEnd = new String[2];
     }
     
-//    DataQuery makeDataQuery(String dataType) {
-//        return switch (dataType) {
-//            case "Road data" -> new RoadDataQuery();
-//            case "Weather data" -> new WeatherDataQuery();
-//            default -> new CombinedDataQuery();
-//        };
-//    }
-    
-    abstract void setParams(TreeItem root);
+    public String getDataType() {
+        return this.dataType;
+    }
     
     public void setLocation(String location) {
         this.location = location;
@@ -42,21 +34,21 @@ public abstract class DataQuery {
         return this.location;
     }
     
-    public void setTimelineStart(String timelineStartTime, String timelineStartDate) {
-        this.timelineStart[0] = timelineStartTime;
-        this.timelineStart[1] = timelineStartDate;
+    public void setTimelineStart(String[] timelineStart) {
+        this.timelineStart = timelineStart;
     }
     
     public String[] getTimelineStart() {
         return this.timelineStart;
     }
     
-    public void setTimelineEnd(String timelineEndTime, String timelineEndDate) {
-        this.timelineEnd[0] = timelineEndTime;
-        this.timelineEnd[1] = timelineEndDate;
+    public void setTimelineEnd(String[] timelineEnd) {
+        this.timelineEnd = timelineEnd;
     }
     
     public String[] getTimelineEnd() {
         return this.timelineEnd;
     }
+    
+    public abstract void testPrint();
 }

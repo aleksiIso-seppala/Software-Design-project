@@ -5,21 +5,13 @@
 package fi.tuni.swdesign.group3.view;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.function.BiConsumer;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TreeItem;
 
 /**
  *
  * @author Lauri Puoskari
  */
 public class RoadDataQuery extends DataQuery {
-    private final static Integer SELECTED = 1;
     
-    private String location;
-    private String timelineStart;
-    private String timelineEnd;
     private ArrayList<String> selectedTasks;
     private ArrayList<String> selectedForecasts;
     private String forecastTime;
@@ -28,30 +20,6 @@ public class RoadDataQuery extends DataQuery {
         super(dataType);
         this.selectedTasks = new ArrayList<>();
         this.selectedForecasts = new ArrayList<>();
-    }
-
-    @Override
-    void setParams(TreeItem root) {
-        TreeItem maintenanceItem = (TreeItem) root.getChildren().get(0);
-        for (int i = 0; i < maintenanceItem.getChildren().size(); i++) {
-            TreeItem item = (TreeItem) maintenanceItem.getChildren().get(i);
-            CheckBox checkBox = (CheckBox) item.getValue();
-            if (checkBox.isSelected()) {
-                this.selectedTasks.add(checkBox.getText());
-            }
-        }
-        
-        TreeItem forecastItem = (TreeItem) root.getChildren().get(1);
-        for (int i = 0; i < forecastItem.getChildren().size(); i++) {
-            TreeItem item = (TreeItem) forecastItem.getChildren().get(i);
-            if (item.getValue().equals("Time (hours)")) {
-                item.getChildren().get(0);
-            }
-            CheckBox checkBox = (CheckBox) item.getValue();
-            if (checkBox.isSelected()) {
-                this.selectedForecasts.add(checkBox.getText());
-            }
-        }
     }
     
     public void setSelectedTasks(ArrayList<String> selectedTasks) {
@@ -76,5 +44,15 @@ public class RoadDataQuery extends DataQuery {
     
     public String getForecastTime() {
         return this.forecastTime;
+    }
+
+    @Override
+    public void testPrint() {
+        System.out.println(super.location + ": " + super.timelineStart[0] + " "
+            + super.timelineStart[1] + " - " + super.timelineEnd[0] + " "
+            + super.timelineEnd[1]);
+        System.out.println(this.selectedTasks);
+        System.out.println(this.selectedForecasts);
+        System.out.println(this.forecastTime);
     }
 }

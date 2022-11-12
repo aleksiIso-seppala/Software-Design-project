@@ -6,7 +6,7 @@ package fi.tuni.swdesign.group3.view;
 
 /**
  *
- * @author Lauri
+ * @author Lauri Puoskari
  */
 public class DataQueryFactory {
     

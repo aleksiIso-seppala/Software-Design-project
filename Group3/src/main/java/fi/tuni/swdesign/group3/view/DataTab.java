@@ -63,11 +63,10 @@ public abstract class DataTab extends Tab {
         
         Label locationLabel = new Label("Location");
         
-        ChoiceBox locationBox = new ChoiceBox();
-        locationBox.setPrefWidth(MED_ELEMENT_WIDTH);
-        locationBox.getItems().addAll(this.mainView.getLocations());
-        locationBox.getSelectionModel().selectFirst();
-        this.locationBox = locationBox;
+        this.locationBox = new ChoiceBox();
+        this.locationBox.setPrefWidth(MED_ELEMENT_WIDTH);
+        this.locationBox.getItems().addAll(this.mainView.getLocations());
+        this.locationBox.getSelectionModel().selectFirst();
         
         Label timelineLabel = new Label("Timeline");
         
@@ -97,9 +96,6 @@ public abstract class DataTab extends Tab {
         LineChart dataChart = new LineChart(new NumberAxis(), new NumberAxis());
         dataChart.setPrefSize(DATA_CHART_WIDTH, DATA_CHART_HEIGHT);
         
-//        TreeView checkBoxTree = new TreeView();
-//        checkBoxTree.setPrefSize(CHECK_BOX_TREE_WIDTH, CHECK_BOX_TREE_HEIGHT);
-        
         Button calculateButton = new Button("Calculate");
         calculateButton.setPrefWidth(SHORT_ELEMENT_WIDTH);
         
@@ -120,11 +116,10 @@ public abstract class DataTab extends Tab {
                 dataButton, prefButton);
         
         gridPane.add(locationLabel, 0, 0);
-        gridPane.add(locationBox, 0, 1);
+        gridPane.add(this.locationBox, 0, 1);
         gridPane.add(timelineLabel, 1, 0);
         gridPane.add(timelineHBox, 1, 1);
         gridPane.add(dataChart, 0, 2, 2, 1);
-//        gridPane.add(checkBoxTree, 2, 1, 1, 2);
         gridPane.add(buttonHBox, 0, 3, 2, 1);
         
         this.setContent(gridPane);
@@ -152,20 +147,21 @@ public abstract class DataTab extends Tab {
             public void handle(ActionEvent t) {
                 DataQueryFactory dqFactory = new DataQueryFactory();
                 DataQuery dataQuery = dqFactory.makeDataQuery(DataTab.this.getText());
-                DataTab.this.populateQuery(dataQuery);
+                DataQueryPopulator dqPopulator = new DataQueryPopulator();
                 
-                // Print tests.
-//                RoadDataQuery query = (RoadDataQuery) dataQuery;
-//                System.out.println(query.getLocation());
-//                System.out.println(query.getTimelineStart()[0] + " " + query.getTimelineStart()[1]);
-//                System.out.println(query.getTimelineEnd()[0] + " " + query.getTimelineEnd()[1]);
-//                System.out.println(query.getSelectedTasks());
-//                System.out.println(query.getSelectedForecasts());
-//                System.out.println(query.getForecastTime());
+                dqPopulator.populateDataQuery(dataQuery, 
+                        DataTab.this.locationBox.getValue().toString(), 
+                        new String[]{DataTab.this.startTimeField.getText(), 
+                            DataTab.this.startDateField.getText()}, 
+                        new String[]{DataTab.this.endTimeField.getText(), 
+                            DataTab.this.endDateField.getText()},
+                        DataTab.this.getCbTreeRoot());
+                
+                dataQuery.testPrint();
             }
             
         });
     }
     
-    abstract void populateQuery(DataQuery query);
+    abstract TreeItem getCbTreeRoot();
 }
