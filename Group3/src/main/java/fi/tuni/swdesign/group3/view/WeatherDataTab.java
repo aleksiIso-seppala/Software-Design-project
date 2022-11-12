@@ -25,4 +25,9 @@ public class WeatherDataTab extends DataTab {
         CheckBoxTreePopulator cbtPopulator = new CheckBoxTreePopulator();
         cbtPopulator.populateCheckBoxTree(checkBoxTree, this.getText());
     }
+
+    @Override
+    void populateQuery(DataQuery query) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

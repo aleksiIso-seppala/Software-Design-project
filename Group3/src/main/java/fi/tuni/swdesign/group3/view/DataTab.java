@@ -46,6 +46,11 @@ public abstract class DataTab extends Tab {
     static final int CHECK_BOX_TREE_WIDTH = 220;
     private Scene scene;
     protected MainView mainView;
+    protected ChoiceBox locationBox;
+    protected TextField startTimeField;
+    protected TextField startDateField;
+    protected TextField endTimeField;
+    protected TextField endDateField;
     
     DataTab(MainView mainView) {
         super();
@@ -62,31 +67,32 @@ public abstract class DataTab extends Tab {
         locationBox.setPrefWidth(MED_ELEMENT_WIDTH);
         locationBox.getItems().addAll(this.mainView.getLocations());
         locationBox.getSelectionModel().selectFirst();
+        this.locationBox = locationBox;
         
         Label timelineLabel = new Label("Timeline");
         
-        TextField startTimeField = new TextField();
-        TextField startDateField = new TextField();
-        TextField endTimeField = new TextField();
-        TextField endDateField = new TextField();
+        this.startTimeField = new TextField();
+        this.startDateField = new TextField();
+        this.endTimeField = new TextField();
+        this.endDateField = new TextField();
         
-        startTimeField.setPromptText("hh.mm");
-        startDateField.setPromptText("dd.mm.yyyy");
-        endTimeField.setPromptText("hh.mm");
-        endDateField.setPromptText("dd.mm.yyyy");
+        this.startTimeField.setPromptText("hh.mm");
+        this.startDateField.setPromptText("dd.mm.yyyy");
+        this.endTimeField.setPromptText("hh.mm");
+        this.endDateField.setPromptText("dd.mm.yyyy");
         
         Label lineLabel = new Label("–");
         
         HBox timelineHBox = new HBox();
-        timelineHBox.getChildren().addAll(startTimeField, startDateField, 
-                lineLabel, endTimeField, endDateField);
+        timelineHBox.getChildren().addAll(this.startTimeField, this.startDateField, 
+                lineLabel, this.endTimeField, this.endDateField);
         timelineHBox.setSpacing(SHORT_H_GAP);
         timelineHBox.setAlignment(Pos.CENTER_LEFT);
         
-        startTimeField.setPrefWidth(VERY_SHORT_ELEMENT_WIDTH);
-        startDateField.setPrefWidth(SHORT_ELEMENT_WIDTH);
-        endTimeField.setPrefWidth(VERY_SHORT_ELEMENT_WIDTH);
-        endDateField.setPrefWidth(SHORT_ELEMENT_WIDTH);
+        this.startTimeField.setPrefWidth(VERY_SHORT_ELEMENT_WIDTH);
+        this.startDateField.setPrefWidth(SHORT_ELEMENT_WIDTH);
+        this.endTimeField.setPrefWidth(VERY_SHORT_ELEMENT_WIDTH);
+        this.endDateField.setPrefWidth(SHORT_ELEMENT_WIDTH);
         
         LineChart dataChart = new LineChart(new NumberAxis(), new NumberAxis());
         dataChart.setPrefSize(DATA_CHART_WIDTH, DATA_CHART_HEIGHT);
@@ -140,5 +146,26 @@ public abstract class DataTab extends Tab {
                 prefMenuView.show();
             }
         });
+        
+        calculateButton.setOnAction(new EventHandler<>() {
+            @Override
+            public void handle(ActionEvent t) {
+                DataQueryFactory dqFactory = new DataQueryFactory();
+                DataQuery dataQuery = dqFactory.makeDataQuery(DataTab.this.getText());
+                DataTab.this.populateQuery(dataQuery);
+                
+                // Print tests.
+//                RoadDataQuery query = (RoadDataQuery) dataQuery;
+//                System.out.println(query.getLocation());
+//                System.out.println(query.getTimelineStart()[0] + " " + query.getTimelineStart()[1]);
+//                System.out.println(query.getTimelineEnd()[0] + " " + query.getTimelineEnd()[1]);
+//                System.out.println(query.getSelectedTasks());
+//                System.out.println(query.getSelectedForecasts());
+//                System.out.println(query.getForecastTime());
+            }
+            
+        });
     }
+    
+    abstract void populateQuery(DataQuery query);
 }

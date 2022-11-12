@@ -41,4 +41,9 @@ public class CombinedDataTab extends DataTab{
             }
         });
     }
+
+    @Override
+    void populateQuery(DataQuery query) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
