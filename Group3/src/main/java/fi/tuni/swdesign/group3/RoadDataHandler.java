@@ -25,7 +25,7 @@ public class RoadDataHandler {
         locations.put("Helsinki", new ArrayList<>(List.of()));
         locations.put("Kuopio", new ArrayList<>(List.of()));
         locations.put("Oulu", new ArrayList<>(List.of()));
-        locations.put("Tampere", new ArrayList<>(List.of()));
+        locations.put("Tampere", new ArrayList<>(List.of("23", "24", "62", "63")));
         locations.put("Rovaniemi", new ArrayList<>(List.of()));
     }
     
@@ -71,6 +71,14 @@ public class RoadDataHandler {
             System.out.println("error");
             return null;
         }
+    }
+    
+    public RoadWeatherData fetchWeatherData(String location){
+        return null;
+    }
+    
+    public RoadWeatherData fetchWeatherData(String location, String max){
+        return null;
     }
     
     public void addData(String time, String location, RoadData data){
