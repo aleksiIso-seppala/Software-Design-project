@@ -1,5 +1,5 @@
 package fi.tuni.swdesign.group3;
-
+import fi.tuni.swdesign.group3.view.*;
 /**
  *
  * Placeholder for main
