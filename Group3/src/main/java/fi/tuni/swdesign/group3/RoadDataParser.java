@@ -4,6 +4,7 @@
  */
 package fi.tuni.swdesign.group3;
 
+import fi.tuni.swdesign.group3.RoadTrafficData;
 import java.net.URL;
 import java.net.MalformedURLException;
 import com.google.gson.*;
@@ -32,7 +33,7 @@ public class RoadDataParser {
      */
     
     public static RoadTrafficData getRoadData(String location, String minX, String maxX,
-            String minY, String maxY, JsonObject condition, JsonObject tasks) throws IOException{
+            String minY, String maxY, JsonObject condition, JsonObject tasks, ArrayList<JsonObject> messageData) throws IOException{
         
         var roadData = readFirstCondition(location, minX, maxX, minY, maxY, condition);
         
@@ -40,18 +41,17 @@ public class RoadDataParser {
             var maintenanceTasks = readMaintenanceTasks(tasks);
             roadData.setMaintenanceTasks(maintenanceTasks);
         }
-        
-        int messages = readTrafficMessages("TRAFFIC_ANNOUNCEMENT");
-        messages += readTrafficMessages("EXEMPTED_TRANSPORT");
-        messages += readTrafficMessages("WEIGHT_RESTRICTION");
-        messages += readTrafficMessages("ROAD_WORK");
-        roadData.setNumberOfTrafficMessages(messages);
+        if(messageData != null){
+            int messages = readTrafficMessages(messageData);
+            roadData.setNumberOfTrafficMessages(messages);            
+        }
+
         
         return roadData;
     }
     
     
-    private static ArrayList<String> readMaintenanceTaskNames(JsonArray response) throws MalformedURLException, IOException{
+    public static ArrayList<String> readMaintenanceTaskNames(JsonArray response) throws MalformedURLException, IOException{
         
         ArrayList<String> tasks = new ArrayList<>();
         for(var object: response){
@@ -189,33 +189,14 @@ public class RoadDataParser {
          
     }
     
-    public static int readTrafficMessages(String sType) throws MalformedURLException, IOException{
+    public static int readTrafficMessages(ArrayList<JsonObject> data) throws MalformedURLException, IOException{
         
-        String sUrl = "https://tie.digitraffic.fi/api/traffic-message/v1/messages?"
-                + "inactiveHours=0&includeAreaGeometry=true&situationType=";
-        String fullUrl = sUrl+sType;
-        URL url = new URL(fullUrl);
-        
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
-        con.setRequestProperty("accept", "*/*");
-        con.setRequestProperty("Accept-Encoding", "gzip");
-        
-        GZIPInputStream gzipInput = null;
-        try {
-            gzipInput = new GZIPInputStream(con.getInputStream());
-        } catch (IOException ex) {
-            return 0;
-
+        int messages = 0;
+        for(var situation : data){
+            JsonArray trafficMessages = situation.getAsJsonArray("features");
+            messages += trafficMessages.size();
         }
-        
-        InputStreamReader reader = new InputStreamReader(gzipInput, "UTF-8");
-        
-        Gson gson = new Gson();
-        JsonObject response = gson.fromJson(reader, JsonObject.class);
-        JsonArray trafficMessages = response.getAsJsonArray("features");
-        
-        return trafficMessages.size();
+        return messages;
         
 //        for(var element : trafficMessages){
 //            JsonObject trafficMessage = (JsonObject) element;
@@ -255,8 +236,8 @@ public class RoadDataParser {
         // readFirstCondition("Suomi","19","32","59","72");
         // readTrafficMessages("TRAFFIC_ANNOUNCEMENT");
         // getRoadData("Suomi","19","32","59","72");
-        var response = RoadDataGetter.getRoadConditionData("Suomi","10","10","10","10");
-        readFirstCondition("Suomi", "10","10","10","10", response);
+        // var response = RoadDataGetter.getRoadConditionData("Suomi","10","10","10","10");
+        // readFirstCondition("Suomi", "10","10","10","10", response);
         
     }
 }
