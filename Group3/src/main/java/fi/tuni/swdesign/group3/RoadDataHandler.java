@@ -11,13 +11,17 @@ import com.google.gson.JsonObject;
 import java.io.IOException;
 
 /**
- *
+ * A class which handles the fetching and saving of data from the two different
+ * APIs. Also provides the database for the program.
  * @author jukka
  */
 public class RoadDataHandler {
-    private HashMap<String, HashMap<String, ArrayList<RoadData>>> database;
-    private HashMap<String, ArrayList<String>> locations;
+    private final HashMap<String, HashMap<String, ArrayList<RoadData>>> database;
+    private final HashMap<String, ArrayList<String>> locations;
     
+    /**
+     * Default builder for roadDataHandler
+     */
     RoadDataHandler(){
         database = new HashMap<>();
         locations = new HashMap<>();
@@ -29,6 +33,11 @@ public class RoadDataHandler {
         locations.put("Rovaniemi", new ArrayList<>(List.of()));
     }
     
+    /**
+     * Method for fetching the data from digitraffic with hardcoded locations
+     * @param location the wanted location as a string
+     * @return RoadTrafficData object that is used to save or visualize data
+     */
     public RoadTrafficData fetchData(String location){
         try {
             
@@ -44,11 +53,13 @@ public class RoadDataHandler {
                             loc.get(1).toString(), loc.get(2).toString(),
                             loc.get(3).toString());
             
+            ArrayList<JsonObject> trafficMsgs = RoadDataGetter.getTrafficMessageData();
+            
             RoadTrafficData data = RoadDataParser.
                     getRoadData(location, loc.get(0).toString(),
                             loc.get(1).toString(), loc.get(2).toString(),
                             loc.get(3).toString(), roadConditions, 
-                            maintenanceTasks);
+                            maintenanceTasks, trafficMsgs);
             
             return data;
             
@@ -58,12 +69,23 @@ public class RoadDataHandler {
         }
     }
     
+    /**
+     * Method for fetching the data from digitraffic with given coordinate range
+     * @param location name as a string
+     * @param minX minumun longitude coorinate as string
+     * @param maxX maximum longitude coorinate as string
+     * @param minY minumun latitude coorinate as string
+     * @param maxY maximum longitude coorinate as string
+     * @return RoadTrafficData object that is used to save or visualize data
+     */
     public RoadTrafficData fetchData(String location, String minX, String maxX, String minY, String maxY){
         try {
             JsonObject roadCond = RoadDataGetter.getRoadConditionData(location, minX, maxX, minY, maxY);
             JsonObject maintTasks = RoadDataGetter.getMaintenanceTaskData(minX, maxX, minY, maxY);
+            ArrayList<JsonObject> trafficMsgs = RoadDataGetter.getTrafficMessageData();
             
-            RoadTrafficData data = RoadDataParser.getRoadData(location, minX, maxX, minY, maxY, roadCond, maintTasks);
+            RoadTrafficData data = RoadDataParser.getRoadData(location, minX,
+                    maxX, minY, maxY, roadCond, maintTasks, trafficMsgs);
             
             return data;
             
@@ -73,14 +95,31 @@ public class RoadDataHandler {
         }
     }
     
+    /**
+     * Method for fetching the data from FMI with hardcoded location coordinates
+     * @param location
+     * @return RoadWeatherData object that is used to save or visualize data
+     */
     public RoadWeatherData fetchWeatherData(String location){
         return null;
     }
     
+    /**
+     * Method for fetching the data from FMI with given location coordinates
+     * @param location
+     * @param max
+     * @return RoadWeatherData object that is used to save or visualize data
+     */
     public RoadWeatherData fetchWeatherData(String location, String max){
         return null;
     }
     
+    /**
+     * Method for storing data to the database
+     * @param time of the data to be stored
+     * @param location name as a string
+     * @param data the object to store
+     */
     public void addData(String time, String location, RoadData data){
         ArrayList<RoadData> newData;
         HashMap<String, ArrayList<RoadData>> locationData;
@@ -104,6 +143,12 @@ public class RoadDataHandler {
         }
     }
     
+    /**
+     * Method for getting data from the database
+     * @param time of the data we wannt as a string
+     * @param location name as a string
+     * @return RoadData object containing the data
+     */
     public ArrayList<RoadData> getRoadData(String time, String location){
         if(this.database.containsKey(time)){
             if(this.database.get(time).containsKey(location)){
@@ -113,10 +158,16 @@ public class RoadDataHandler {
         return null;
     }
     
+    /**
+     * Method for saving the current database as JSON
+     */
     public void saveDataBase(){
         
     }
     
+    /**
+     * Method for loading the saved database from a JSON file
+     */
     public void loadDataBase(){
         
     }
