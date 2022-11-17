@@ -25,6 +25,10 @@ abstract class RoadData {
         this.time = time;
     }
     
+    /**
+     * Override method for toString()
+     * @return the object stringified
+     */
     @Override
     public String toString(){
         return this.location+" - "+this.coordinates;
