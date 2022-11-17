@@ -17,7 +17,7 @@ import org.w3c.dom.NodeList;
  * @author Amanda Dieuaide
  */
 public class RoadDataParserXML {
-    private static RoadWeatherData getDOMParsedDocument(org.w3c.dom.Document w3cDocument, String minX, String maxX, String minY, String maxY, String lat, String lon, String startTime) throws MalformedURLException, ProtocolException, IOException {
+    protected static RoadWeatherData getDOMParsedDocument(org.w3c.dom.Document w3cDocument, String minX, String maxX, String minY, String maxY, String lat, String lon, String startTime) throws MalformedURLException, ProtocolException, IOException {
         RoadWeatherData roadWeatherData = null;
         
         //Check if there's a document
@@ -99,7 +99,7 @@ public class RoadDataParserXML {
         return roadWeatherData;
     }
     
-    private static RoadWeatherData setRoadWeatherData(RoadWeatherData roadWeatherData, String param, String value){
+    protected static RoadWeatherData setRoadWeatherData(RoadWeatherData roadWeatherData, String param, String value){
         float floatValue = Float.parseFloat(value);
 
         if(param.equals("t2m") || param.equals("temperature")){

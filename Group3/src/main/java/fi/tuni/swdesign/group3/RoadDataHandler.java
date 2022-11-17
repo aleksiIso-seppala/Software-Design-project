@@ -17,20 +17,20 @@ import java.io.IOException;
  */
 public class RoadDataHandler {
     private final HashMap<String, HashMap<String, ArrayList<RoadData>>> database;
-    private final HashMap<String, ArrayList<String>> locations;
+    private final HashMap<String, ArrayList<String>> digiTraficLocations;
     
     /**
      * Default builder for roadDataHandler
      */
     RoadDataHandler(){
         database = new HashMap<>();
-        locations = new HashMap<>();
-        locations.put("Suomi", new ArrayList<>(List.of("19", "32", "59", "72")));
-        locations.put("Helsinki", new ArrayList<>(List.of()));
-        locations.put("Kuopio", new ArrayList<>(List.of()));
-        locations.put("Oulu", new ArrayList<>(List.of()));
-        locations.put("Tampere", new ArrayList<>(List.of("23", "24", "62", "63")));
-        locations.put("Rovaniemi", new ArrayList<>(List.of()));
+        digiTraficLocations = new HashMap<>();
+        digiTraficLocations.put("Suomi", new ArrayList<>(List.of("19", "32", "59", "72")));
+        digiTraficLocations.put("Helsinki", new ArrayList<>(List.of("24.93545", "25", "60.16952", "61")));
+        digiTraficLocations.put("Kuopio", new ArrayList<>(List.of("27.67703","28", "62.89238", "63")));
+        digiTraficLocations.put("Oulu", new ArrayList<>(List.of("25.46816", "26", "65.01236", "66" )));
+        digiTraficLocations.put("Tampere", new ArrayList<>(List.of("23.78712", "24", "61.49911", "62")));
+        digiTraficLocations.put("Rovaniemi", new ArrayList<>(List.of("25.71667", "26", "66.5","67")));
     }
     
     /**
@@ -38,10 +38,10 @@ public class RoadDataHandler {
      * @param location the wanted location as a string
      * @return RoadTrafficData object that is used to save or visualize data
      */
-    public RoadTrafficData fetchData(String location){
+    public RoadTrafficData fetchRoadData(String location){
         try {
             
-            ArrayList loc = this.locations.get(location);
+            ArrayList loc = this.digiTraficLocations.get(location);
             
             JsonObject roadConditions = RoadDataGetter.
                     getRoadConditionData(location, loc.get(0).toString(),
@@ -78,7 +78,7 @@ public class RoadDataHandler {
      * @param maxY maximum longitude coorinate as string
      * @return RoadTrafficData object that is used to save or visualize data
      */
-    public RoadTrafficData fetchData(String location, String minX, String maxX, String minY, String maxY){
+    public RoadTrafficData fetchRoadData(String location, String minX, String maxX, String minY, String maxY){
         try {
             JsonObject roadCond = RoadDataGetter.getRoadConditionData(location, minX, maxX, minY, maxY);
             JsonObject maintTasks = RoadDataGetter.getMaintenanceTaskData(minX, maxX, minY, maxY);
@@ -98,10 +98,27 @@ public class RoadDataHandler {
     /**
      * Method for fetching the data from FMI with hardcoded location coordinates
      * @param location
+     * @param time
+     * @param futureTime
      * @return RoadWeatherData object that is used to save or visualize data
      */
-    public RoadWeatherData fetchWeatherData(String location){
-        return null;
+    public RoadWeatherData fetchWeatherData(String location, String time, String futureTime){
+        try {
+            
+            ArrayList loc = this.digiTraficLocations.get(location);
+            org.w3c.dom.Document doc = RoadDataGetterFMI.getDOMDocument("fmi::observations::weather::simple", loc.get(0).toString(),
+                            loc.get(2).toString(), loc.get(1).toString(),
+                            loc.get(3).toString(), "", "", time, futureTime, 
+                            "t2m,ws_10min,n_man,TA_PT1H_AVG,TA_PT1H_MAX,TA_PT1H_MIN");
+            
+            RoadWeatherData data = RoadDataParserXML.getDOMParsedDocument(doc, loc.get(0).toString(),
+                            loc.get(2).toString(), loc.get(1).toString(),
+                            loc.get(3).toString(), "", "", time);
+            return data;
+        } catch (IOException e){
+            System.out.println("error");
+            return null;
+        }
     }
     
     /**
