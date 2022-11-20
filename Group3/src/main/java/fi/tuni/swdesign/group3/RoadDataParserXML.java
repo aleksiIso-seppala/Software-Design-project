@@ -17,6 +17,25 @@ import org.w3c.dom.NodeList;
  * @author Amanda Dieuaide
  */
 public class RoadDataParserXML {
+    /**
+     * Method that uses the w3cDocument created while fetching the data (in RoadDataGetterFMI)
+     * It goes through the different elements/nodes of the document and sets the data queried by the User
+     * With the setRoadWeatherData() function
+     * @param w3cDocument
+     * Location values:
+     * @param minX
+     * @param maxX
+     * @param minY
+     * @param maxY
+     * Specific location values for Predicted values:
+     * @param lat
+     * @param lon
+     * @param startTime
+     * @return
+     * @throws MalformedURLException
+     * @throws ProtocolException
+     * @throws IOException 
+     */
     protected static RoadWeatherData getDOMParsedDocument(org.w3c.dom.Document w3cDocument, String minX, String maxX, String minY, String maxY, String lat, String lon, String startTime) throws MalformedURLException, ProtocolException, IOException {
         RoadWeatherData roadWeatherData = null;
         
@@ -99,6 +118,14 @@ public class RoadDataParserXML {
         return roadWeatherData;
     }
     
+    /**
+     * Method to set the fetched data from the API into the RoadWeatherData object
+     * Depending on the parameters in the query
+     * @param roadWeatherData
+     * @param param
+     * @param value
+     * @return 
+     */
     protected static RoadWeatherData setRoadWeatherData(RoadWeatherData roadWeatherData, String param, String value){
         float floatValue = Float.parseFloat(value);
 
@@ -140,8 +167,8 @@ public class RoadDataParserXML {
         }
                 
         System.out.println("\nEx: Forecast for the temperature and the wind speed in 2h intervals for Tampere area (coordinates 61.49911 and 23.78712) for 30/11/2022 (! starting time has to be in the future else values are NaN) using the HARMONIE weather model");
-        org.w3c.dom.Document forecastDOM = RoadDataGetterFMI.getDOMDocument("fmi::forecast::harmonie::surface::point::simple", "", "", "", "", "61.49911", "23.78712", "2022-11-19T06:00:00Z", "2022-11-19T18:00:00Z", "temperature,windspeedms");
-        RoadWeatherData test2 = getDOMParsedDocument(forecastDOM, "", "", "", "", "61.49911", "23.78712", "2022-11-19T06:00:00Z");
+        org.w3c.dom.Document forecastDOM = RoadDataGetterFMI.getDOMDocument("fmi::forecast::harmonie::surface::point::simple", "", "", "", "", "61.49911", "23.78712", "2022-11-25T06:00:00Z", "2022-11-25T18:00:00Z", "temperature,windspeedms");
+        RoadWeatherData test2 = getDOMParsedDocument(forecastDOM, "", "", "", "", "61.49911", "23.78712", "2022-11-25T06:00:00Z");
         if(test2 != null){
             System.out.println(test2.toString());
             System.out.println(test2.getForecasts());
