@@ -8,6 +8,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Button;
@@ -16,6 +18,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -51,6 +54,7 @@ public abstract class DataTab extends Tab {
     protected TextField startDateField;
     protected TextField endTimeField;
     protected TextField endDateField;
+    protected TabPane chartTabPane;
     
     DataTab(MainView mainView) {
         super();
@@ -93,8 +97,18 @@ public abstract class DataTab extends Tab {
         this.endTimeField.setPrefWidth(VERY_SHORT_ELEMENT_WIDTH);
         this.endDateField.setPrefWidth(SHORT_ELEMENT_WIDTH);
         
-        LineChart dataChart = new LineChart(new NumberAxis(), new NumberAxis());
-        dataChart.setPrefSize(DATA_CHART_WIDTH, DATA_CHART_HEIGHT);
+        this.chartTabPane = new TabPane();
+//        LineChart dataChart = new LineChart(new NumberAxis(), new NumberAxis());
+//        dataChart.setPrefSize(DATA_CHART_WIDTH, DATA_CHART_HEIGHT);
+//        Tab tab = new Tab("test");
+//        tab.setContent(dataChart);
+//        chartTabPane.getTabs().add(tab);
+        
+//        BarChart barChart = new BarChart(new CategoryAxis(), new NumberAxis());
+//        barChart.setPrefSize(DATA_CHART_WIDTH, DATA_CHART_HEIGHT);
+//        Tab tab2 = new Tab("bar");
+//        tab2.setContent(barChart);
+//        chartTabPane.getTabs().add(tab2);
         
         Button calculateButton = new Button("Calculate");
         calculateButton.setPrefWidth(SHORT_ELEMENT_WIDTH);
@@ -119,7 +133,8 @@ public abstract class DataTab extends Tab {
         gridPane.add(this.locationBox, 0, 1);
         gridPane.add(timelineLabel, 1, 0);
         gridPane.add(timelineHBox, 1, 1);
-        gridPane.add(dataChart, 0, 2, 2, 1);
+//        gridPane.add(dataChart, 0, 2, 2, 1);
+        gridPane.add(this.chartTabPane, 0, 2, 2, 1);
         gridPane.add(buttonHBox, 0, 3, 2, 1);
         
         this.setContent(gridPane);

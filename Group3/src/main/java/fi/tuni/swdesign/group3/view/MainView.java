@@ -27,6 +27,7 @@ public class MainView extends Application {
     public void start(Stage stage) {
         this.stage = stage;
         stage.setTitle("RoadCast");
+        stage.setResizable(false);
         this.tabPane = new TabPane();
         
         this.tabPane.getTabs().add(new StartMenuTab(this));
