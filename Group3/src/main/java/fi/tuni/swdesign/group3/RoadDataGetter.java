@@ -52,7 +52,7 @@ public class RoadDataGetter {
             String minY, String maxY) throws MalformedURLException, IOException{
         
         String sUrl = "https://tie.digitraffic.fi/api/maintenance/v1/tracking/routes/latest?";        
-        String coordinates = "xMin="+minX+"&yMin="+minY+"&xMax"+maxX+"&yMax"+maxY; 
+        String coordinates = "xMin="+minX+"&yMin="+minY+"&xMax="+maxX+"&yMax="+maxY; 
         String fullUrl = sUrl+coordinates+"&domain=all";
         
         URL url = new URL(fullUrl);
