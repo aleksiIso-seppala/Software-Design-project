@@ -9,7 +9,7 @@ package fi.tuni.swdesign.group3;
  * @author jukka
  * An abstract class of RoadData. Extended by different under-modules.
  */
-abstract class RoadData {
+public abstract class RoadData {
     protected String location;
     protected String coordinates;
     protected String time;
@@ -62,5 +62,21 @@ abstract class RoadData {
     */
     public String getCoordinates(){
         return this.coordinates;
+    }
+    
+    /**
+     * Getter for time
+     * @return time as a string
+     */
+    public String getTime(){
+        return this.time;
+    }
+    
+    /**
+     * Setter for time
+     * @param time as a string
+     */
+    public void setTime(String time){
+        this.time = time;
     }
 }
