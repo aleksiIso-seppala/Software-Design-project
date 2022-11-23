@@ -22,7 +22,7 @@ public class RoadDataHandler {
     /**
      * Default builder for roadDataHandler
      */
-    RoadDataHandler(){
+    public RoadDataHandler(){
         database = new HashMap<>();
         digiTraficLocations = new HashMap<>();
         digiTraficLocations.put("Suomi", new ArrayList<>(List.of("19.1", "32", "59.1", "72")));

@@ -6,6 +6,7 @@ package fi.tuni.swdesign.group3.view;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
@@ -22,7 +23,9 @@ public class MainView extends Application {
     private TabPane tabPane;
     private ArrayList<String> locations;
     private Stage stage;
-
+    
+    private ViewModel viewModel;
+    
     @Override
     public void start(Stage stage) {
         this.stage = stage;
@@ -41,7 +44,33 @@ public class MainView extends Application {
         this.locations.add("Rovaniemi");
         this.locations.add("Kuopio");
         Collections.sort(this.locations);
+        
+        ModelFactory mf = new ModelFactory();
+        ViewModelFactory vmf = new ViewModelFactory(mf);
+        this.viewModel = vmf.getViewModel();
+        
+        //runAutoUpdate((Model) mf.getModel());
+        
     }
+    
+    /*
+    A way to autoupdate GUI if we want to
+    private void runAutoUpdate(Model m){
+        Thread thread = new Thread(()->{
+            Random r = new Random();
+            while(true){
+                m.updateData();
+                try {
+                    Thread.sleep(r.nextInt(500)+1000);
+                } catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.setDaemon(true);
+        thread.start();    
+    }
+*/
     
     public TabPane getTabPane() {
         return this.tabPane;
@@ -54,7 +83,7 @@ public class MainView extends Application {
     public Stage getStage() {
         return this.stage;
     }
-    
+       
     public void initGUI() {
         launch();
     }
