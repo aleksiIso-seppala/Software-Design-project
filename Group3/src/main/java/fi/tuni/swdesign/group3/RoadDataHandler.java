@@ -22,7 +22,7 @@ public class RoadDataHandler {
     /**
      * Default builder for roadDataHandler
      */
-    RoadDataHandler(){
+    public RoadDataHandler(){
         database = new HashMap<>();
         digiTraficLocations = new HashMap<>();
         digiTraficLocations.put("Suomi", new ArrayList<>(List.of("19.1", "32", "59.1", "72")));
@@ -43,19 +43,19 @@ public class RoadDataHandler {
             
             ArrayList loc = this.digiTraficLocations.get(location);
             
-            JsonObject roadConditions = RoadDataGetter.
+            JsonObject roadConditions = RoadDataGetterDigitraffic.
                     getRoadConditionData(location, loc.get(0).toString(),
                             loc.get(1).toString(), loc.get(2).toString(),
                             loc.get(3).toString());
                     
-            JsonObject maintenanceTasks = RoadDataGetter.
+            JsonObject maintenanceTasks = RoadDataGetterDigitraffic.
                     getMaintenanceTaskData(loc.get(0).toString().split("\\.",2)[0],
                             loc.get(1).toString(), loc.get(2).toString().split("\\.",2)[0],
                             loc.get(3).toString());
             
-            ArrayList<JsonObject> trafficMsgs = RoadDataGetter.getTrafficMessageData();
+            ArrayList<JsonObject> trafficMsgs = RoadDataGetterDigitraffic.getTrafficMessageData();
             
-            RoadTrafficData data = RoadDataParser.
+            RoadTrafficData data = RoadDataParserJSON.
                     getRoadData(location, loc.get(0).toString(),
                             loc.get(1).toString(), loc.get(2).toString(),
                             loc.get(3).toString(), roadConditions, 
@@ -80,11 +80,11 @@ public class RoadDataHandler {
      */
     public RoadTrafficData fetchRoadData(String location, String minX, String maxX, String minY, String maxY){
         try {
-            JsonObject roadCond = RoadDataGetter.getRoadConditionData(location, minX, maxX, minY, maxY);
-            JsonObject maintTasks = RoadDataGetter.getMaintenanceTaskData(minX, maxX, minY, maxY);
-            ArrayList<JsonObject> trafficMsgs = RoadDataGetter.getTrafficMessageData();
+            JsonObject roadCond = RoadDataGetterDigitraffic.getRoadConditionData(location, minX, maxX, minY, maxY);
+            JsonObject maintTasks = RoadDataGetterDigitraffic.getMaintenanceTaskData(minX, maxX, minY, maxY);
+            ArrayList<JsonObject> trafficMsgs = RoadDataGetterDigitraffic.getTrafficMessageData();
             
-            RoadTrafficData data = RoadDataParser.getRoadData(location, minX,
+            RoadTrafficData data = RoadDataParserJSON.getRoadData(location, minX,
                     maxX, minY, maxY, roadCond, maintTasks, trafficMsgs);
             
             return data;
@@ -123,6 +123,7 @@ public class RoadDataHandler {
     
     /**
      * Method for fetching the data from FMI with given location coordinates
+     * NOT YET IMPLEMENTED
      * @param location
      * @param max
      * @return RoadWeatherData object that is used to save or visualize data
@@ -130,7 +131,7 @@ public class RoadDataHandler {
     public RoadWeatherData fetchWeatherData(String location, String max){
         return null;
     }
-    
+      
     /**
      * Method for storing data to the database
      * @param time of the data to be stored
