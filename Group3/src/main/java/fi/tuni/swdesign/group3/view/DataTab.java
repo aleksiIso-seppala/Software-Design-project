@@ -4,6 +4,11 @@
  */
 package fi.tuni.swdesign.group3.view;
 
+import fi.tuni.swdesign.group3.RoadTrafficData;
+import fi.tuni.swdesign.group3.RoadTrafficDataForecast;
+import fi.tuni.swdesign.group3.RoadWeatherData;
+import java.util.HashMap;
+import java.util.Random;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -172,11 +177,67 @@ public abstract class DataTab extends Tab {
                             DataTab.this.endDateField.getText()},
                         DataTab.this.getCbTreeRoot());
                 
-                dataQuery.testPrint();
+//                dataQuery.testPrint();
+
+//                RoadDataQuery query = (RoadDataQuery) dataQuery;
+//                RoadTrafficData data = new RoadTrafficData(dataQuery.getLocation(),
+//                        "", dataQuery.getTimelineStart()[0] + dataQuery.getTimelineStart()[1]);
+//                HashMap<String, Integer> tasks = new HashMap<>();
+//                Random rand = new Random();
+//                for (var i : query.getSelectedTasks()) {
+//                    tasks.put(i, rand.nextInt(0, 50));
+//                }
+//                data.setMaintenanceTasks(tasks);
+//                HashMap<String, RoadTrafficDataForecast> forecasts = new HashMap<>();
+//                RoadTrafficDataForecast tmp = new RoadTrafficDataForecast("", "", "");
+//                for (var i : query.getSelectedForecasts()) {
+//                    if (i.equals("Precipitation")) {
+//                        tmp.setPrecipitation("precip");
+//                    }
+//                    if (i.equals("Winter slipperiness")) {
+//                        tmp.setWinterSlipperines(true);
+//                    }
+//                    if (i.equals("Overall")) {
+//                        tmp.setOverAllcondition("overall");
+//                    }
+//                }
+//                forecasts.put(query.getForecastTime(), tmp);
+//                data.setForecasts(forecasts);
+//                DataVisualizer dv = DataVisualizer.makeDataVisualizer(mainView, data);
+//                RoadDataVisualizer rdv = (RoadDataVisualizer) dv;
+//                rdv.setMTasksToVisualize(query.getSelectedTasks());
+//                rdv.setForecastsToVisualize(query.getSelectedForecasts());
+//                dv.visualizeData();
+//
+//                WeatherDataQuery query = (WeatherDataQuery) dataQuery;
+//                RoadWeatherData data = new RoadWeatherData(dataQuery.getLocation(),
+//                        "", dataQuery.getTimelineStart()[0] + dataQuery.getTimelineStart()[1]);
+//                HashMap<String, RoadWeatherData> forecasts = new HashMap<>();
+//                Random rand = new Random();
+//                data.setTemperature(rand.nextFloat(-20, 20));
+//                data.setCloudiness(rand.nextFloat(0, 10));
+//                data.setWind(rand.nextFloat(0, 10));
+//                for (int i = 2; i < 11; i+=2) {
+//                    RoadWeatherData tmp = new RoadWeatherData("", "", "");
+//                    tmp.setTemperature(rand.nextFloat(-20, 20));
+//                    tmp.setCloudiness(rand.nextFloat(0, 10));
+//                    tmp.setWind(rand.nextFloat(0, 10));
+//                    forecasts.put(Integer.toString(i), tmp);
+//                }
+//                data.setForecasts(forecasts);
+//                DataVisualizer dv = DataVisualizer.makeDataVisualizer(mainView, data);
+//                WeatherDataVisualizer wdv = (WeatherDataVisualizer) dv;
+//                wdv.setObsTypesToVisualize(query.getSelectedObsParams());
+//                wdv.setPreTypesToVisualize(query.getSelectedPreParams());
+//                wdv.visualizeData();
             }
             
         });
     }
     
     abstract TreeItem getCbTreeRoot();
+    
+    public TabPane getChartTabPane() {
+        return this.chartTabPane;
+    }
 }

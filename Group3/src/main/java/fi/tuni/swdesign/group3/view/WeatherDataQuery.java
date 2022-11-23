@@ -11,37 +11,40 @@ import java.util.ArrayList;
  * @author Lauri Puoskari
  */
 public class WeatherDataQuery extends DataQuery{
-
-    private ArrayList<String> selectedTempParams;
-    private ArrayList<String> selectedWindParams;
-    private ArrayList<String> selectedCloudParams;
+//
+//    private ArrayList<String> selectedTempParams;
+//    private ArrayList<String> selectedWindParams;
+//    private ArrayList<String> selectedCloudParams;
+    private ArrayList<String> selectedObsParams;
+    private ArrayList<String> selectedPreParams;
+    private ArrayList<String> selectedPerMonthParams;
     
     WeatherDataQuery(String dataType) {
         super(dataType);
-        this.selectedTempParams = new ArrayList<>();
-        this.selectedWindParams = new ArrayList<>();
-        this.selectedCloudParams = new ArrayList<>();
+        this.selectedObsParams = new ArrayList<>();
+        this.selectedPreParams = new ArrayList<>();
+        this.selectedPerMonthParams = new ArrayList<>();
     }
     
-    public void setSelectedTempParams(ArrayList<String> selectedTempParams) {
-        this.selectedTempParams = selectedTempParams;
+    public void setSelectedObsParams(ArrayList<String> selectedObsParams) {
+        this.selectedObsParams = selectedObsParams;
     }
-    public ArrayList<String> getSelectedTempParams() {
-        return this.selectedTempParams;
-    }
-    
-    public void setSelectedWindParams(ArrayList<String> selectedWindParams) {
-        this.selectedWindParams = selectedWindParams;
-    }
-    public ArrayList<String> getSelectedWindParams() {
-        return this.selectedWindParams;
+    public ArrayList<String> getSelectedObsParams() {
+        return this.selectedObsParams;
     }
     
-    public void setSelectedCloudParams(ArrayList<String> selectedCloudParams) {
-        this.selectedCloudParams = selectedCloudParams;
+    public void setSelectedPreParams(ArrayList<String> selectedPreParams) {
+        this.selectedPreParams = selectedPreParams;
     }
-    public ArrayList<String> getSelectedCloudParams() {
-        return this.selectedCloudParams;
+    public ArrayList<String> getSelectedPreParams() {
+        return this.selectedPreParams;
+    }
+    
+    public void setSelectedPerMonthParams(ArrayList<String> selectedPerMonthParams) {
+        this.selectedPerMonthParams = selectedPerMonthParams;
+    }
+    public ArrayList<String> getSelectedPerMonthParams() {
+        return this.selectedPerMonthParams;
     }
 
     @Override
@@ -49,8 +52,8 @@ public class WeatherDataQuery extends DataQuery{
         System.out.println(super.location + ": " + super.timelineStart[0] + " "
             + super.timelineStart[1] + " - " + super.timelineEnd[0] + " "
             + super.timelineEnd[1]);
-        System.out.println(this.selectedTempParams);
-        System.out.println(this.selectedWindParams);
-        System.out.println(this.selectedCloudParams);
+        System.out.println(this.selectedObsParams);
+        System.out.println(this.selectedPreParams);
+        System.out.println(this.selectedPerMonthParams);
     }
 }

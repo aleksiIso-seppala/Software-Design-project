@@ -80,38 +80,38 @@ public class DataQueryPopulator {
         
         for (var object : root.getChildren()) {
             TreeItem treeItem = (TreeItem) object;
-            if (treeItem.getValue().equals("Temperature")) {
-                ArrayList<String> selectedTempParams = new ArrayList<>();
+            if (treeItem.getValue().equals("Observed values")) {
+                ArrayList<String> selectedObsParams = new ArrayList<>();
                 for (var paramObject : treeItem.getChildren()) {
                     TreeItem paramItem = (TreeItem) paramObject;
                     CheckBox paramBox = (CheckBox) paramItem.getValue();
                     if (paramBox.isSelected()) {
-                        selectedTempParams.add(paramBox.getText());
+                        selectedObsParams.add(paramBox.getText());
                     }
                 }
-                query.setSelectedTempParams(selectedTempParams);
+                query.setSelectedObsParams(selectedObsParams);
             }
-            else if (treeItem.getValue().equals("Wind")) {
-                ArrayList<String> selectedWindParams = new ArrayList<>();
+            else if (treeItem.getValue().equals("Predicted values")) {
+                ArrayList<String> selectedPreParams = new ArrayList<>();
                 for (var paramObject : treeItem.getChildren()) {
                     TreeItem paramItem = (TreeItem) paramObject;
                     CheckBox paramBox = (CheckBox) paramItem.getValue();
                     if (paramBox.isSelected()) {
-                        selectedWindParams.add(paramBox.getText());
+                        selectedPreParams.add(paramBox.getText());
                     }
                 }
-                query.setSelectedWindParams(selectedWindParams);
+                query.setSelectedPreParams(selectedPreParams);
             }
-            else if (treeItem.getValue().equals("Cloudiness")) {
-                ArrayList<String> selectedCloudParams = new ArrayList<>();
+            else if (treeItem.getValue().equals("Values per month")) {
+                ArrayList<String> selectedPerMonthParams = new ArrayList<>();
                 for (var paramObject : treeItem.getChildren()) {
                     TreeItem paramItem = (TreeItem) paramObject;
                     CheckBox paramBox = (CheckBox) paramItem.getValue();
                     if (paramBox.isSelected()) {
-                        selectedCloudParams.add(paramBox.getText());
+                        selectedPerMonthParams.add(paramBox.getText());
                     }
                 }
-                query.setSelectedCloudParams(selectedCloudParams);
+                query.setSelectedPerMonthParams(selectedPerMonthParams);
             }
         }
     }
@@ -132,8 +132,8 @@ public class DataQueryPopulator {
         query.setSelectedForecasts(subRoadDataQuery.getSelectedForecasts());
         query.setForecastTime(subRoadDataQuery.getForecastTime());
         
-        query.setSelectedTempParams(subWeatherDataQuery.getSelectedTempParams());
-        query.setSelectedWindParams(subWeatherDataQuery.getSelectedWindParams());
-        query.setSelectedCloudParams(subWeatherDataQuery.getSelectedWindParams());
+        query.setSelectedTempParams(subWeatherDataQuery.getSelectedObsParams());
+        query.setSelectedWindParams(subWeatherDataQuery.getSelectedPreParams());
+        query.setSelectedCloudParams(subWeatherDataQuery.getSelectedPerMonthParams());
     }
 }

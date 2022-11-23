@@ -67,31 +67,35 @@ public class CheckBoxTreePopulator {
             timeItem.getChildren().add(timeHBoxItem);
         }
         if (tabName.equals("Weather data") | tabName.equals("Combined data")) {
-            TreeItem temperatureItem = new TreeItem("Temperature");
-            TreeItem windItem = new TreeItem("Wind");
-            TreeItem cloudinessItem = new TreeItem("Cloudiness");
-            root.getChildren().addAll(temperatureItem, windItem, cloudinessItem);
+            TreeItem observedItem = new TreeItem("Observed values");
+            TreeItem predictedItem = new TreeItem("Predicted values");
+            TreeItem perMonthItem = new TreeItem("Values per month");
+            root.getChildren().addAll(observedItem, predictedItem, perMonthItem);
 
-            CheckBox averageTempBox = new CheckBox("Average daily/month");
-            CheckBox maxMinTempBox = new CheckBox("Max & min values/month");
-            CheckBox obsTempBox = new CheckBox("Observed values");
-            CheckBox preTempBox = new CheckBox("Predicted values");
+            CheckBox averageTempBox = new CheckBox("Average temperature");
+            CheckBox maxMinTempBox = new CheckBox("Max & min temperatures");
+            CheckBox obsTempBox = new CheckBox("Temperature");
+            CheckBox preTempBox = new CheckBox("Temperature");
             TreeItem averageTempItem = new TreeItem(averageTempBox);
             TreeItem maxMinTempItem = new TreeItem(maxMinTempBox);
             TreeItem obsTempItem = new TreeItem(obsTempBox);
             TreeItem preTempItem = new TreeItem(preTempBox);
-            temperatureItem.getChildren().addAll(averageTempItem, maxMinTempItem, 
-                    obsTempItem, preTempItem);
+//            observedItem.getChildren().addAll(averageTempItem, maxMinTempItem, 
+//                    obsTempItem, preTempItem);
+            observedItem.getChildren().add(obsTempItem);
+            predictedItem.getChildren().add(preTempItem);
+            perMonthItem.getChildren().addAll(averageTempItem, maxMinTempItem);
 
-            CheckBox obsWindBox = new CheckBox("Observed values");
-            CheckBox preWindBox = new CheckBox("Predicted values");
+            CheckBox obsWindBox = new CheckBox("Wind speed");
+            CheckBox preWindBox = new CheckBox("Wind speed");
             TreeItem obsWindItem = new TreeItem(obsWindBox);
             TreeItem preWindItem = new TreeItem(preWindBox);
-            windItem.getChildren().addAll(obsWindItem, preWindItem);
+            observedItem.getChildren().add(obsWindItem);
+            predictedItem.getChildren().add(preWindItem);
 
-            CheckBox obsCloudBox = new CheckBox("Observed values");
+            CheckBox obsCloudBox = new CheckBox("Cloudiness");
             TreeItem obsCloudItem = new TreeItem(obsCloudBox);
-            cloudinessItem.getChildren().add(obsCloudItem);
+            observedItem.getChildren().add(obsCloudItem);
         }
     }
 }

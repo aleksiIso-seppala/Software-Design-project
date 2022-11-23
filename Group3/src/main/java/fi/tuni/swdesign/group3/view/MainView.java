@@ -17,8 +17,8 @@ import javafx.stage.Stage;
  */
 public class MainView extends Application {
     
-    private final static int WINDOW_WIDTH = 800;
-    private final static int WINDOW_HEIGHT = 500;
+    private final static int WINDOW_WIDTH = 850;
+    private final static int WINDOW_HEIGHT = 550;
 
     private TabPane tabPane;
     private ArrayList<String> locations;
