@@ -13,12 +13,30 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.zip.GZIPInputStream;
+
 /**
- *
- * @author Aleksi
+ * A class for getting the RoadData from Digitraffic using correct url addresses
+ * and then converting them to JsonObjects/JsonArrays containing the correct data.
+ * Generally is meant to be used with the RoadDataParserJSON which parses the Json
+ * Objects to an usable format.
+ * 
+ * @author Aleksi Iso-Seppälä
  */
 public class RoadDataGetterDigitraffic implements RoadDataGetter {
     
+    /**
+     * A dunction that gets the JsonArray containing all the different maintenance
+     * task type names. It gets the function from Digitraffic using an url and
+     * then converting it to the JsonArray.
+     * <p>
+     * The returned JsonArray is to be used with the corresponsing parser functions
+     * so the data can be used.
+     * 
+     * @return returns a JsonArray with the data on the task names.
+     * @throws MalformedURLException if there is something wrong with the url address
+     * @throws IOException if there goes something wrong with getting the correct data
+     * from the URL address.
+     */
     public static JsonArray getMaintenanceTaskNamesData() throws 
             MalformedURLException, IOException{
         
@@ -46,6 +64,27 @@ public class RoadDataGetterDigitraffic implements RoadDataGetter {
         
     }
     
+    /**
+     * A function that gets the JsonObject containing the data 
+     * for active maintenance tasks. It gets the data from Digitraffic using an
+     * url with the correct coordinate specifications.
+     * <p>
+     * The coordinates work so the x-coordinates must be set between 10 and 32. Y-
+     * decimals must be set between 59 and 72. Coordinates may contain decimals and are
+     * to be set in WGS84 format.
+     * <p>
+     * The returned JsonObject is to be used with the corresponsing parser functions
+     * so the data can be used.
+     * 
+     * @param minX A string for the minimum longitude coordinate
+     * @param maxX A string for the maximum longitude coordinate
+     * @param minY A string for the minimum latitude coordinate
+     * @param maxY A string for the maximum latitude coordinate
+     * @return The JsonObject containing the data
+     * @throws MalformedURLException if there is something wrong with the url address
+     * @throws IOException if there no maintenanceTasks were found or if the given
+     * coordinates were invalid.
+     */
     public static JsonObject getMaintenanceTaskData(String minX, String maxX,
             String minY, String maxY) throws MalformedURLException, IOException{
         
@@ -81,6 +120,28 @@ public class RoadDataGetterDigitraffic implements RoadDataGetter {
         return response;
     }
     
+    /**
+     * A function that gets the JsonObject containing the data 
+     * for road conditions. It gets the data from Digitraffic using an
+     * url with the correct coordinate specifications.
+     * <p>
+     * The coordinates work so the x-coordinates must be set between 10 and 32. Y-
+     * decimals must be set between 59 and 72. Coordinates may contain decimals and are
+     * to be set in WGS84 format.
+     * <p>
+     * The returned JsonObject is to be used with the corresponsing parser functions
+     * so the data can be used.
+     * 
+     * @param location A string that defines the city which the coordinates belong to
+     * @param minX A string for the minimum longitude coordinate
+     * @param maxX A string for the maximum longitude coordinate
+     * @param minY A string for the minimum latitude coordinate
+     * @param maxY A string for the maximum latitude coordinate
+     * @return The JsonObject containing the data
+     * @throws MalformedURLException if there is something wrong with the url address
+     * @throws IOException if there no road conditions were found or if the given
+     * coordinates were invalid.
+     */
     public static JsonObject getRoadConditionData(String location, String minX, String maxX,
             String minY, String maxY) throws MalformedURLException, IOException{
         
@@ -116,6 +177,23 @@ public class RoadDataGetterDigitraffic implements RoadDataGetter {
         return response;
     }
     
+    /**
+     * A function that gets the JsonObject containing the data 
+     * for traffic messages. It gets the data from Digitraffic using an
+     * url with the correct specifications.
+     * <p>
+     * The function goes through multiple types of traffic message types and combines
+     * every JsonObject that contained any messages to an ArrayList. 
+     * <p>
+     * The returned ArrayList is to be used with the corresponsing parser functions
+     * so the data can be used.
+     * 
+     * @return The ArrayList containing the data
+     * @throws MalformedURLException if there is something wrong with the url address
+     * @throws IOException if there are no traffic messages available for the specific
+     * message type. Note that this does not stop the function, as it goes on normally after
+     * it
+     */
     public static ArrayList<JsonObject> getTrafficMessageData() throws MalformedURLException, IOException{
         
         ArrayList<JsonObject> messageData = new ArrayList<>();
@@ -161,11 +239,4 @@ public class RoadDataGetterDigitraffic implements RoadDataGetter {
         return messageData;
     }
     
-    public static void main(String args[]) throws IOException {
-        // TODO code application logic here
-        // var response = getRoadConditionData("suomi","100","100","100","100");
-        // RoadDataParserJSON.readFirstCondition("suomi", "19", "32", "59", "72", response);
-        int messages = RoadDataParserJSON.readTrafficMessages(getTrafficMessageData());
-        System.out.println(messages);
-    }
 }
