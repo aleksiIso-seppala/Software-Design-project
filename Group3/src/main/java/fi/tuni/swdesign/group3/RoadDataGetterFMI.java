@@ -21,6 +21,26 @@ import org.xml.sax.SAXException;
  */
 public class RoadDataGetterFMI {
 
+    /**
+     * Method that fetched data from the API and creates a w3cDocument from it
+     * This document will then be used in RoadDataParserXML to set the data in an actual object
+     * @param queryName is the type of query (Observed or Predicted values)
+     * Location values:
+     * @param minX
+     * @param maxX
+     * @param minY
+     * @param maxY
+     * Specific location values for Predicted values:
+     * @param lat
+     * @param lon
+     * @param startTime
+     * @param endTime
+     * @param parameters -> what data the User wants (temperature, windspeed, cloudiness...)
+     * @return
+     * @throws MalformedURLException
+     * @throws ProtocolException
+     * @throws IOException 
+     */
     public static org.w3c.dom.Document getDOMDocument(String queryName, String minX, String maxX, String minY, String maxY, String lat, String lon, String startTime, String endTime, String parameters) throws MalformedURLException, ProtocolException, IOException {
         org.w3c.dom.Document w3cDocument = null;
         
@@ -92,8 +112,16 @@ public class RoadDataGetterFMI {
         return w3cDocument;
     }
 
+    /**
+     * Method that does a very basic verification of the query according to the queryType and the parameters asked
+     * Since the parameters needed for Observed and Predicted fetching are named differently
+     * (Optional TO-DO: refactor into a CheckQuery Class for clarification + better verification)
+     * @param query
+     * @param param
+     * @return 
+     */
     private static boolean checkIfCorrectQuery(String query, String param){
         return (query.contains("fmi::forecast") && (param.contains("TA_PT1H") || param.contains("t2m") || param.contains("ws_10min") || param.contains("n_man")))
-                || (query.equals("fmi::observations") && (param.contains("TA_PT1H") || param.contains("temperature") || param.contains("windspeedms")));
+                || (query.equals("fmi::observations") && (param.contains("temperature") || param.contains("windspeedms")));
     }
 }

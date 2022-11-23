@@ -63,4 +63,20 @@ public abstract class RoadData {
     public String getCoordinates(){
         return this.coordinates;
     }
+    
+    /**
+     * Getter for time
+     * @return time as a string
+     */
+    public String getTime(){
+        return this.time;
+    }
+    
+    /**
+     * Setter for time
+     * @param time as a string
+     */
+    public void setTime(String time){
+        this.time = time;
+    }
 }

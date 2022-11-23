@@ -25,7 +25,7 @@ public class RoadDataHandler {
     RoadDataHandler(){
         database = new HashMap<>();
         digiTraficLocations = new HashMap<>();
-        digiTraficLocations.put("Suomi", new ArrayList<>(List.of("19", "32", "59", "72")));
+        digiTraficLocations.put("Suomi", new ArrayList<>(List.of("19.1", "32", "59.1", "72")));
         digiTraficLocations.put("Helsinki", new ArrayList<>(List.of("24.93545", "25", "60.16952", "61")));
         digiTraficLocations.put("Kuopio", new ArrayList<>(List.of("27.67703","28", "62.89238", "63")));
         digiTraficLocations.put("Oulu", new ArrayList<>(List.of("25.46816", "26", "65.01236", "66" )));
@@ -47,10 +47,10 @@ public class RoadDataHandler {
                     getRoadConditionData(location, loc.get(0).toString(),
                             loc.get(1).toString(), loc.get(2).toString(),
                             loc.get(3).toString());
-                     
+                    
             JsonObject maintenanceTasks = RoadDataGetter.
-                    getMaintenanceTaskData(loc.get(0).toString(),
-                            loc.get(1).toString(), loc.get(2).toString(),
+                    getMaintenanceTaskData(loc.get(0).toString().split("\\.",2)[0],
+                            loc.get(1).toString(), loc.get(2).toString().split("\\.",2)[0],
                             loc.get(3).toString());
             
             ArrayList<JsonObject> trafficMsgs = RoadDataGetter.getTrafficMessageData();
