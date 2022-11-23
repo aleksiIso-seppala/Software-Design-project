@@ -4,30 +4,41 @@
  */
 package fi.tuni.swdesign.group3;
 
-import java.net.URL;
-import java.net.MalformedURLException;
 import com.google.gson.*;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.zip.GZIPInputStream;
+
 
 
 /**
- *
+ * A class for parsing the RoadData from Json to an usable form. Generally is 
+ * meant to be used with the RoadDataGetterDigiTraffic class which generates the
+ * JsonObjects needed for the functions in this class.
+ * 
  * @author Aleksi Iso-Seppälä
  */
 public class RoadDataParserJSON implements RoadDataParser{
-
-    /**
-     * @param args the command line arguments
-     * @return 
-     */
     
+    /**
+     * Returns a complete RoadTrafficData object with all the different road data information
+     * filled using the corresponding functions. 
+     * <p>
+     * X-coordinates must be set between 10 and 32. Y-
+     * decimals must be set between 59 and 72. Coordinates may contain decimals and are
+     * to be set in WGS84 format.
+     * 
+     * @param location A string that defines the city which the coordinates belong to
+     * @param minX A string for the minimum longitude coordinate
+     * @param maxX A string for the maximum longitude coordinate
+     * @param minY A string for the minimum latitude coordinate
+     * @param maxY A string for the maximum latitude coordinate
+     * @param condition A JsonObject for the roadCondition data
+     * @param tasks A JsonObject for the road maintenance task data
+     * @param messageData an ArrayList for the JsonObjects for the traffic message data
+     * @return A roadTrafficData object
+     */
     public static RoadTrafficData getRoadData(String location, String minX, String maxX,
-            String minY, String maxY, JsonObject condition, JsonObject tasks, ArrayList<JsonObject> messageData) throws IOException{
+            String minY, String maxY, JsonObject condition, JsonObject tasks, ArrayList<JsonObject> messageData){
         
         var roadData = readFirstCondition(location, minX, maxX, minY, maxY, condition);
         
@@ -44,8 +55,18 @@ public class RoadDataParserJSON implements RoadDataParser{
         return roadData;
     }
     
-    
-    public static ArrayList<String> readMaintenanceTaskNames(JsonArray response) throws MalformedURLException, IOException{
+    /**
+     * A function that goes through the maintenance tasknames jsonarray and gets all
+     * the different possible names of maintenance tasks. The JsonArray needs to be
+     * generated via the getter function getMaintenanceTaskNamesData()
+     * <p>
+     * The gathered data is put to an ArrayList with the Names of the possible
+     * task names.
+     * 
+     * @param response The starting point of the Json data Array
+     * @return An ArrayList with all the names of the maintenance tasks
+     */
+    public static ArrayList<String> readMaintenanceTaskNames(JsonArray response){
         
         ArrayList<String> tasks = new ArrayList<>();
         for(var object: response){
@@ -60,8 +81,18 @@ public class RoadDataParserJSON implements RoadDataParser{
 
     }
     
-    public static HashMap<String, Integer> readMaintenanceTasks(JsonObject response)
-            throws MalformedURLException, IOException{
+    /**
+     * Function that goes through all the maintenance tasks inside the JsonObject.
+     * JsonObject is generated with the getter function getMaintenanceTaskData().
+     * <p>
+     * The gathered data is then put into a HashMap with the name of
+     * the task and the number of occurences of that task type.
+     * 
+     * @param response The starting point of the JsonObject data
+     * @return A HashMap with the different task types found and the number of cases
+     * corresponding to the task type
+     */
+    public static HashMap<String, Integer> readMaintenanceTasks(JsonObject response){
         
         JsonArray features = response.getAsJsonArray("features");
         
@@ -81,47 +112,71 @@ public class RoadDataParserJSON implements RoadDataParser{
         
     }
     
-    public static void readRoadConditions(String minX, String maxX, String minY, String maxY) throws MalformedURLException, IOException{
-        
-        String sUrl = "https://tie.digitraffic.fi/api/v3/data/road-conditions/";        
-        String coordinates = minX+"/"+minY+"/"+maxX+"/"+maxY; 
-        String fullUrl = sUrl+coordinates;
-        
-        URL url = new URL(fullUrl);
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
-        con.setRequestProperty("accept", "*/*");
-        con.setRequestProperty("Accept-Encoding", "gzip");
-        
-        GZIPInputStream gzipInput = new GZIPInputStream(con.getInputStream());
-        InputStreamReader reader = new InputStreamReader(gzipInput, "UTF-8");
-        
-        Gson gson = new Gson();
-        JsonObject response = gson.fromJson(reader, JsonObject.class);
-        JsonArray weatherData = response.getAsJsonArray("weatherData");
-        
-        for(var data: weatherData){
-            JsonObject forecast = (JsonObject) data;
-            JsonArray roadConditions = forecast.getAsJsonArray("roadConditions");
-            for(var road : roadConditions){
-                JsonObject condition = road.getAsJsonObject();
-                String time = condition.get("forecastName").getAsString();
-                String overallRoadCondition = condition.get("overallRoadCondition").getAsString();
-                String weatherSymbol = condition.get("weatherSymbol").getAsString();
-
-                if(condition.get("type").getAsString().equals("FORECAST")){
-                    JsonObject forecastCondition = condition.getAsJsonObject("forecastConditionReason");
-
-                    forecastCondition.get("precipitationCondition").getAsString();
-                    forecastCondition.get("roadCondition").getAsString();
-
-                }
-            }
-        }
-    }
     
+//    private static void readRoadConditions(String minX, String maxX, String minY, String maxY){
+//        
+//        String sUrl = "https://tie.digitraffic.fi/api/v3/data/road-conditions/";        
+//        String coordinates = minX+"/"+minY+"/"+maxX+"/"+maxY; 
+//        String fullUrl = sUrl+coordinates;
+//        
+//        URL url = new URL(fullUrl);
+//        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+//        con.setRequestMethod("GET");
+//        con.setRequestProperty("accept", "*/*");
+//        con.setRequestProperty("Accept-Encoding", "gzip");
+//        
+//        GZIPInputStream gzipInput = new GZIPInputStream(con.getInputStream());
+//        InputStreamReader reader = new InputStreamReader(gzipInput, "UTF-8");
+//        
+//        Gson gson = new Gson();
+//        JsonObject response = gson.fromJson(reader, JsonObject.class);
+//        JsonArray weatherData = response.getAsJsonArray("weatherData");
+//        
+//        for(var data: weatherData){
+//            JsonObject forecast = (JsonObject) data;
+//            JsonArray roadConditions = forecast.getAsJsonArray("roadConditions");
+//            for(var road : roadConditions){
+//                JsonObject condition = road.getAsJsonObject();
+//                String time = condition.get("forecastName").getAsString();
+//                String overallRoadCondition = condition.get("overallRoadCondition").getAsString();
+//                String weatherSymbol = condition.get("weatherSymbol").getAsString();
+//
+//                if(condition.get("type").getAsString().equals("FORECAST")){
+//                    JsonObject forecastCondition = condition.getAsJsonObject("forecastConditionReason");
+//
+//                    forecastCondition.get("precipitationCondition").getAsString();
+//                    forecastCondition.get("roadCondition").getAsString();
+//
+//                }
+//            }
+//        }
+//    }
+
+    /**
+     * A function that goes through the roadCondition data that and gets the 
+     * first complete set of data from it. This includes an observation of the
+     * current condition and multiple forecasts of coming conditions.
+     * <p>
+     * An object RoadTrafficData is created and the observation and forecasts
+     * are converted to usable data and put to the object with setter functions
+     * <p>
+     * The inital JsonObject is to be created with corresponding getter function
+     * getRoadConditionData().
+     * 
+     * X-coordinates must be set between 10 and 32. Y-
+     * decimals must be set between 59 and 72. Coordinates may contain decimals and are
+     * to be set in WGS84 format.
+     * 
+     * @param location The name of the location for which the coordinates belong to
+     * @param minX A string for the minimum longitude coordinate
+     * @param maxX A string for the maximum longitude coordinate
+     * @param minY A string for the minimum latitude coordinate
+     * @param maxY A string for the maximum latitude coordinate
+     * @param response The JsonObject for the roadCondition data 
+     * @return A RoadTrafficData with the correct gathered road conditions
+     */
     public static RoadTrafficData readFirstCondition(String location, String minX, String maxX,
-            String minY, String maxY, JsonObject response) throws MalformedURLException, IOException{
+            String minY, String maxY, JsonObject response){
         
         String coordinates = minX+"/"+minY+"/"+maxX+"/"+maxY; 
         
@@ -183,7 +238,19 @@ public class RoadDataParserJSON implements RoadDataParser{
          
     }
     
-    public static int readTrafficMessages(ArrayList<JsonObject> data) throws MalformedURLException, IOException{
+    /**
+     * A function that gathers the total amount of traffic messages between all the
+     * different possible traffic message types. The function goes through an 
+     * ArrayList containing the JsonObjects for the message types and counts the
+     * amount of messages.
+     * <p>
+     * The initial ArrayList is to be created with the corresponding getter
+     * function getTrafficMessageData()
+     * 
+     * @param data An ArrayList Of JsonObjects of the trafficmessage data
+     * @return An integer of the total amount of traffic messages found.
+     */
+    public static int readTrafficMessages(ArrayList<JsonObject> data){
         
         int messages = 0;
         for(var situation : data){
@@ -223,15 +290,4 @@ public class RoadDataParserJSON implements RoadDataParser{
 //        }
     }
     
-    public static void main(String args[]) throws IOException {
-        // TODO code application logic here
-        // readMaintenanceTasks("19","32","59","72");
-        // readRoadConditions("19","32","59","72");
-        // readFirstCondition("Suomi","19","32","59","72");
-        // readTrafficMessages("TRAFFIC_ANNOUNCEMENT");
-        // getRoadData("Suomi","19","32","59","72");
-        // var response = RoadDataGetter.getRoadConditionData("Suomi","10","10","10","10");
-        // readFirstCondition("Suomi", "10","10","10","10", response);
-        
-    }
 }
