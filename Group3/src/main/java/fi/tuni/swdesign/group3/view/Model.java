@@ -6,7 +6,7 @@ import fi.tuni.swdesign.group3.*;
  * @author jukka
  */
 public class Model {
-    private RoadDataHandler handler;
+    private final RoadDataHandler handler;
 
     /**
      * Default constructor for Model
@@ -41,7 +41,5 @@ public class Model {
      */
     public RoadWeatherData getRoadWeatherData(String location, String time, String futureTime){
         return this.handler.fetchWeatherData(location, time, futureTime);
-    }
-    
-    
+    } 
 }

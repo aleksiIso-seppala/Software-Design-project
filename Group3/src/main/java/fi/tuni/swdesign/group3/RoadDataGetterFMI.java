@@ -19,7 +19,7 @@ import org.xml.sax.SAXException;
  *
  * @author Amanda Dieuaide
  */
-public class RoadDataGetterFMI {
+public class RoadDataGetterFMI implements RoadDataGetter {
 
     /**
      * Method that fetched data from the API and creates a w3cDocument from it

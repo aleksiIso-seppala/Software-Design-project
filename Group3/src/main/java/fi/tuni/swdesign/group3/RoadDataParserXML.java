@@ -16,7 +16,7 @@ import org.w3c.dom.NodeList;
  *
  * @author Amanda Dieuaide
  */
-public class RoadDataParserXML {
+public class RoadDataParserXML implements RoadDataParser{
     /**
      * Method that uses the w3cDocument created while fetching the data (in RoadDataGetterFMI)
      * It goes through the different elements/nodes of the document and sets the data queried by the User
