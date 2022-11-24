@@ -10,6 +10,8 @@ import java.util.Collections;
  */
 public class Model {
     private final RoadDataHandler handler;
+    private ArrayList<String> locations;
+    private ArrayList<String> mntTaskTypes;
 
     /**
      * Default constructor for Model
@@ -47,10 +49,20 @@ public class Model {
     } 
     
     public ArrayList<String> getLocations(){
-        ArrayList<String> locations = new ArrayList<>();
-        handler.getHardCodedLocations().forEach((key, value) -> 
-                locations.add(key));
-        Collections.sort(locations);
-        return locations;
+        if(this.locations == null){
+            this.locations = new ArrayList<>();
+            handler.getHardCodedLocations().forEach((key, value) -> 
+                    locations.add(key));
+            Collections.sort(locations);
+        }
+        return this.locations;
+    }
+    
+    public ArrayList<String> getMaintenaneTaskTypes(){
+        if(this.mntTaskTypes == null){
+            this.mntTaskTypes = new ArrayList<>();
+            this.mntTaskTypes = handler.getMaintenanceTaskNames();
+        }
+        return this.mntTaskTypes;
     }
 }

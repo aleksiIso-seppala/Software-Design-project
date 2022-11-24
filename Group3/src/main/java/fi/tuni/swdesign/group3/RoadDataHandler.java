@@ -4,6 +4,7 @@
  */
 package fi.tuni.swdesign.group3;
 
+import com.google.gson.JsonArray;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -198,5 +199,17 @@ public class RoadDataHandler {
      */
     public HashMap<String, ArrayList<String>> getHardCodedLocations(){
         return this.digiTraficLocations;
+    }
+    
+    public ArrayList<String> getMaintenanceTaskNames(){
+        try {
+            JsonArray arr = RoadDataGetterDigitraffic.getMaintenanceTaskNamesData();
+            ArrayList<String> names = new ArrayList<>();
+            names = RoadDataParserJSON.readMaintenanceTaskNames(arr);
+            return names;
+        } catch (Exception e) {
+        System.out.println("Error in maintenanceTasknames");
+        }
+        return null;
     }
 }

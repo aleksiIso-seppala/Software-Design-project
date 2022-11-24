@@ -49,6 +49,9 @@ public class ViewModel {
         return model.getLocations();
     }
     
+    public ArrayList<String> getMaintenanceTaskTypes(){
+        return model.getMaintenaneTaskTypes();
+    }
     
     
 }
