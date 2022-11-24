@@ -33,7 +33,7 @@ public class CombinedDataTab extends DataTab{
         gridPane.add(trafficMsgButton, 2, 3);
         gridPane.add(this.checkBoxTree, 2, 1, 1, 2);
         
-        CheckBoxTreePopulator cbtPopulator = new CheckBoxTreePopulator();
+        CheckBoxTreePopulator cbtPopulator = new CheckBoxTreePopulator(super.mainView);
         cbtPopulator.populateCheckBoxTree(this.checkBoxTree, this.getText());
         
         trafficMsgButton.setOnAction(new EventHandler<>() {

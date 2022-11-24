@@ -167,5 +167,4 @@ public class RoadDataVisualizer extends DataVisualizer{
         
         return forecastView;
     }
-    
 }

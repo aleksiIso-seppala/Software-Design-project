@@ -37,18 +37,22 @@ public class MainView extends Application {
         stage.setScene(new Scene(tabPane, WINDOW_WIDTH, WINDOW_HEIGHT));
         stage.show();
         
-        // Hardcode implementation for prototype.
-        this.locations = new ArrayList<>();
-        this.locations.add("Tampere");
-        this.locations.add("Helsinki");
-        this.locations.add("Oulu");
-        this.locations.add("Rovaniemi");
-        this.locations.add("Kuopio");
-        Collections.sort(this.locations);
+//        // Hardcode implementation for prototype.
+//        this.locations = new ArrayList<>();
+//        this.locations.add("Tampere");
+//        this.locations.add("Helsinki");
+//        this.locations.add("Oulu");
+//        this.locations.add("Rovaniemi");
+//        this.locations.add("Kuopio");
+//        Collections.sort(this.locations);
+        
+        
         
         ModelFactory mf = new ModelFactory();
         ViewModelFactory vmf = new ViewModelFactory(mf);
         this.viewModel = vmf.getViewModel();
+        
+        this.locations = this.viewModel.getLocations();
         
         //runAutoUpdate((Model) mf.getModel());
         
@@ -83,6 +87,10 @@ public class MainView extends Application {
     
     public Stage getStage() {
         return this.stage;
+    }
+    
+    public ViewModel getViewModel() {
+        return this.viewModel;
     }
        
     public void initGUI() {

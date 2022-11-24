@@ -18,8 +18,10 @@ import javafx.scene.layout.HBox;
 public class CheckBoxTreePopulator {
     
     private static final int SHORT_H_GAP = 10;
+    private MainView mainView;
     
-    CheckBoxTreePopulator() {
+    CheckBoxTreePopulator(MainView mainView) {
+        this.mainView = mainView;
     }
     
     public void populateCheckBoxTree(TreeView checkBoxTree, String tabName) {
@@ -32,8 +34,13 @@ public class CheckBoxTreePopulator {
             root.getChildren().addAll(maintenanceItem, conditionItem);
 
             // Hardcode implementation for prototype.
-            for (int i = 1; i < 6; i++) {
-                CheckBox checkBox = new CheckBox("Maintenance task " + i);
+//            for (int i = 1; i < 6; i++) {
+//                CheckBox checkBox = new CheckBox("Maintenance task " + i);
+//                TreeItem checkBoxItem = new TreeItem(checkBox);
+//                maintenanceItem.getChildren().add(checkBoxItem);
+//            }
+            for (var taskType : this.mainView.getViewModel().getMaintenanceTaskTypes()) {
+                CheckBox checkBox = new CheckBox(taskType);
                 TreeItem checkBoxItem = new TreeItem(checkBox);
                 maintenanceItem.getChildren().add(checkBoxItem);
             }
