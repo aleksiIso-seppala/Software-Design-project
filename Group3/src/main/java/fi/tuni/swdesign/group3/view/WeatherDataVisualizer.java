@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 import javafx.geometry.Pos;
+import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
@@ -30,6 +31,7 @@ public class WeatherDataVisualizer extends DataVisualizer{
     private RoadWeatherData data;
     private ArrayList<String> obsTypesToVisualize;
     private ArrayList<String> preTypesToVisualize;
+    private ArrayList<String> perMonthTypesToVisualize;
     
     WeatherDataVisualizer(MainView mainView, RoadWeatherData data) {
         super(mainView);
@@ -50,6 +52,14 @@ public class WeatherDataVisualizer extends DataVisualizer{
     
     public void setPreTypesToVisualize(ArrayList<String> forecasts) {
         this.preTypesToVisualize = forecasts;
+    }
+    
+    public ArrayList<String> getPerMonthTypesToVisualize() {
+        return perMonthTypesToVisualize;
+    }
+    
+    public void setPerMonthTypesToVisualize(ArrayList<String> perMonthTypesToVisualize) {
+        this.perMonthTypesToVisualize = perMonthTypesToVisualize;
     }
     
     @Override
@@ -149,5 +159,36 @@ public class WeatherDataVisualizer extends DataVisualizer{
         }
         
         return predictedChart;
+    }
+    
+    private AreaChart visualizePerMonthValues() {
+        HashMap<String, RoadWeatherData> dailyValues = new HashMap<>();
+        final CategoryAxis xAxis = new CategoryAxis();
+        final NumberAxis yAxis = new NumberAxis();
+        final AreaChart perMonthChart = new AreaChart(xAxis, yAxis);
+        perMonthChart.setTitle("Predicted weather values: " + 
+                this.data.getLocation() + " - " + this.data.getTime());
+        xAxis.setLabel("Date (dd.mm)");
+        yAxis.setLabel("Temperature (°C)");
+        perMonthChart.setCreateSymbols(false);
+        
+        for (String type : this.perMonthTypesToVisualize) {
+            XYChart.Series series = new XYChart.Series();
+            series.setName(type);
+            for (String date : dailyValues.keySet()) {
+                if (type.equals("Average temperature")) {
+                    series.getData().add(new XYChart.Data(date, dailyValues.get(date)
+                            .getAVGTemperature()));
+                }
+                else if (type.equals("Max & min temperatures")) {
+                    series.getData().add(new XYChart.Data(date, dailyValues.get(date)
+                            .getMINTemperature()));
+                    series.getData().add(new XYChart.Data(date, dailyValues.get(date)
+                            .getMAXTemperature()));
+                }
+            }
+            perMonthChart.getData().add(series);
+        }
+        return perMonthChart;
     }
 }

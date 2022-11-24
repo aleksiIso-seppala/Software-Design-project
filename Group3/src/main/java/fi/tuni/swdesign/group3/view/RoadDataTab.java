@@ -7,6 +7,7 @@ package fi.tuni.swdesign.group3.view;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.GridPane;
@@ -18,32 +19,37 @@ import javafx.scene.layout.GridPane;
 public class RoadDataTab extends DataTab {
     private GridPane gridPane;
     private TreeView checkBoxTree;
+    private Label trafficMsgLabel;
     
     RoadDataTab(MainView mainView) {
         super(mainView);
         this.setText("Road data");
         this.gridPane = (GridPane) super.getContent();
         
-        Button trafficMsgButton = new Button("Traffic messages (5)");
-        trafficMsgButton.setPrefWidth(DataTab.LONG_ELEMENT_WIDTH);
+        this.trafficMsgLabel = new Label("Amount of traffic messages: ");
+        this.trafficMsgLabel.setPrefWidth(DataTab.LONG_ELEMENT_WIDTH);
         
         this.checkBoxTree = new TreeView();
         this.checkBoxTree.setPrefSize(DataTab.CHECK_BOX_TREE_WIDTH, DataTab.CHECK_BOX_TREE_HEIGHT);
         
-        this.gridPane.add(trafficMsgButton, 2, 3);
+        this.gridPane.add(this.trafficMsgLabel, 2, 3);
         this.gridPane.add(this.checkBoxTree, 2, 1, 1, 2);
         
-        CheckBoxTreePopulator cbtPopulator = new CheckBoxTreePopulator(super.mainView);
-        cbtPopulator.populateCheckBoxTree(this.checkBoxTree, this.getText());
+        TreeItem root = new TreeItem();
+        this.checkBoxTree.setRoot(root);
+        this.checkBoxTree.setShowRoot(false);
+        RoadDataCBTPopulator cbtPopulator = (RoadDataCBTPopulator) 
+                CheckBoxTreePopulator.makeCBTPopulator(mainView, this.getText());
+        cbtPopulator.populateCheckBoxTree(this.checkBoxTree);
         
-        trafficMsgButton.setOnAction(new EventHandler<>() {
-            @Override
-            public void handle(ActionEvent t) {
-                TrafficMessageView trafMsgView = new TrafficMessageView(
-                        RoadDataTab.this.mainView);
-                trafMsgView.show();
-            }
-        });
+//        trafficMsgButton.setOnAction(new EventHandler<>() {
+//            @Override
+//            public void handle(ActionEvent t) {
+//                TrafficMessageView trafMsgView = new TrafficMessageView(
+//                        RoadDataTab.this.mainView);
+//                trafMsgView.show();
+//            }
+//        });
         
     }
 
@@ -60,4 +66,9 @@ public class RoadDataTab extends DataTab {
             visualizer.visualizeData();
         }
     }
+    
+    public Label getTrafficMsgLabel() {
+        return trafficMsgLabel;
+    }
+
 }

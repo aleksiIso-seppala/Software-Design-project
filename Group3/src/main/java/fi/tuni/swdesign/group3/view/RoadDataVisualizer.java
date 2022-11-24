@@ -166,4 +166,21 @@ public class RoadDataVisualizer extends DataVisualizer{
         
         return forecastView;
     }
+    
+    public void visualizeTrafficMsgs() {
+        if (super.mainView.getTabPane().getSelectionModel().getSelectedItem()
+                instanceof RoadDataTab) {
+            RoadDataTab rdTab = (RoadDataTab) super.mainView.getTabPane()
+                    .getSelectionModel().getSelectedItem();
+            rdTab.getTrafficMsgLabel().setText("Amount of traffic Messages: " 
+                    + this.data.getNumberOfTrafficMessages());
+        }
+        else if (super.mainView.getTabPane().getSelectionModel().getSelectedItem()
+                instanceof CombinedDataTab) {
+            CombinedDataTab cdTab = (CombinedDataTab) super.mainView.getTabPane()
+                    .getSelectionModel().getSelectedItem();
+            cdTab.getTrafficMsgLabel().setText("Amount of traffic Messages: "
+                    + this.data.getNumberOfTrafficMessages());
+        }
+    }
 }

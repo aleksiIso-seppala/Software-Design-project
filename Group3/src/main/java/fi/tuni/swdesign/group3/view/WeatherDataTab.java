@@ -24,8 +24,12 @@ public class WeatherDataTab extends DataTab {
         this.checkBoxTree.setPrefSize(DataTab.CHECK_BOX_TREE_WIDTH, DataTab.CHECK_BOX_TREE_HEIGHT);
         gridPane.add(this.checkBoxTree, 2, 1, 1, 2);
         
-        CheckBoxTreePopulator cbtPopulator = new CheckBoxTreePopulator(super.mainView);
-        cbtPopulator.populateCheckBoxTree(this.checkBoxTree, this.getText());
+        TreeItem root = new TreeItem();
+        this.checkBoxTree.setRoot(root);
+        this.checkBoxTree.setShowRoot(false);
+        WeatherDataCBTPopulator cbtPopulator = (WeatherDataCBTPopulator) 
+                CheckBoxTreePopulator.makeCBTPopulator(mainView, this.getText());
+        cbtPopulator.populateCheckBoxTree(this.checkBoxTree);
     }
         
     @Override
