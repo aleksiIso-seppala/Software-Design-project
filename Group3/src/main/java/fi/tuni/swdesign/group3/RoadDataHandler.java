@@ -4,12 +4,15 @@
  */
 package fi.tuni.swdesign.group3;
 
+import com.google.gson.*;
 import com.google.gson.JsonArray;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import com.google.gson.JsonObject;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Map;
 
 /**
@@ -181,7 +184,50 @@ public class RoadDataHandler {
     /**
      * Method for saving the current database as JSON
      */
-    public void saveDataBase(){
+    public void saveDataBase(RoadTrafficData roadData,RoadTrafficDataForecast weatherData) throws IOException{
+        
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String fileName = "SavedData.json";
+        Writer writer = new FileWriter(fileName);
+        JsonArray userData = new JsonArray();
+        
+        JsonObject dataPackage = new JsonObject();
+        dataPackage.addProperty("numberOfTrafficMessages", roadData.getNumberOfTrafficMessages());
+        dataPackage.addProperty("windSpeed", roadData.getWindSpeed());
+        dataPackage.addProperty("temperature", roadData.getTemperature());
+        dataPackage.addProperty("overAllCondition", roadData.getOverAllCondition());
+        dataPackage.addProperty("weatherSymbol", roadData.getWeatherSymbol());
+        
+        JsonObject maintenanceTasks = new JsonObject();
+       
+        for(var task : roadData.getMaintenanceTasks().entrySet()){
+            maintenanceTasks.addProperty(task.getKey(),task.getValue());
+        }
+        dataPackage.add("maintenanceTasks", maintenanceTasks);
+      
+        JsonArray forecasts = new JsonArray();
+        for(var forecast : roadData.getForecasts().entrySet()){
+            JsonObject forecastObject = new JsonObject();
+            forecastObject.addProperty("time", forecast.getKey());
+            
+            var forecastData = forecast.getValue();
+            forecastObject.addProperty("windSpeed", forecastData.getWindSpeed());
+            forecastObject.addProperty("temperature", forecastData.getTemperature());
+            forecastObject.addProperty("overAllCondition", forecastData.getOverAllCondition());
+            forecastObject.addProperty("weatherSymbol", forecastData.getWeatherSymbol());       
+            
+            forecastObject.addProperty("precipitation", forecastData.getPrecipitation());
+            forecastObject.addProperty("friction", forecastData.getFriction());
+            forecastObject.addProperty("overAllcondition", forecastData.getOverAllcondition());
+            forecastObject.addProperty("visibility", forecastData.getVisibility());
+            
+            forecasts.add(forecastObject);
+        }
+        dataPackage.add("forecast",forecasts);
+        
+        userData.add(dataPackage);    
+        gson.toJson(userData, writer);
+        writer.close();
         
     }
     
