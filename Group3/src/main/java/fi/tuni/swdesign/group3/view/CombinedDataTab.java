@@ -47,7 +47,28 @@ public class CombinedDataTab extends DataTab{
     }
     
     @Override
-    TreeItem getCbTreeRoot() {
+    public TreeItem getCbTreeRoot() {
         return this.checkBoxTree.getRoot();
+    }
+
+    @Override
+    public void updateChart(DataVisualizer... visualizers) {
+        this.chartTabPane.getTabs().clear();
+        RoadDataVisualizer roadDV = null;
+        WeatherDataVisualizer weatherDV = null;
+        for (int i = 0; i < visualizers.length; i++) {
+            if (visualizers[i] instanceof RoadDataVisualizer) {
+                roadDV = (RoadDataVisualizer) visualizers[i];
+            }
+            else if (visualizers[i] instanceof WeatherDataVisualizer) {
+                weatherDV = (WeatherDataVisualizer) visualizers[i];
+            }
+        }
+        if (roadDV != null) {
+            roadDV.visualizeData();
+        }
+        if (weatherDV != null) {
+            weatherDV.visualizeData();
+        }
     }
 }

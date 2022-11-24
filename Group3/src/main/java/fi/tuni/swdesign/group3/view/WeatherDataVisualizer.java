@@ -57,7 +57,6 @@ public class WeatherDataVisualizer extends DataVisualizer{
         DataTab dataTab = (DataTab) super.mainView.getTabPane().
                 getSelectionModel().getSelectedItem();
         TabPane chartTabPane = dataTab.getChartTabPane();
-        chartTabPane.getTabs().clear();
         if (!this.obsTypesToVisualize.isEmpty()) {
             Tab observedTab = new Tab("Observed values");
             observedTab.setContent(visualizeObservedValues());

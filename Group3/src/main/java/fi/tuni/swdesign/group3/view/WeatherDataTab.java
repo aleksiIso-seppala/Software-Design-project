@@ -29,7 +29,16 @@ public class WeatherDataTab extends DataTab {
     }
         
     @Override
-    TreeItem getCbTreeRoot() {
+    public TreeItem getCbTreeRoot() {
         return this.checkBoxTree.getRoot();
+    }
+
+    @Override
+    public void updateChart(DataVisualizer... visualizers) {
+        this.chartTabPane.getTabs().clear();
+        if (visualizers.length > 0) {
+            WeatherDataVisualizer visualizer = (WeatherDataVisualizer) visualizers[0];
+            visualizer.visualizeData();
+        }
     }
 }

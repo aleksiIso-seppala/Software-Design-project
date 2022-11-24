@@ -178,7 +178,6 @@ public abstract class DataTab extends Tab {
                         DataTab.this.getCbTreeRoot());
                 
                 
-                
 //                dataQuery.testPrint();
 
 //                RoadDataQuery query = (RoadDataQuery) dataQuery;
@@ -237,9 +236,11 @@ public abstract class DataTab extends Tab {
         });
     }
     
-    abstract TreeItem getCbTreeRoot();
+    public abstract TreeItem getCbTreeRoot();
     
     public TabPane getChartTabPane() {
         return this.chartTabPane;
     }
+    
+    public abstract void updateChart(DataVisualizer... visualizers);
 }

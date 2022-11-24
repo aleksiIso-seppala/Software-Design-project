@@ -48,7 +48,16 @@ public class RoadDataTab extends DataTab {
     }
 
     @Override
-    TreeItem getCbTreeRoot() {
+    public TreeItem getCbTreeRoot() {
         return this.checkBoxTree.getRoot();
+    }
+
+    @Override
+    public void updateChart(DataVisualizer... visualizers) {
+        this.chartTabPane.getTabs().clear();
+        if (visualizers.length > 0) {
+            RoadDataVisualizer visualizer = (RoadDataVisualizer) visualizers[0];
+            visualizer.visualizeData();
+        }
     }
 }

@@ -60,7 +60,6 @@ public class RoadDataVisualizer extends DataVisualizer{
         DataTab dataTab = (DataTab) super.mainView.getTabPane().
                 getSelectionModel().getSelectedItem();
         TabPane chartTabPane = dataTab.getChartTabPane();
-        chartTabPane.getTabs().clear();
         if (!this.mTasksToVisualize.isEmpty()) {
             Tab maintenanceTab = new Tab("Maintenance tasks");
             if (!this.data.getMaintenanceTasks().isEmpty()) {
