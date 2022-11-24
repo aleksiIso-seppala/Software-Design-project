@@ -1,6 +1,8 @@
 package fi.tuni.swdesign.group3.view;
 import fi.tuni.swdesign.group3.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  *
@@ -48,6 +50,7 @@ public class Model {
         ArrayList<String> locations = new ArrayList<>();
         handler.getHardCodedLocations().forEach((key, value) -> 
                 locations.add(key));
+        Collections.sort(locations);
         return locations;
     }
 }

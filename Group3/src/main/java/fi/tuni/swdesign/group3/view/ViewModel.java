@@ -1,6 +1,7 @@
 package fi.tuni.swdesign.group3.view;
 import fi.tuni.swdesign.group3.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import javafx.event.ActionEvent;
 
