@@ -15,17 +15,17 @@ public class CombinedDataQuery extends DataQuery {
     private ArrayList<String> selectedTasks;
     private ArrayList<String> selectedForecasts;
     private String forecastTime;
-    private ArrayList<String> selectedTempParams;
-    private ArrayList<String> selectedWindParams;
-    private ArrayList<String> selectedCloudParams;
+    private ArrayList<String> selectedObsParams;
+    private ArrayList<String> selectedPreParams;
+    private ArrayList<String> selectedPerMonthParams;
     
     CombinedDataQuery(String dataType) {
         super(dataType);
         this.selectedTasks = new ArrayList<>();
         this.selectedForecasts = new ArrayList<>();
-        this.selectedTempParams = new ArrayList<>();
-        this.selectedWindParams = new ArrayList<>();
-        this.selectedCloudParams = new ArrayList<>();
+        this.selectedObsParams = new ArrayList<>();
+        this.selectedPreParams = new ArrayList<>();
+        this.selectedPerMonthParams = new ArrayList<>();
     }
 
     public void setSelectedTasks(ArrayList<String> selectedTasks) {
@@ -51,26 +51,29 @@ public class CombinedDataQuery extends DataQuery {
     public String getForecastTime() {
         return this.forecastTime;
     }
+    
+     public ArrayList<String> getSelectedObsParams() {
+        return selectedObsParams;
+    }
 
-    public void setSelectedTempParams(ArrayList<String> selectedTempParams) {
-        this.selectedTempParams = selectedTempParams;
+    public void setSelectedObsParams(ArrayList<String> selectedObsParams) {
+        this.selectedObsParams = selectedObsParams;
     }
-    public ArrayList<String> getSelectedTempParams() {
-        return this.selectedTempParams;
+
+    public ArrayList<String> getSelectedPreParams() {
+        return selectedPreParams;
     }
-    
-    public void setSelectedWindParams(ArrayList<String> selectedWindParams) {
-        this.selectedWindParams = selectedWindParams;
+
+    public void setSelectedPreParams(ArrayList<String> selectedPreParams) {
+        this.selectedPreParams = selectedPreParams;
     }
-    public ArrayList<String> getSelectedWindParams() {
-        return this.selectedWindParams;
+
+    public ArrayList<String> getSelectedPerMonthParams() {
+        return selectedPerMonthParams;
     }
-    
-    public void setSelectedCloudParams(ArrayList<String> selectedCloudParams) {
-        this.selectedCloudParams = selectedCloudParams;
-    }
-    public ArrayList<String> getSelectedCloudParams() {
-        return this.selectedCloudParams;
+
+    public void setSelectedPerMonthParams(ArrayList<String> selectedPerMonthParams) {
+        this.selectedPerMonthParams = selectedPerMonthParams;
     }
 
     @Override
@@ -81,9 +84,9 @@ public class CombinedDataQuery extends DataQuery {
         System.out.println(this.selectedTasks);
         System.out.println(this.selectedForecasts);
         System.out.println(this.forecastTime);
-        System.out.println(this.selectedTempParams);
-        System.out.println(this.selectedWindParams);
-        System.out.println(this.selectedCloudParams);
+        System.out.println(this.selectedObsParams);
+        System.out.println(this.selectedPreParams);
+        System.out.println(this.selectedPerMonthParams);
     }
     
 }

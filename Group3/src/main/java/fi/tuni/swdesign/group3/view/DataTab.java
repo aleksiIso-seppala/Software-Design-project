@@ -60,6 +60,7 @@ public abstract class DataTab extends Tab {
     protected TextField endTimeField;
     protected TextField endDateField;
     protected TabPane chartTabPane;
+    protected Label errorInfoLabel;
     
     DataTab(MainView mainView) {
         super();
@@ -118,9 +119,9 @@ public abstract class DataTab extends Tab {
         Button calculateButton = new Button("Calculate");
         calculateButton.setPrefWidth(SHORT_ELEMENT_WIDTH);
         
-        Label errorInfoLabel = new Label("Invalid parameters!");
-        errorInfoLabel.setTextFill(Color.RED);
-        errorInfoLabel.setPrefWidth(LONG_ELEMENT_WIDTH);
+        this.errorInfoLabel = new Label();
+        this.errorInfoLabel.setTextFill(Color.RED);
+        this.errorInfoLabel.setPrefWidth(LONG_ELEMENT_WIDTH);
         
         Button dataButton = new Button("Data");
         dataButton.setPrefWidth(SHORT_ELEMENT_WIDTH);
@@ -131,7 +132,7 @@ public abstract class DataTab extends Tab {
         HBox buttonHBox = new HBox();
         buttonHBox.setSpacing(SHORT_H_GAP);
         buttonHBox.setAlignment(Pos.CENTER_LEFT);
-        buttonHBox.getChildren().addAll(calculateButton, errorInfoLabel, 
+        buttonHBox.getChildren().addAll(calculateButton, this.errorInfoLabel, 
                 dataButton, prefButton);
         
         gridPane.add(locationLabel, 0, 0);
@@ -177,7 +178,16 @@ public abstract class DataTab extends Tab {
                             DataTab.this.endDateField.getText()},
                         DataTab.this.getCbTreeRoot());
                 
-                
+                DataQueryValidityChecker dqValidityChecker = 
+                        DataQueryValidityChecker.makeDataQueryValidityChecker(
+                                mainView, dataQuery);
+                String dqValidity = dqValidityChecker.checkDataQueryValidity();
+                if (dqValidity.equals("Data query is valid.")) {
+                    DataTab.this.errorInfoLabel.setText("");
+                }
+                else {
+                    DataTab.this.errorInfoLabel.setText(dqValidity);
+                }
 //                dataQuery.testPrint();
 
 //                RoadDataQuery query = (RoadDataQuery) dataQuery;
