@@ -1,5 +1,6 @@
 package fi.tuni.swdesign.group3.view;
 import fi.tuni.swdesign.group3.*;
+import java.util.ArrayList;
 
 /**
  *
@@ -42,4 +43,11 @@ public class Model {
     public RoadWeatherData getRoadWeatherData(String location, String time, String futureTime){
         return this.handler.fetchWeatherData(location, time, futureTime);
     } 
+    
+    public ArrayList<String> getLocations(){
+        ArrayList<String> locations = new ArrayList<>();
+        handler.getHardCodedLocations().forEach((key, value) -> 
+                locations.add(key));
+        return locations;
+    }
 }

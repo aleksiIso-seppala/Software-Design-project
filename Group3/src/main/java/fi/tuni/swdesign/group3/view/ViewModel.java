@@ -1,5 +1,6 @@
 package fi.tuni.swdesign.group3.view;
 import fi.tuni.swdesign.group3.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import javafx.event.ActionEvent;
 
@@ -19,14 +20,21 @@ public class ViewModel {
     ViewModel(Model m){
         this.model = m;
     }
-            
-    public void onRoadDataCalculateButton(ActionEvent e, HashMap<String, String> parameters){
+     
+    /**
+     * 
+     * @param parameters
+     * @return 
+     */
+    public RoadTrafficData onRoadDataCalculateButton(HashMap<String, String> parameters){
         RoadTrafficData data = model.getRoadTrafficData(parameters.get("location"));
+        return data;
     }
     
-    public void onWeatherDataCalculateButton(ActionEvent e, HashMap<String, String> parameters){
+    public RoadWeatherData onWeatherDataCalculateButton(ActionEvent e, HashMap<String, String> parameters){
         RoadWeatherData data = model.getRoadWeatherData(parameters.get("location"), 
                 parameters.get("time"), parameters.get("futuretime"));
+        return data;
     }
     
     public void onCombinedDataCalculateButton(ActionEvent e, HashMap<String, String> parameters){
@@ -34,6 +42,10 @@ public class ViewModel {
         RoadWeatherData wdata = model.getRoadWeatherData(parameters.get("location"), 
                 parameters.get("time"), parameters.get("futuretime"));
                 
+    }
+    
+    public ArrayList<String> getLocations(){
+        return model.getLocations();
     }
     
     

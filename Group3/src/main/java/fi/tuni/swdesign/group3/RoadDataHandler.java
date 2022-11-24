@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import com.google.gson.JsonObject;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * A class which handles the fetching and saving of data from the two different
@@ -190,4 +191,12 @@ public class RoadDataHandler {
         
     }
     
+    /**
+     * Method for getting the hardcoded locations which will then be added
+     * to the GUI
+     * @return ArrayList which contains the locations as a string
+     */
+    public HashMap<String, ArrayList<String>> getHardCodedLocations(){
+        return this.digiTraficLocations;
+    }
 }
