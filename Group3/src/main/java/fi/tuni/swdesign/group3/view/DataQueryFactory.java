@@ -13,11 +13,12 @@ public class DataQueryFactory {
     DataQueryFactory() {
     }
     
-    DataQuery makeDataQuery(String dataType) {
+    public static DataQuery makeDataQuery(String dataType) {
         return switch (dataType) {
             case "Road data" -> new RoadDataQuery(dataType);
             case "Weather data" -> new WeatherDataQuery(dataType);
-            default -> new CombinedDataQuery(dataType);
+            case "Combined data" -> new CombinedDataQuery(dataType);
+            default -> null;
         };
     }
 }
