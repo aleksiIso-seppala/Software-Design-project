@@ -7,7 +7,14 @@ package fi.tuni.swdesign.group3;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.TreeMap;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -106,7 +113,7 @@ public class RoadDataParserXML implements RoadDataParser{
                                 newRoadWeatherData = setRoadWeatherData(newRoadWeatherData, param, value);
                             }
                         }
-                        
+
                     }
                 }
             }
@@ -155,6 +162,72 @@ public class RoadDataParserXML implements RoadDataParser{
         }
         return roadWeatherData;
     }
+    
+    /**
+     * Method to get daily AVG, MIN, MAX, Temperatures for a location and a choosen month
+     * It uses getDOMParsedDocument() to parse the data from a org.w3c.dom.Document object
+     * The query uses fmi::observations::weather::daily::simple and fetches for the TA_PT1H_AVG,TA_PT1H_MAX,TA_PT1H_MIN parameters
+     * If some days of the month are set in the future, the values are = 0.0
+     * Location values:
+     * @param minX
+     * @param maxX
+     * @param minY
+     * @param maxY
+     * @param date YYYY-MM input queried by the user
+     * @return a TreeMap as the keys are sorted out by date (day 1 of the month until the end of the month)
+     * @throws ProtocolException
+     * @throws IOException 
+     */
+    protected static TreeMap<String, Float[]> getMonthlyTemperatureData(String minX, String maxX, String minY, String maxY, String date) throws ProtocolException, IOException{
+        TreeMap<String, Float[]> monthlyData = new TreeMap<>();
+        
+        String[] dateSplit = date.split("-");
+        
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, Integer.parseInt(dateSplit[0])); //Year
+        cal.set(Calendar.MONTH, Integer.parseInt(dateSplit[1])-1); //Month: 0 = January; 11 = December
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        int maxDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        
+        for (int i = 0; i < maxDay; i++) 
+        {
+            cal.set(Calendar.DAY_OF_MONTH, i + 1);
+            
+            String keyDate = df.format(cal.getTime()) + "T";
+            
+            org.w3c.dom.Document observationDOM = RoadDataGetterFMI.getDOMDocument("fmi::observations::weather::daily::simple", minX, maxX, minY, maxY, "", "", keyDate, keyDate + "23:59:59Z", "TA_PT1H_AVG,TA_PT1H_MAX,TA_PT1H_MIN");
+            
+            ArrayList<Float> allAvg = new ArrayList<>(), allMin = new ArrayList<>(), allMax = new ArrayList<>();
+            
+            //Get multiple AVG, MIN and MAX values in a day
+            RoadWeatherData daily = getDOMParsedDocument(observationDOM, minX, maxX, minY, maxY, "", "", keyDate + "00:00:00Z");
+            HashMap<String, RoadWeatherData> forecast = daily.getForecasts();
+            allAvg.add(daily.getAVGTemperature());
+            allMin.add(daily.getMINTemperature());
+            allMax.add(daily.getMAXTemperature());
+            
+            Collection<RoadWeatherData> hourlyData = forecast.values();
+            
+            for (RoadWeatherData weatherData : hourlyData) {
+                allAvg.add(weatherData.getAVGTemperature());
+                allMin.add(weatherData.getMINTemperature());
+                allMax.add(weatherData.getMAXTemperature());
+            }
+            
+            //Get one AVG, MIN, MAX values from the multiple values (different hours) in one day
+            float dailyAVG = (Collections.max(allAvg) + Collections.min(allAvg))/2;
+            dailyAVG /= Math.pow(10, (int) Math.log10(dailyAVG));
+            dailyAVG = ((int) (dailyAVG * 10)) / 10.0f; // One digit floor
+            float dailyMIN = Collections.min(allMin);
+            float dailyMAX = Collections.max(allMax);
+
+            Float[] temp = {dailyAVG, dailyMIN, dailyMAX};
+            monthlyData.put(keyDate, temp);
+        }
+        
+        return monthlyData;
+    }
 
     public static void main(String[] args) throws Exception {
         //Test: Parsing Observed and Predicted Weather Data using data fetched by RoadDataGetterFMI
@@ -173,5 +246,13 @@ public class RoadDataParserXML implements RoadDataParser{
             System.out.println(test2.toString());
             System.out.println(test2.getForecasts());
         }
+        
+        //Ex: Observed daily temperature for a whole month in a specific location
+        System.out.println("\nEx: Observed daily temperature for a whole month in a specific location");
+        TreeMap<String, Float[]> monthlyData = getMonthlyTemperatureData("23", "61", "24", "62","2022-02");
+        monthlyData.entrySet().forEach(entry -> {
+            System.out.println(entry.getKey() + " " + Arrays.toString(entry.getValue()));
+        });
+        
     }
 }
