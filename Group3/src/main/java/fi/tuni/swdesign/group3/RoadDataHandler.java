@@ -12,7 +12,10 @@ import java.util.HashMap;
 import com.google.gson.JsonObject;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Reader;
 import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Map;
 
 /**
@@ -184,49 +187,102 @@ public class RoadDataHandler {
     /**
      * Method for saving the current database as JSON
      */
-    public void saveDataBase(RoadTrafficData roadData,RoadTrafficDataForecast weatherData) throws IOException{
+    public void saveDataBase(RoadTrafficData roadData,RoadWeatherData weatherData) throws IOException{
         
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String fileName = "SavedData.json";
         Writer writer = new FileWriter(fileName);
-        JsonArray userData = new JsonArray();
+        JsonArray saveData = new JsonArray();
         
-        JsonObject dataPackage = new JsonObject();
-        dataPackage.addProperty("numberOfTrafficMessages", roadData.getNumberOfTrafficMessages());
-        dataPackage.addProperty("windSpeed", roadData.getWindSpeed());
-        dataPackage.addProperty("temperature", roadData.getTemperature());
-        dataPackage.addProperty("overAllCondition", roadData.getOverAllCondition());
-        dataPackage.addProperty("weatherSymbol", roadData.getWeatherSymbol());
-        
-        JsonObject maintenanceTasks = new JsonObject();
-       
-        for(var task : roadData.getMaintenanceTasks().entrySet()){
-            maintenanceTasks.addProperty(task.getKey(),task.getValue());
+        // saving roadData
+        if(roadData != null){
+            JsonObject roadPackage = new JsonObject();
+            roadPackage.addProperty("dataType", "RoadTrafficData");
+            
+            roadPackage.addProperty("location",roadData.getLocation());
+            roadPackage.addProperty("coordinates",roadData.getCoordinates());
+            roadPackage.addProperty("time",roadData.getTime());
+            
+            roadPackage.addProperty("numberOfTrafficMessages", roadData.getNumberOfTrafficMessages());
+            roadPackage.addProperty("windSpeed", roadData.getWindSpeed());
+            roadPackage.addProperty("temperature", roadData.getTemperature());
+            roadPackage.addProperty("overAllCondition", roadData.getOverAllCondition());
+            roadPackage.addProperty("weatherSymbol", roadData.getWeatherSymbol());
+
+            JsonObject maintenanceTasks = new JsonObject();
+
+            for(var task : roadData.getMaintenanceTasks().entrySet()){
+                maintenanceTasks.addProperty(task.getKey(),task.getValue());
+            }
+            roadPackage.add("maintenanceTasks", maintenanceTasks);
+
+            JsonArray roadForecasts = new JsonArray();
+            for(var forecast : roadData.getForecasts().entrySet()){
+                JsonObject forecastObject = new JsonObject();
+                
+                forecastObject.addProperty("time", forecast.getKey());
+
+                var forecastData = forecast.getValue();
+                
+                forecastObject.addProperty("location",forecastData.getLocation());
+                forecastObject.addProperty("coordinate",forecastData.getCoordinates());
+                
+                forecastObject.addProperty("windSpeed", forecastData.getWindSpeed());
+                forecastObject.addProperty("temperature", forecastData.getTemperature());
+                forecastObject.addProperty("overAllCondition", forecastData.getOverAllCondition());
+                forecastObject.addProperty("weatherSymbol", forecastData.getWeatherSymbol());       
+
+                forecastObject.addProperty("precipitation", forecastData.getPrecipitation());
+                forecastObject.addProperty("friction", forecastData.getFriction());
+                forecastObject.addProperty("overAllcondition", forecastData.getOverAllcondition());
+                forecastObject.addProperty("visibility", forecastData.getVisibility());
+
+                roadForecasts.add(forecastObject);
+            }
+            roadPackage.add("roadForecasts",roadForecasts);
+
+            saveData.add(roadPackage);
         }
-        dataPackage.add("maintenanceTasks", maintenanceTasks);
-      
-        JsonArray forecasts = new JsonArray();
-        for(var forecast : roadData.getForecasts().entrySet()){
-            JsonObject forecastObject = new JsonObject();
-            forecastObject.addProperty("time", forecast.getKey());
-            
-            var forecastData = forecast.getValue();
-            forecastObject.addProperty("windSpeed", forecastData.getWindSpeed());
-            forecastObject.addProperty("temperature", forecastData.getTemperature());
-            forecastObject.addProperty("overAllCondition", forecastData.getOverAllCondition());
-            forecastObject.addProperty("weatherSymbol", forecastData.getWeatherSymbol());       
-            
-            forecastObject.addProperty("precipitation", forecastData.getPrecipitation());
-            forecastObject.addProperty("friction", forecastData.getFriction());
-            forecastObject.addProperty("overAllcondition", forecastData.getOverAllcondition());
-            forecastObject.addProperty("visibility", forecastData.getVisibility());
-            
-            forecasts.add(forecastObject);
-        }
-        dataPackage.add("forecast",forecasts);
         
-        userData.add(dataPackage);    
-        gson.toJson(userData, writer);
+        //saving weatherData
+        if(weatherData != null){
+            JsonObject weatherPackage = new JsonObject();
+            weatherPackage.addProperty("dataType", "RoadWeatherData");
+            
+            weatherPackage.addProperty("location",weatherData.getLocation());
+            weatherPackage.addProperty("coordinates",weatherData.getCoordinates());
+            weatherPackage.addProperty("time",weatherData.getTime());
+            
+            weatherPackage.addProperty("temperature",weatherData.getTemperature());
+            weatherPackage.addProperty("wind",weatherData.getWind());
+            weatherPackage.addProperty("cloudiness",weatherData.getCloudiness());
+            weatherPackage.addProperty("AVGTemperature",weatherData.getAVGTemperature());
+            weatherPackage.addProperty("MAXTemperature",weatherData.getMAXTemperature());
+            weatherPackage.addProperty("MINTemperature",weatherData.getMINTemperature());
+
+            JsonArray weatherForecasts = new JsonArray();
+            for(var forecast : weatherData.getForecasts().entrySet()){
+                JsonObject forecastObject = new JsonObject();
+                forecastObject.addProperty("time", forecast.getKey());
+                
+                var forecastData = forecast.getValue();
+                forecastObject.addProperty("location", forecastData.getLocation());
+                forecastObject.addProperty("coordinates", forecastData.getCoordinates());
+                
+                forecastObject.addProperty("temperature",forecastData.getTemperature());
+                forecastObject.addProperty("wind",forecastData.getWind());
+                forecastObject.addProperty("cloudiness",forecastData.getCloudiness());
+                forecastObject.addProperty("AVGTemperature",forecastData.getAVGTemperature());
+                forecastObject.addProperty("MAXTemperature",forecastData.getMAXTemperature());
+                forecastObject.addProperty("MINTemperature",forecastData.getMINTemperature()); 
+
+                weatherForecasts.add(forecastObject);
+            }
+            weatherPackage.add("weatherForecasts", weatherForecasts);
+            saveData.add(weatherPackage);
+        }
+        
+        gson.toJson(saveData, writer);
         writer.close();
         
     }
@@ -234,7 +290,150 @@ public class RoadDataHandler {
     /**
      * Method for loading the saved database from a JSON file
      */
-    public void loadDataBase(){
+    public void loadDataBase() throws IOException{
+        
+        Gson gson = new Gson();
+        String fileName = "SavedData.json";
+        Reader reader = Files.newBufferedReader(Paths.get(fileName));
+        JsonArray response = gson.fromJson(reader, JsonArray.class);
+        
+        for(var data : response){
+            JsonObject roadData = (JsonObject) data;
+            
+            //type roadTrafficData
+            if(roadData.get("dataType").getAsString().equals("roadTrafficData")){
+                
+                //getting RoadData information
+                String location = roadData.get("location").getAsString();
+                String coordinates = roadData.get("coordinates").getAsString();
+                String time = roadData.get("time").getAsString();
+                
+                //getting roadTrafficData information
+                int numberOfTrafficMessages = roadData.get("numberOfTrafficMessages").getAsInt();
+                double windSpeed = roadData.get("windSpeed").getAsDouble();
+                String temperature = roadData.get("temperature").getAsString();
+                String overAllCondition = roadData.get("overAllCondition").getAsString();
+                String weatherSymbol = roadData.get("weatherSymbol").getAsString();
+                
+                //getting maintenance tasks
+                var maintenanceTasks = roadData.get("maintenanceTasks").getAsJsonObject();                
+                HashMap<String, Integer> maintenanceTaskMap = new HashMap<>();
+                
+                maintenanceTasks.keySet().forEach(keyStr ->{
+                   int amount = maintenanceTasks.get(keyStr).getAsInt();
+                   String taskName = keyStr;
+                   maintenanceTaskMap.put(keyStr, amount);
+                });
+                
+                //creating roadTrafficData class object
+                RoadTrafficData roadTrafficData = new RoadTrafficData(location, coordinates, time);
+                roadTrafficData.setNumberOfTrafficMessages(numberOfTrafficMessages);
+                roadTrafficData.setWindSpeed(windSpeed);
+                roadTrafficData.setTemperature(temperature);
+                roadTrafficData.setOverAllCondition(overAllCondition);
+                roadTrafficData.setWeatherSymbol(weatherSymbol);
+                roadTrafficData.setMaintenanceTasks(maintenanceTaskMap);                
+                
+                //getting road forecasts
+                JsonArray roadForecasts = roadData.get("roadForecasts").getAsJsonArray();
+                HashMap<String, RoadTrafficDataForecast> forecastsMap = new HashMap<>();
+                
+                for(var forecast : roadForecasts){
+                    JsonObject forecastData = (JsonObject) forecast;
+                    
+                    String fLocation = forecastData.get("location").getAsString();
+                    String fCoordinates = forecastData.get("coordinates").getAsString();
+                    String fTime = forecastData.get("time").getAsString();
+                    
+                    double fWindSpeed = forecastData.get("windSpeed").getAsDouble();
+                    String fTemperature = forecastData.get("temperature").getAsString();
+                    String fOverAllCondition = forecastData.get("overAllCondition").getAsString();
+                    String fWeatherSymbol = forecastData.get("weatherSymbol").getAsString();                   
+                    
+                    String precipitation = forecastData.get("precipitation").getAsString();
+                    String friction = forecastData.get("friction").getAsString();
+                    String overAllcondition = forecastData.get("overAllcondition").getAsString();
+                    String visibility = forecastData.get("visibility").getAsString();
+                    boolean winterSlipperiness = forecastData.get("winterSlipperiness").getAsBoolean();
+                    
+                    var forecastObject = new RoadTrafficDataForecast(fLocation, fCoordinates, fTime);
+                    forecastObject.setWindSpeed(fWindSpeed);
+                    forecastObject.setTemperature(fTemperature);
+                    forecastObject.setOverAllCondition(fOverAllCondition);
+                    forecastObject.setWeatherSymbol(fWeatherSymbol);
+                    
+                    forecastObject.setPrecipitation(precipitation);
+                    forecastObject.setFriction(friction);
+                    forecastObject.setOverAllcondition(overAllcondition);
+                    forecastObject.setVisibility(visibility);
+                    forecastObject.setWinterSlipperines(winterSlipperiness);
+                    
+                    forecastsMap.put(fTime, forecastObject);                    
+                }
+                roadTrafficData.setForecasts(forecastsMap);    
+            }
+            
+            //type RoadWeatherData
+            else if(roadData.get("dataType").getAsString().equals("RoadWeatherData")){
+                
+                //getting RoadData information
+                String location = roadData.get("location").getAsString();
+                String coordinates = roadData.get("coordinates").getAsString();
+                String time = roadData.get("time").getAsString();
+                
+                //getting roadWeatherData information
+                float temperature = roadData.get("temperature").getAsFloat();
+                float wind = roadData.get("wind").getAsFloat();
+                float cloudiness = roadData.get("cloudiness").getAsFloat();
+                float AVGTemperature = roadData.get("AVGTemperature").getAsFloat();
+                float MAXTemperaturee = roadData.get("MAXTemperature").getAsFloat();
+                float MINTemperature = roadData.get("MINTemperature").getAsFloat();
+                
+                //creating weather object
+                var roadWeatherData = new RoadWeatherData(location,coordinates,time);
+                roadWeatherData.setTemperature(temperature);
+                roadWeatherData.setWind(wind);
+                roadWeatherData.setCloudiness(cloudiness);
+                roadWeatherData.setAVGTemperature(AVGTemperature);
+                roadWeatherData.setMAXTemperature(MAXTemperaturee);
+                roadWeatherData.setMINTemperature(MINTemperature);
+                
+                //getting forecast data
+                JsonArray forecastArray = roadData.getAsJsonArray("weatherForecasts");
+                HashMap<String, RoadWeatherData> forecasts = new HashMap<>();
+                for(var forecastData : forecastArray){
+                    JsonObject forecastObject = (JsonObject) forecastData;
+                    
+                    String fLocation = forecastObject.get("location").getAsString();
+                    String fCoordinates = forecastObject.get("coordinates").getAsString();
+                    String fTime = forecastObject.get("time").getAsString();
+                    
+                    float fTemperature = forecastObject.get("temperature").getAsFloat();
+                    float fWind = forecastObject.get("wind").getAsFloat();
+                    float fCloudiness = forecastObject.get("cloudiness").getAsFloat();
+                    float fAVGTemperature = forecastObject.get("AVGTemperature").getAsFloat();
+                    float fMAXTemperaturee = forecastObject.get("MAXTemperature").getAsFloat();
+                    float fMINTemperature = forecastObject.get("MINTemperature").getAsFloat();
+                    
+                    var roadForecastData = new RoadWeatherData(fLocation,fCoordinates,fTime);
+                    roadForecastData.setTemperature(fTemperature);
+                    roadForecastData.setWind(fWind);
+                    roadForecastData.setCloudiness(fCloudiness);
+                    roadForecastData.setAVGTemperature(fAVGTemperature);
+                    roadForecastData.setMAXTemperature(fMAXTemperaturee);
+                    roadForecastData.setMINTemperature(fMINTemperature);
+                    
+                    forecasts.put(time, roadForecastData);                    
+                }
+                roadWeatherData.setForecasts(forecasts);                
+            }
+            
+            //type not valid
+            else{
+                System.out.println("not valid datatype");
+                continue;
+            }
+        }  
         
     }
     
