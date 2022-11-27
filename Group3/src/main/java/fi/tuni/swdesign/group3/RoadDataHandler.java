@@ -16,6 +16,9 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
+import fi.tuni.swdesign.group3.view.*;
+
 import java.util.Map;
 
 /**
@@ -185,7 +188,10 @@ public class RoadDataHandler {
     }
     
     /**
-     * Method for saving the current database as JSON
+     * 
+     * @param roadData
+     * @param weatherData
+     * @throws IOException 
      */
     public void saveDataBase(RoadTrafficData roadData,RoadWeatherData weatherData) throws IOException{
         
@@ -288,7 +294,8 @@ public class RoadDataHandler {
     }
     
     /**
-     * Method for loading the saved database from a JSON file
+     * 
+     * @throws IOException 
      */
     public void loadDataBase() throws IOException{
         
@@ -435,6 +442,257 @@ public class RoadDataHandler {
             }
         }  
         
+    }
+    
+    /**
+     * 
+     * @param dataQuery
+     * @throws IOException 
+     */
+    public void savePreferences(DataQuery dataQuery) throws IOException{
+        
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String fileName = "SavedPreferences.json";
+        Writer writer = new FileWriter(fileName);
+        
+        JsonObject userPreferences = new JsonObject();
+        
+        String dataType = dataQuery.getDataType();
+        String location = dataQuery.getLocation();
+        String[] timelineStart = dataQuery.getTimelineStart();
+        String[] timelineEnd = dataQuery.getTimelineEnd();
+        
+        userPreferences.addProperty("dataType", dataType);
+        userPreferences.addProperty("location", location);
+        
+        if(dataQuery instanceof RoadDataQuery){
+            RoadDataQuery query = (RoadDataQuery) dataQuery;
+            
+            ArrayList<String> selectedTasks = query.getSelectedTasks();
+            JsonArray jsonSelectedTasks = new JsonArray();
+            for(var task : selectedTasks){
+                jsonSelectedTasks.add(task);
+            }
+            
+            ArrayList<String> selectedForecasts = query.getSelectedForecasts();
+            JsonArray jsonSelectedForecasts = new JsonArray();
+            for(var task : selectedForecasts){
+                jsonSelectedForecasts.add(task);
+            }
+            
+            String forecastTime = query.getForecastTime();
+            
+            userPreferences.addProperty("forecastTime", forecastTime);
+            userPreferences.add("selectedTasks", jsonSelectedTasks);
+            userPreferences.add("selectedForecasts", jsonSelectedForecasts);
+            
+        }
+        else if(dataQuery instanceof WeatherDataQuery){
+            WeatherDataQuery query = (WeatherDataQuery) dataQuery;
+            
+            ArrayList<String> selectedObsParams = query.getSelectedObsParams();
+            JsonArray jsonSelectedObs = new JsonArray();
+            for(var param : selectedObsParams){
+                jsonSelectedObs.add(param);
+            }
+            
+            ArrayList<String> selectedPreParams = query.getSelectedPreParams();
+            JsonArray jsonSelectedPre = new JsonArray();
+            for(var param : selectedPreParams){
+                jsonSelectedPre.add(param);
+            }
+            
+            ArrayList<String> selectedPreMonthParams = query.getSelectedPerMonthParams();
+            JsonArray jsonSelectedPreMonth = new JsonArray();
+            for(var param : selectedPreMonthParams){
+                jsonSelectedPreMonth.add(param);
+            }
+            
+            userPreferences.add("selectedObsParams",jsonSelectedObs);
+            userPreferences.add("selectedPreParams",jsonSelectedPre);
+            userPreferences.add("selectedPreMonthParams",jsonSelectedPreMonth);
+            
+        }
+        else if(dataQuery instanceof CombinedDataQuery){
+            CombinedDataQuery query = (CombinedDataQuery) dataQuery;
+            
+            //roadData
+            ArrayList<String> selectedTasks = query.getSelectedTasks();
+            JsonArray jsonSelectedTasks = new JsonArray();
+            for(var task : selectedTasks){
+                jsonSelectedTasks.add(task);
+            }
+            
+            ArrayList<String> selectedForecasts = query.getSelectedForecasts();
+            JsonArray jsonSelectedForecasts = new JsonArray();
+            for(var task : selectedForecasts){
+                jsonSelectedForecasts.add(task);
+            }
+            String forecastTime = query.getForecastTime();
+            
+            //weatherData
+            ArrayList<String> selectedObsParams = query.getSelectedObsParams();
+            JsonArray jsonSelectedObs = new JsonArray();
+            for(var param : selectedObsParams){
+                jsonSelectedObs.add(param);
+            }
+            
+            ArrayList<String> selectedPreParams = query.getSelectedPreParams();
+            JsonArray jsonSelectedPre = new JsonArray();
+            for(var param : selectedPreParams){
+                jsonSelectedPre.add(param);
+            }
+            
+            ArrayList<String> selectedPreMonthParams = query.getSelectedPerMonthParams();
+            JsonArray jsonSelectedPreMonth = new JsonArray();
+            for(var param : selectedPreMonthParams){
+                jsonSelectedPreMonth.add(param);
+            }
+            
+            //setting parameters
+            userPreferences.addProperty("forecastTime", forecastTime);
+            userPreferences.add("selectedTasks", jsonSelectedTasks);
+            userPreferences.add("selectedForecasts", jsonSelectedForecasts);            
+            userPreferences.add("selectedObsParams",jsonSelectedObs);
+            userPreferences.add("selectedPreParams",jsonSelectedPre);
+            userPreferences.add("selectedPreMonthParams",jsonSelectedPreMonth);
+         
+        }
+        gson.toJson(userPreferences,writer);
+        writer.close();
+    }
+    
+    /**
+     * 
+     */
+    public DataQuery loadPreferences() throws IOException{
+        
+        Gson gson = new Gson();
+        String fileName = "SavedPreferences.json";
+        Reader reader = Files.newBufferedReader(Paths.get(fileName));
+        JsonArray response = gson.fromJson(reader, JsonArray.class);
+        
+        for(var preference : response){
+            JsonObject preferenceO = (JsonObject) preference;
+            
+            String dataType = preferenceO.get("dataType").getAsString();
+            String location = preferenceO.get("location").getAsString();
+            
+            //String[] timelineStart = preferenceO.get("timelineStart");
+            //String[] timelineEnd = preferenceO.get("timelineEnd");
+            
+            
+            if(dataType.equals("Road data")){
+                
+                JsonArray selectedTasks = preferenceO.getAsJsonArray("selectedTasks");
+                ArrayList<String> tasksList = new ArrayList<>();
+                for(var obs : selectedTasks){
+                    tasksList.add(obs.getAsString());
+                }
+                
+                JsonArray selectedForecasts = preferenceO.getAsJsonArray("selectedForecasts");
+                ArrayList<String> ForecastsList = new ArrayList<>();
+                for(var obs : selectedForecasts){
+                    ForecastsList.add(obs.getAsString());
+                }                
+                
+                String forecastTime = preferenceO.get("forecastTime").getAsString();
+                
+                var roadDataQuery = DataQueryFactory.makeDataQuery(dataType);
+                RoadDataQuery castedData = (RoadDataQuery) roadDataQuery;
+                
+                castedData.setLocation(location);
+                castedData.setSelectedTasks(tasksList);
+                castedData.setSelectedForecasts(ForecastsList);
+                castedData.setForecastTime(forecastTime);
+                
+                return castedData;
+                
+            }
+            
+            
+            else if(dataType.equals("Weather data")){
+                
+                JsonArray selectedObs = preferenceO.getAsJsonArray("selectedObsParams");
+                ArrayList<String> obsList = new ArrayList<>();
+                for(var obs : selectedObs){
+                    obsList.add(obs.getAsString());
+                }
+
+                JsonArray selectedPre = preferenceO.getAsJsonArray("selectedPreParams");
+                ArrayList<String> preList = new ArrayList<>();
+                for(var obs : selectedObs){
+                    preList.add(obs.getAsString());
+                }
+                
+                JsonArray selectedPreMonth = preferenceO.getAsJsonArray("selectedPreMonthParams");
+                ArrayList<String> preMonthList = new ArrayList<>();
+                for(var obs : selectedObs){
+                    preMonthList.add(obs.getAsString());
+                }
+                
+                var weatherDataQuery = DataQueryFactory.makeDataQuery(dataType);
+                WeatherDataQuery castedData = (WeatherDataQuery) weatherDataQuery;
+                
+                castedData.setLocation(location);
+                castedData.setSelectedObsParams(obsList);
+                castedData.setSelectedPreParams(preList);
+                castedData.setSelectedPerMonthParams(preMonthList);
+                
+                return castedData;
+                
+            }
+            else if(dataType.equals("Combined data")){
+                
+                //roadData
+                JsonArray selectedTasks = preferenceO.getAsJsonArray("selectedTasks");
+                ArrayList<String> tasksList = new ArrayList<>();
+                for(var obs : selectedTasks){
+                    tasksList.add(obs.getAsString());
+                }
+                
+                JsonArray selectedForecasts = preferenceO.getAsJsonArray("selectedForecasts");
+                ArrayList<String> ForecastsList = new ArrayList<>();
+                for(var obs : selectedForecasts){
+                    ForecastsList.add(obs.getAsString());
+                }                 
+                String forecastTime = preferenceO.get("forecastTime").getAsString();
+                
+                //weatherData
+                JsonArray selectedObs = preferenceO.getAsJsonArray("selectedObsParams");
+                ArrayList<String> obsList = new ArrayList<>();
+                for(var obs : selectedObs){
+                    obsList.add(obs.getAsString());
+                }
+
+                JsonArray selectedPre = preferenceO.getAsJsonArray("selectedPreParams");
+                ArrayList<String> preList = new ArrayList<>();
+                for(var obs : selectedObs){
+                    preList.add(obs.getAsString());
+                }
+                
+                JsonArray selectedPreMonth = preferenceO.getAsJsonArray("selectedPreMonthParams");
+                ArrayList<String> preMonthList = new ArrayList<>();
+                for(var obs : selectedObs){
+                    preMonthList.add(obs.getAsString());
+                }
+                
+                var combinedDataQuery = DataQueryFactory.makeDataQuery(dataType);
+                CombinedDataQuery castedData = (CombinedDataQuery) combinedDataQuery;
+                
+                castedData.setLocation(location);
+                castedData.setSelectedTasks(tasksList);
+                castedData.setSelectedForecasts(ForecastsList);
+                castedData.setForecastTime(forecastTime);
+                castedData.setSelectedObsParams(obsList);
+                castedData.setSelectedPreParams(preList);
+                castedData.setSelectedPerMonthParams(preMonthList);
+                
+                return castedData;
+            }
+            
+        }
+        return null;
     }
     
     /**
