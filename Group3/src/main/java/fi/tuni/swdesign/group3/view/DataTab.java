@@ -4,6 +4,7 @@
  */
 package fi.tuni.swdesign.group3.view;
 
+import fi.tuni.swdesign.group3.RoadData;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -293,9 +294,8 @@ public abstract class DataTab extends Tab {
         
         calculateButton.setOnAction((ActionEvent t) -> {
             DataQuery dataQuery = DataQueryFactory.makeDataQuery(DataTab.this.getText());
-            DataQueryPopulator dqPopulator = new DataQueryPopulator();
             
-            dqPopulator.populateDataQuery(dataQuery,
+            DataQueryPopulator.populateDataQuery(dataQuery,
                     DataTab.this.locationBox.getValue().toString(),
                     new String[]{DataTab.this.startTimeField.getText(),
                         DataTab.this.startDateField.getText()},
@@ -309,6 +309,19 @@ public abstract class DataTab extends Tab {
             String dqValidity = dqValidityChecker.checkDataQueryValidity();
             if (dqValidity.equals(DQ_IS_VALID)) {
                 DataTab.this.errorInfoLabel.setText(EMPTY_STR);
+                RoadData[] datas = this.mainView.getViewModel()
+                        .onCalculateButtonPress(dataQuery);
+                DataVisualizer dv1 = DataVisualizer
+                        .makeDataVisualizer(mainView, datas[0]);
+                
+                if (datas.length > 1) {
+                    DataVisualizer dv2 = DataVisualizer
+                            .makeDataVisualizer(mainView, datas[1]);
+                    this.updateChart(dataQuery, dv1, dv2);
+                }
+                else {
+                    this.updateChart(dataQuery, dv1);
+                }
             }
             else {
                 DataTab.this.errorInfoLabel.setText(dqValidity);
@@ -334,5 +347,5 @@ public abstract class DataTab extends Tab {
      * An abstract method for updating the visualization of the data.
      * @param visualizers DataVisualizers used for visualizing the data.
      */
-    public abstract void updateChart(DataVisualizer... visualizers);
+    public abstract void updateChart(DataQuery query, DataVisualizer... visualizers);
 }

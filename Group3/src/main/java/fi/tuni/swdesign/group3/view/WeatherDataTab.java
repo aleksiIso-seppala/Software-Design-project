@@ -53,15 +53,20 @@ public class WeatherDataTab extends DataTab {
     }
 
     /**
-     * A method for updating the data visualizations. Overrides the abstract
+     * A method for updating the data visualizations.Overrides the abstract
      * method in base class DataTab
+     * @param query the query used to fetch the data.
      * @param visualizers the DataVisualizers used for the visualization.
      */
     @Override
-    public void updateChart(DataVisualizer... visualizers) {
+    public void updateChart(DataQuery query, DataVisualizer... visualizers) {
         this.chartTabPane.getTabs().clear();
         if (visualizers.length > 0) {
             WeatherDataVisualizer visualizer = (WeatherDataVisualizer) visualizers[0];
+            WeatherDataQuery weatherDQ = (WeatherDataQuery) query;
+            visualizer.setObsTypesToVisualize(weatherDQ.getSelectedObsParams());
+            visualizer.setPreTypesToVisualize(weatherDQ.getSelectedPreParams());
+            visualizer.setPerMonthTypesToVisualize(weatherDQ.getSelectedPerMonthParams());
             visualizer.visualizeData();
         }
     }

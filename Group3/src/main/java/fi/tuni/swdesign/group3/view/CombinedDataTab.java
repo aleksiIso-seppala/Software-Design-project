@@ -63,21 +63,27 @@ public class CombinedDataTab extends DataTab{
     }
 
     /**
-     * A method for updating the data visualizations. Overrides the abstract
+     * A method for updating the data visualizations.Overrides the abstract
      * method in base class DataTab
+     * @param query the query used to fetch the data.
      * @param visualizers the DataVisualizers used for the visualization.
      */
     @Override
-    public void updateChart(DataVisualizer... visualizers) {
+    public void updateChart(DataQuery query, DataVisualizer... visualizers) {
         this.chartTabPane.getTabs().clear();
         RoadDataVisualizer roadDV = null;
         WeatherDataVisualizer weatherDV = null;
-        for (int i = 0; i < visualizers.length; i++) {
-            if (visualizers[i] instanceof RoadDataVisualizer) {
-                roadDV = (RoadDataVisualizer) visualizers[i];
-            }
-            else if (visualizers[i] instanceof WeatherDataVisualizer) {
-                weatherDV = (WeatherDataVisualizer) visualizers[i];
+        CombinedDataQuery combinedDQ = (CombinedDataQuery) query;
+        for (DataVisualizer visualizer : visualizers) {
+            if (visualizer instanceof RoadDataVisualizer roadDataVisualizer) {
+                roadDV = roadDataVisualizer;
+                roadDV.setMTasksToVisualize(combinedDQ.getSelectedTasks());
+                roadDV.setForecastsToVisualize(combinedDQ.getSelectedForecasts());
+            } else if (visualizer instanceof WeatherDataVisualizer weatherDataVisualizer) {
+                weatherDV = weatherDataVisualizer;
+                weatherDV.setObsTypesToVisualize(combinedDQ.getSelectedObsParams());
+                weatherDV.setPreTypesToVisualize(combinedDQ.getSelectedPreParams());
+                weatherDV.setPerMonthTypesToVisualize(combinedDQ.getSelectedPerMonthParams());
             }
         }
         if (roadDV != null) {
