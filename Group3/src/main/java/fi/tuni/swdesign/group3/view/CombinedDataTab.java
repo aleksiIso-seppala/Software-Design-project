@@ -4,36 +4,45 @@
  */
 package fi.tuni.swdesign.group3.view;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.GridPane;
 
 /**
- *
+ * A subclass of DataTab for a tab in which the CombinedData parameters are set and
+ * the CombinedData is visualized.
  * @author Lauri Puoskari
  */
 public class CombinedDataTab extends DataTab{
-    
+    /**
+     * The TreeView in which the parameter CheckBoxes are placed.
+     */
     private TreeView checkBoxTree;
+    /**
+     * The label that shows the current amount of traffic messages.
+     */
     private Label trafficMsgLabel;
     
+    /**
+     * A constructor in which the visual elements of the CombinedDataTab and its 
+     * functionality is initialized.
+     * @param mainView the current instance of MainView.
+     */
     CombinedDataTab(MainView mainView) {
         super(mainView);
-        this.setText("Combined data");
+        this.setText(COMBINED_DATA);
         GridPane gridPane = (GridPane) super.getContent();
         
-        this.trafficMsgLabel = new Label("Amount of traffic messages: ");
+        this.trafficMsgLabel = new Label(TRAFFIC_MSG_AMOUNT);
         this.trafficMsgLabel.setPrefWidth(DataTab.LONG_ELEMENT_WIDTH);
         
         this.checkBoxTree = new TreeView();
         this.checkBoxTree.setPrefSize(DataTab.CHECK_BOX_TREE_WIDTH, DataTab.CHECK_BOX_TREE_HEIGHT);
         
-        gridPane.add(this.trafficMsgLabel, 2, 3);
-        gridPane.add(this.checkBoxTree, 2, 1, 1, 2);
+        gridPane.add(this.trafficMsgLabel, THIRD_COL, FOURTH_ROW);
+        gridPane.add(this.checkBoxTree, THIRD_COL, SECOND_ROW, 
+                COL_SPAN_OF_1, ROW_SPAN_OF_2);
         
         TreeItem root = new TreeItem();
         this.checkBoxTree.setRoot(root);
@@ -41,22 +50,23 @@ public class CombinedDataTab extends DataTab{
         CombinedDataCBTPopulator cbtPopulator = (CombinedDataCBTPopulator) 
                 CheckBoxTreePopulator.makeCBTPopulator(mainView, this.getText());
         cbtPopulator.populateCheckBoxTree(this.checkBoxTree);
-        
-//        trafficMsgLabel.setOnAction(new EventHandler<>() {
-//            @Override
-//            public void handle(ActionEvent t) {
-//                TrafficMessageView trafMsgView = new TrafficMessageView(
-//                        CombinedDataTab.this.mainView);
-//                trafMsgView.show();
-//            }
-//        });
     }
     
+    /**
+     * A getter-method for the root of the CheckBoxTree. Overrides the abstract
+     * method in base class DataTab
+     * @return the root item of the CheckBoxTree.
+     */
     @Override
     public TreeItem getCbTreeRoot() {
         return this.checkBoxTree.getRoot();
     }
 
+    /**
+     * A method for updating the data visualizations. Overrides the abstract
+     * method in base class DataTab
+     * @param visualizers the DataVisualizers used for the visualization.
+     */
     @Override
     public void updateChart(DataVisualizer... visualizers) {
         this.chartTabPane.getTabs().clear();
@@ -78,6 +88,10 @@ public class CombinedDataTab extends DataTab{
         }
     }
     
+    /**
+     * A getter-method for the traffic message label.
+     * @return the label in which the amount of traffic messages is shown.
+     */
     public Label getTrafficMsgLabel() {
         return trafficMsgLabel;
     }

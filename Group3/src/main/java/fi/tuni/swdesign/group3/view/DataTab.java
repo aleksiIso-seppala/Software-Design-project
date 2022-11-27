@@ -4,64 +4,208 @@
  */
 package fi.tuni.swdesign.group3.view;
 
-import fi.tuni.swdesign.group3.RoadTrafficData;
-import fi.tuni.swdesign.group3.RoadTrafficDataForecast;
-import fi.tuni.swdesign.group3.RoadWeatherData;
-import java.util.HashMap;
-import java.util.Random;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 
 /**
- *
+ * An abstract base class for a tab in which the data parameters are set and
+ * the data is visualized.
  * @author Lauri Puoskari
  */
 public abstract class DataTab extends Tab {
-    
-    private final static int WINDOW_WIDTH = 800;
-    private final static int WINDOW_HEIGHT = 500;
-    private final static int MENU_WIDTH = 225;
-    private final static int MENU_HEIGHT = 100;
-    private final static int H_GAP = 20;
-    private final static int SHORT_H_GAP = 10;
-    private final static int V_GAP = 10;
+
+    /**
+     * A constant that represents the medium horizontal gap between visual
+     * elements.
+     */
+    protected final static int H_GAP = 20;
+    /**
+     * A constant that represents the short horizontal gap between visual
+     * elements.
+     */
+    protected final static int SHORT_H_GAP = 10;
+    /**
+     * A constant that represents the vertical gap between the visual elements.
+     */
+    protected final static int V_GAP = 10;
+    /**
+     * A constant that represents the width of a long-width visual element.
+     */
     protected final static int LONG_ELEMENT_WIDTH = 220;
-    private final static int MED_ELEMENT_WIDTH = 150;
-    private final static int SHORT_ELEMENT_WIDTH = 80;
-    private final static int VERY_SHORT_ELEMENT_WIDTH = 55;
-    private final static int DATA_CHART_HEIGHT = 300;
-    private final static int DATA_CHART_WIDTH = 500;
-    static final int CHECK_BOX_TREE_HEIGHT = 300;
-    static final int CHECK_BOX_TREE_WIDTH = 220;
-    private Scene scene;
+    /**
+     * A constant that represents the width of a medium-width visual element.
+     */
+    protected final static int MED_ELEMENT_WIDTH = 150;
+    /**
+     * A constant that represents the width of a short-width visual element.
+     */
+    protected final static int SHORT_ELEMENT_WIDTH = 80;
+    /**
+     * A constant that represents the width of a very short-width visual element.
+     */
+    protected final static int VERY_SHORT_ELEMENT_WIDTH = 55;
+    /**
+     * A constant that represents the height of the check box treeview.
+     */
+    protected static final int CHECK_BOX_TREE_HEIGHT = 300;
+    /**
+     * A constant that represents the width of the check box treeview.
+     */
+    protected static final int CHECK_BOX_TREE_WIDTH = 220;
+    /**
+     * A constant representing the first row of a grid.
+     */
+    protected static final int FIRST_ROW = 0;
+    /**
+     * A constant representing the first column of a grid.
+     */
+    protected static final int FIRST_COL = 0;
+    /**
+     * A constant representing the 2nd row of a grid.
+     */
+    protected static final int SECOND_ROW = 1;
+    /**
+     * A constant representing the 2nd column of a grid.
+     */
+    protected static final int SECOND_COL = 1;
+    /**
+     * A constant representing the 3rd row of a grid.
+     */
+    protected static final int THIRD_ROW = 2;
+    /**
+     * A constant representing the 3rd column of a grid.
+     */
+    protected static final int THIRD_COL = 2;
+    /**
+     * A constant representing the 4th row of a grid.
+     */
+    protected static final int FOURTH_ROW = 3;
+    /**
+     * A constant representing the 4th column of a grid.
+     */
+    protected static final int FOURHT_COL = 3;
+    /**
+     * A constant representing a length span of one column.
+     */
+    protected static final int COL_SPAN_OF_1 = 1;
+    /**
+     * A constant representing a length span of two columns.
+     */
+    protected static final int COL_SPAN_OF_2 = 2;
+    /**
+     * A constant representing a length span of one row.
+     */
+    protected static final int ROW_SPAN_OF_1 = 1;
+    /**
+     * A constant representing a length span of two rows.
+     */
+    protected static final int ROW_SPAN_OF_2 = 2;
+    /**
+     * A constant string representing location.
+     */
+    protected static final String LOCATION = "Location";
+    /**
+     * A constant string representing timeline.
+     */
+    protected static final String TIMELINE = "Timeline";
+    /**
+     * A constant string representing the format in which the time should be
+     * typed.
+     */
+    protected static final String TIME_FORMAT = "hh.mm";
+    /**
+     * A constant string representing the format in which the date should be
+     * typed.
+     */
+    protected static final String DATE_FORMAT = "dd.mm.yyyy";
+    /**
+     * A constant string representing calculate.
+     */
+    protected static final String CALCULATE = "Calculate";
+    /**
+     * A constant string representing data.
+     */
+    protected static final String DATA = "Data";
+    /**
+     * A constant string representing preferences.
+     */
+    protected static final String PREFERENCES = "Preferences";
+    /**
+     * A constant string representing a line.
+     */
+    protected static final String LINE = "–";
+    /**
+     * A constant string representing that the DataQuery is valid.
+     */
+    protected static final String DQ_IS_VALID = "Data query is valid.";
+    /**
+     * A constant string representing an empty string.
+     */
+    protected static final String EMPTY_STR = "";
+    /**
+     * A constant string representing road data.
+     */
+    protected static final String ROAD_DATA = "Road data";
+    /**
+     * A constant string representing weather data.
+     */
+    protected static final String WEATHER_DATA = "Weather data";
+    /**
+     * A constant string representing combined data.
+     */
+    protected static final String COMBINED_DATA = "Combined data";
+    /**
+     * A constant string representing the amount of traffic messages.
+     */
+    protected static final String TRAFFIC_MSG_AMOUNT = "Amount of traffic messages: ";
+    /**
+     * The current instance of the MainView.
+     */
     protected MainView mainView;
+    /**
+     * The ChoiceBox in which the location is selected.
+     */
     protected ChoiceBox locationBox;
+    /**
+     * The TextField in which the time of the start of the timeline is typed.
+     */
     protected TextField startTimeField;
+    /**
+     * The TextField in which the date of the start of the timeline is typed.
+     */
     protected TextField startDateField;
+    /**
+     * The TextField in which the time of the end of the timeline is typed.
+     */
     protected TextField endTimeField;
+    /**
+     * The TextField in which the date of the end of the timeline is typed.
+     */
     protected TextField endDateField;
+    /**
+     * The TabPane in which the data is visualized.
+     */
     protected TabPane chartTabPane;
+    /**
+     * The label in which the error messages are visualized.
+     */
     protected Label errorInfoLabel;
     
+    /**
+     * A constructor in which the visual template of a DataTab and its 
+     * functionality is initialized.
+     * @param mainView the current instance of MainView.
+     */
     DataTab(MainView mainView) {
         super();
         
@@ -71,26 +215,26 @@ public abstract class DataTab extends Tab {
         gridPane.setVgap(V_GAP);
         gridPane.setAlignment(Pos.CENTER);
         
-        Label locationLabel = new Label("Location");
+        Label locationLabel = new Label(LOCATION);
         
         this.locationBox = new ChoiceBox();
         this.locationBox.setPrefWidth(MED_ELEMENT_WIDTH);
         this.locationBox.getItems().addAll(this.mainView.getLocations());
         this.locationBox.getSelectionModel().selectFirst();
         
-        Label timelineLabel = new Label("Timeline");
+        Label timelineLabel = new Label(TIMELINE);
         
         this.startTimeField = new TextField();
         this.startDateField = new TextField();
         this.endTimeField = new TextField();
         this.endDateField = new TextField();
         
-        this.startTimeField.setPromptText("hh.mm");
-        this.startDateField.setPromptText("dd.mm.yyyy");
-        this.endTimeField.setPromptText("hh.mm");
-        this.endDateField.setPromptText("dd.mm.yyyy");
+        this.startTimeField.setPromptText(TIME_FORMAT);
+        this.startDateField.setPromptText(DATE_FORMAT);
+        this.endTimeField.setPromptText(TIME_FORMAT);
+        this.endDateField.setPromptText(DATE_FORMAT);
         
-        Label lineLabel = new Label("–");
+        Label lineLabel = new Label(LINE);
         
         HBox timelineHBox = new HBox();
         timelineHBox.getChildren().addAll(this.startTimeField, this.startDateField, 
@@ -104,29 +248,18 @@ public abstract class DataTab extends Tab {
         this.endDateField.setPrefWidth(SHORT_ELEMENT_WIDTH);
         
         this.chartTabPane = new TabPane();
-//        LineChart dataChart = new LineChart(new NumberAxis(), new NumberAxis());
-//        dataChart.setPrefSize(DATA_CHART_WIDTH, DATA_CHART_HEIGHT);
-//        Tab tab = new Tab("test");
-//        tab.setContent(dataChart);
-//        chartTabPane.getTabs().add(tab);
         
-//        BarChart barChart = new BarChart(new CategoryAxis(), new NumberAxis());
-//        barChart.setPrefSize(DATA_CHART_WIDTH, DATA_CHART_HEIGHT);
-//        Tab tab2 = new Tab("bar");
-//        tab2.setContent(barChart);
-//        chartTabPane.getTabs().add(tab2);
-        
-        Button calculateButton = new Button("Calculate");
+        Button calculateButton = new Button(CALCULATE);
         calculateButton.setPrefWidth(SHORT_ELEMENT_WIDTH);
         
         this.errorInfoLabel = new Label();
         this.errorInfoLabel.setTextFill(Color.RED);
         this.errorInfoLabel.setPrefWidth(LONG_ELEMENT_WIDTH);
         
-        Button dataButton = new Button("Data");
+        Button dataButton = new Button(DATA);
         dataButton.setPrefWidth(SHORT_ELEMENT_WIDTH);
         
-        Button prefButton = new Button("Preferences");
+        Button prefButton = new Button(PREFERENCES);
         prefButton.setPrefWidth(SHORT_ELEMENT_WIDTH);
         
         HBox buttonHBox = new HBox();
@@ -135,122 +268,71 @@ public abstract class DataTab extends Tab {
         buttonHBox.getChildren().addAll(calculateButton, this.errorInfoLabel, 
                 dataButton, prefButton);
         
-        gridPane.add(locationLabel, 0, 0);
-        gridPane.add(this.locationBox, 0, 1);
-        gridPane.add(timelineLabel, 1, 0);
-        gridPane.add(timelineHBox, 1, 1);
-//        gridPane.add(dataChart, 0, 2, 2, 1);
-        gridPane.add(this.chartTabPane, 0, 2, 2, 1);
-        gridPane.add(buttonHBox, 0, 3, 2, 1);
+        gridPane.add(locationLabel, FIRST_COL, FIRST_ROW);
+        gridPane.add(this.locationBox, FIRST_COL, SECOND_ROW);
+        gridPane.add(timelineLabel, SECOND_COL, FIRST_ROW);
+        gridPane.add(timelineHBox, SECOND_COL, SECOND_ROW);
+        gridPane.add(this.chartTabPane, FIRST_COL, THIRD_ROW,
+                COL_SPAN_OF_2, ROW_SPAN_OF_1);
+        gridPane.add(buttonHBox, FIRST_COL, FOURTH_ROW, 
+                COL_SPAN_OF_2, ROW_SPAN_OF_1);
         
         this.setContent(gridPane);
         
-        dataButton.setOnAction(new EventHandler<>() {
-            @Override
-            public void handle(ActionEvent t) {
-                DataMenuView dataMenuView = new DataMenuView(DataTab.this.
-                        mainView);
-                dataMenuView.show();
-            }
+        dataButton.setOnAction((ActionEvent t) -> {
+            DataMenuView dataMenuView = new DataMenuView(DataTab.this.
+                    mainView);
+            dataMenuView.show();
         });
         
-        prefButton.setOnAction(new EventHandler<>() {
-            @Override
-            public void handle(ActionEvent t) {
-                PreferencesMenuView prefMenuView = new PreferencesMenuView(
-                        DataTab.this.mainView);
-                prefMenuView.show();
-            }
+        prefButton.setOnAction((ActionEvent t) -> {
+            PreferencesMenuView prefMenuView = new PreferencesMenuView(
+                    DataTab.this.mainView);
+            prefMenuView.show();
         });
         
-        calculateButton.setOnAction(new EventHandler<>() {
-            @Override
-            public void handle(ActionEvent t) {
-                DataQueryFactory dqFactory = new DataQueryFactory();
-                DataQuery dataQuery = dqFactory.makeDataQuery(DataTab.this.getText());
-                DataQueryPopulator dqPopulator = new DataQueryPopulator();
-                
-                dqPopulator.populateDataQuery(dataQuery, 
-                        DataTab.this.locationBox.getValue().toString(), 
-                        new String[]{DataTab.this.startTimeField.getText(), 
-                            DataTab.this.startDateField.getText()}, 
-                        new String[]{DataTab.this.endTimeField.getText(), 
-                            DataTab.this.endDateField.getText()},
-                        DataTab.this.getCbTreeRoot());
-                
-                DataQueryValidityChecker dqValidityChecker = 
-                        DataQueryValidityChecker.makeDataQueryValidityChecker(
-                                mainView, dataQuery);
-                String dqValidity = dqValidityChecker.checkDataQueryValidity();
-                if (dqValidity.equals("Data query is valid.")) {
-                    DataTab.this.errorInfoLabel.setText("");
-                }
-                else {
-                    DataTab.this.errorInfoLabel.setText(dqValidity);
-                }
-//                dataQuery.testPrint();
-
-//                RoadDataQuery query = (RoadDataQuery) dataQuery;
-//                RoadTrafficData data = new RoadTrafficData(dataQuery.getLocation(),
-//                        "", dataQuery.getTimelineStart()[0] + dataQuery.getTimelineStart()[1]);
-//                HashMap<String, Integer> tasks = new HashMap<>();
-//                Random rand = new Random();
-//                for (var i : query.getSelectedTasks()) {
-//                    tasks.put(i, rand.nextInt(0, 50));
-//                }
-//                data.setMaintenanceTasks(tasks);
-//                HashMap<String, RoadTrafficDataForecast> forecasts = new HashMap<>();
-//                RoadTrafficDataForecast tmp = new RoadTrafficDataForecast("", "", "");
-//                for (var i : query.getSelectedForecasts()) {
-//                    if (i.equals("Precipitation")) {
-//                        tmp.setPrecipitation("precip");
-//                    }
-//                    if (i.equals("Winter slipperiness")) {
-//                        tmp.setWinterSlipperines(true);
-//                    }
-//                    if (i.equals("Overall")) {
-//                        tmp.setOverAllcondition("overall");
-//                    }
-//                }
-//                forecasts.put(query.getForecastTime(), tmp);
-//                data.setForecasts(forecasts);
-//                DataVisualizer dv = DataVisualizer.makeDataVisualizer(mainView, data);
-//                RoadDataVisualizer rdv = (RoadDataVisualizer) dv;
-//                rdv.setMTasksToVisualize(query.getSelectedTasks());
-//                rdv.setForecastsToVisualize(query.getSelectedForecasts());
-//                dv.visualizeData();
-//
-//                WeatherDataQuery query = (WeatherDataQuery) dataQuery;
-//                RoadWeatherData data = new RoadWeatherData(dataQuery.getLocation(),
-//                        "", dataQuery.getTimelineStart()[0] + dataQuery.getTimelineStart()[1]);
-//                HashMap<String, RoadWeatherData> forecasts = new HashMap<>();
-//                Random rand = new Random();
-//                data.setTemperature(rand.nextFloat(-20, 20));
-//                data.setCloudiness(rand.nextFloat(0, 10));
-//                data.setWind(rand.nextFloat(0, 10));
-//                for (int i = 2; i < 11; i+=2) {
-//                    RoadWeatherData tmp = new RoadWeatherData("", "", "");
-//                    tmp.setTemperature(rand.nextFloat(-20, 20));
-//                    tmp.setCloudiness(rand.nextFloat(0, 10));
-//                    tmp.setWind(rand.nextFloat(0, 10));
-//                    forecasts.put(Integer.toString(i), tmp);
-//                }
-//                data.setForecasts(forecasts);
-//                DataVisualizer dv = DataVisualizer.makeDataVisualizer(mainView, data);
-//                WeatherDataVisualizer wdv = (WeatherDataVisualizer) dv;
-//                wdv.setObsTypesToVisualize(query.getSelectedObsParams());
-//                wdv.setPreTypesToVisualize(query.getSelectedPreParams());
-//                wdv.visualizeData();
-            }
+        calculateButton.setOnAction((ActionEvent t) -> {
+            DataQuery dataQuery = DataQueryFactory.makeDataQuery(DataTab.this.getText());
+            DataQueryPopulator dqPopulator = new DataQueryPopulator();
             
+            dqPopulator.populateDataQuery(dataQuery,
+                    DataTab.this.locationBox.getValue().toString(),
+                    new String[]{DataTab.this.startTimeField.getText(),
+                        DataTab.this.startDateField.getText()},
+                    new String[]{DataTab.this.endTimeField.getText(),
+                        DataTab.this.endDateField.getText()},
+                    DataTab.this.getCbTreeRoot());
+            
+            DataQueryValidityChecker dqValidityChecker =
+                    DataQueryValidityChecker.makeDataQueryValidityChecker(
+                            mainView, dataQuery);
+            String dqValidity = dqValidityChecker.checkDataQueryValidity();
+            if (dqValidity.equals(DQ_IS_VALID)) {
+                DataTab.this.errorInfoLabel.setText(EMPTY_STR);
+            }
+            else {
+                DataTab.this.errorInfoLabel.setText(dqValidity);
+            }
         });
     }
     
+    /**
+     * An abstract getter-method for the root of the CheckBoxTree.
+     * @return the root item of the CheckBoxTree.
+     */
     public abstract TreeItem getCbTreeRoot();
     
+    /**
+     * A getter-method for the TabPane in which the data is visualized.
+     * @return the TabPane in which the data is visualized.
+     */
     public TabPane getChartTabPane() {
         return this.chartTabPane;
     }
     
+    /**
+     * An abstract method for updating the visualization of the data.
+     * @param visualizers DataVisualizers used for visualizing the data.
+     */
     public abstract void updateChart(DataVisualizer... visualizers);
 }

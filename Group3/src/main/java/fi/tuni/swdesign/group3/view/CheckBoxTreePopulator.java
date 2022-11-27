@@ -4,109 +4,143 @@
  */
 package fi.tuni.swdesign.group3.view;
 
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.layout.HBox;
 
 /**
- *
+ * An abstract base class for populating the checkbox treeview in the different
+ * datatabs.
  * @author Lauri Puoskari
  */
 public abstract class CheckBoxTreePopulator {
     
+    /**
+     * A constant for a short gap between horizontal components.
+     */
     protected static final int SHORT_H_GAP = 10;
+    /**
+     * A constant string representing road data.
+     */
+    protected static final String ROAD_DATA = "Road data";
+    /**
+     * A constant string representing weather data.
+     */
+    protected static final String WEATHER_DATA = "Weather data";
+    /**
+     * A constant string representing combined data.
+     */
+    protected static final String COMBINED_DATA = "Combined data";
+    /**
+     * A constant string representing maintenance.
+     */
+    protected static final String MAINTENANCE = "Maintenance";
+    /**
+     * A constant string representing condition forecast.
+     */
+    protected static final String COND_FORECAST = "Condition forecast";
+    /**
+     * A constant string representing precipitation.
+     */
+    protected static final String PRECIPITATION = "Precipitation";
+    /**
+     * A constant string representing winter slipperiness.
+     */
+    protected static final String WINTER_SLIP = "Winter slipperiness";
+    /**
+     * A constant string representing overall condition.
+     */
+    protected static final String OVERALL = "Overall";
+    /**
+     * A constant string representing the forecast time in hours.
+     */
+    protected static final String FORECAST_TIME = "Time (hours)";
+    /**
+     * A constant string representing the forecast time of two hours.
+     */
+    protected static final String TWO_HOURS = "2";
+    /**
+     * A constant string representing the forecast time of four hours.
+     */
+    protected static final String FOUR_HOURS = "4";
+    /**
+     * A constant string representing the forecast time of six hours.
+     */
+    protected static final String SIX_HOURS = "6";
+    /**
+     * A constant string representing the forecast time of twelve hours.
+     */
+    protected static final String TWELVE_HOURS = "12";
+    /**
+     * A constant string representing observed values.
+     */
+    protected static final String OBSERVED_VALUES = "Observed values";
+    /**
+     * A constant string representing predicted values.
+     */
+    protected static final String PREDICTED_VALUES = "Predicted values";
+    /**
+     * A constant string representing daily values per month.
+     */
+    protected static final String VALUES_PER_MONTH = "Values per month";
+    /**
+     * A constant string representing average temperature.
+     */
+    protected static final String AVG_TEMPERATURE = "Average temperature";
+    /**
+     * A constant string representing maximum and minimum values of temperature.
+     */
+    protected static final String MAX_MIN_TEMPERATURE = "Max & min temperatures";
+    /**
+     * A constant string representing temperature.
+     */
+    protected static final String TEMPERATURE = "Temperature";
+    /**
+     * A constant string representing wind speed.
+     */
+    protected static final String WIND_SPEED = "Wind speed";
+    /**
+     * A constant string representing cloudiness.
+     */
+    protected static final String CLOUDINESS = "Cloudiness";
+    /**
+     * The current instance of the MainView.
+     */
     protected MainView mainView;
     
+    
+    /**
+     * Constructor in which the instance of the MainView is stored.
+     * @param mainView the current instance of MainView.
+     */
     CheckBoxTreePopulator(MainView mainView) {
         this.mainView = mainView;
     }
     
+    /**
+     * A Factory method for creating the different subclasses of this abstract
+     * base class.
+     * @param mainView the current instance of the MainView.
+     * @param dataType String which determines which subclass will be constructed.
+     * @return an instance of the chosen subclass of CheckBoxTreePopulator.
+     */
     public static CheckBoxTreePopulator makeCBTPopulator(MainView mainView, String dataType) {
-        if (dataType.equals("Road data")) {
-            return new RoadDataCBTPopulator(mainView);
+        switch (dataType) {
+            case ROAD_DATA -> {
+                return new RoadDataCBTPopulator(mainView);
+            }
+            case WEATHER_DATA -> {
+                return new WeatherDataCBTPopulator(mainView);
+            }
+            case COMBINED_DATA -> {
+                return new CombinedDataCBTPopulator(mainView);
+            }
+            default -> { return null;
+            }
         }
-        else if (dataType.equals("Weather data")) {
-            return new WeatherDataCBTPopulator(mainView);
-        }
-        else if (dataType.equals("Combined data")) {
-            return new CombinedDataCBTPopulator(mainView);
-        }
-        return null;
     }
     
+    /**
+     * An abstract method for populating the checkbox tree of a datatab.
+     * @param checkBoxTree the TreeView component of the datatab.
+     */
     public abstract void populateCheckBoxTree(TreeView checkBoxTree);
-//        TreeItem root = new TreeItem();
-//        checkBoxTree.setRoot(root);
-//        checkBoxTree.setShowRoot(false);
-//        if (tabName.equals("Road data") | tabName.equals("Combined data")) {
-//            TreeItem maintenanceItem = new TreeItem("Maintenance");
-//            TreeItem conditionItem = new TreeItem("Condition forecast");
-//            root.getChildren().addAll(maintenanceItem, conditionItem);
-//            for (var taskType : this.mainView.getViewModel().getMaintenanceTaskTypes()) {
-//                CheckBox checkBox = new CheckBox(taskType);
-//                TreeItem checkBoxItem = new TreeItem(checkBox);
-//                maintenanceItem.getChildren().add(checkBoxItem);
-//            }
-//
-//            CheckBox precipitationCheckBox = new CheckBox("Precipitation");
-//            TreeItem precipitationItem = new TreeItem(precipitationCheckBox);
-//            CheckBox slipperinessCheckBox = new CheckBox("Winter slipperiness");
-//            TreeItem slipperinessItem = new TreeItem(slipperinessCheckBox);
-//            CheckBox overallCheckBox = new CheckBox("Overall");
-//            TreeItem overallItem = new TreeItem(overallCheckBox);
-//            conditionItem.getChildren().addAll( 
-//                    precipitationItem, slipperinessItem, overallItem);
-//
-//            TreeItem timeItem = new TreeItem("Time (hours)");
-//
-//            RadioButton radioButton1 = new RadioButton("2");
-//            RadioButton radioButton2 = new RadioButton("4");
-//            RadioButton radioButton3 = new RadioButton("6");
-//            RadioButton radioButton4 = new RadioButton("12");
-//            ToggleGroup toggleGroup = new ToggleGroup();
-//            toggleGroup.getToggles().addAll(radioButton1, radioButton2, 
-//                    radioButton3, radioButton4);
-//            radioButton1.setSelected(true);
-//            HBox timeHBox = new HBox();
-//            timeHBox.getChildren().addAll(radioButton1, radioButton2, 
-//                    radioButton3, radioButton4);
-//            timeHBox.setSpacing(SHORT_H_GAP);
-//            TreeItem timeHBoxItem = new TreeItem(timeHBox);
-//
-//            conditionItem.getChildren().add(timeItem);
-//            timeItem.getChildren().add(timeHBoxItem);
-//        }
-//        if (tabName.equals("Weather data") | tabName.equals("Combined data")) {
-//            TreeItem observedItem = new TreeItem("Observed values");
-//            TreeItem predictedItem = new TreeItem("Predicted values");
-//            TreeItem perMonthItem = new TreeItem("Values per month");
-//            root.getChildren().addAll(observedItem, predictedItem, perMonthItem);
-//
-//            CheckBox averageTempBox = new CheckBox("Average temperature");
-//            CheckBox maxMinTempBox = new CheckBox("Max & min temperatures");
-//            CheckBox obsTempBox = new CheckBox("Temperature");
-//            CheckBox preTempBox = new CheckBox("Temperature");
-//            TreeItem averageTempItem = new TreeItem(averageTempBox);
-//            TreeItem maxMinTempItem = new TreeItem(maxMinTempBox);
-//            TreeItem obsTempItem = new TreeItem(obsTempBox);
-//            TreeItem preTempItem = new TreeItem(preTempBox);
-//            observedItem.getChildren().add(obsTempItem);
-//            predictedItem.getChildren().add(preTempItem);
-//            perMonthItem.getChildren().addAll(averageTempItem, maxMinTempItem);
-//
-//            CheckBox obsWindBox = new CheckBox("Wind speed");
-//            CheckBox preWindBox = new CheckBox("Wind speed");
-//            TreeItem obsWindItem = new TreeItem(obsWindBox);
-//            TreeItem preWindItem = new TreeItem(preWindBox);
-//            observedItem.getChildren().add(obsWindItem);
-//            predictedItem.getChildren().add(preWindItem);
-//
-//            CheckBox obsCloudBox = new CheckBox("Cloudiness");
-//            TreeItem obsCloudItem = new TreeItem(obsCloudBox);
-//            observedItem.getChildren().add(obsCloudItem);
-//        }
-//    }
 }
