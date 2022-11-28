@@ -218,7 +218,7 @@ public class RoadDataParserJSON implements RoadDataParser{
 
                 JsonObject forecastCondition = 
                         condition.getAsJsonObject("forecastConditionReason");
-
+                
                 if(forecastCondition.has("precipitationCondition")){
                     String precipitation = forecastCondition.get("precipitationCondition").getAsString();
                     trafficForecast.setPrecipitation(precipitation);              
@@ -226,7 +226,7 @@ public class RoadDataParserJSON implements RoadDataParser{
 
                 if(forecastCondition.has("roadCondition")){
                     String roadCondition = forecastCondition.get("roadCondition").getAsString();
-                    trafficForecast.setOverAllCondition(roadCondition); 
+                    trafficForecast.setOverAllcondition(roadCondition); 
                 }
 
                 forecasts.put(time, trafficForecast);
