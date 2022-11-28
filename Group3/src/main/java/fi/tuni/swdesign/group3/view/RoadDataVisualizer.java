@@ -204,28 +204,28 @@ public class RoadDataVisualizer extends DataVisualizer{
         
 //        Set<String> forecastTimes = forecasts.keySet();
 //        for (String time : this.query) {
-        String time = this.query.getForecastTime() + "h";
-            Label timeValue = new Label(time);
-            timeValue.setPrefSize(GRID_CELL_WIDTH, GRID_CELL_HEIGHT);
-            timeValue.setAlignment(Pos.CENTER);
-            Label precipitationValue = new Label(forecasts.get(time).getPrecipitation());
-            precipitationValue.setPrefSize(GRID_CELL_WIDTH, GRID_CELL_HEIGHT);
-            precipitationValue.setAlignment(Pos.CENTER);
-            Label winterSlipValue = new Label();
-            if (forecasts.get(time).isWinterSlipperines()) {
-                winterSlipValue.setText(YES);
-            }
-            else if (this.forecastsToVisualize.contains(WINTER_SLIP_TITLE)) {
-                winterSlipValue.setText(NO);
-            }
-            winterSlipValue.setPrefSize(GRID_CELL_WIDTH, GRID_CELL_HEIGHT);
-            winterSlipValue.setAlignment(Pos.CENTER);
-            Label overallValue = new Label(forecasts.get(time).getOverAllcondition());
-            overallValue.setPrefSize(GRID_CELL_WIDTH, GRID_CELL_HEIGHT);
-            overallValue.setAlignment(Pos.CENTER);
-            forecastGrid.addRow(row_count, timeValue, precipitationValue, 
-                    winterSlipValue, overallValue);
-            row_count++;
+        String time = this.query.getForecastTime();
+        Label timeValue = new Label(time);
+        timeValue.setPrefSize(GRID_CELL_WIDTH, GRID_CELL_HEIGHT);
+        timeValue.setAlignment(Pos.CENTER);
+        Label precipitationValue = new Label(forecasts.get(time).getPrecipitation());
+        precipitationValue.setPrefSize(GRID_CELL_WIDTH, GRID_CELL_HEIGHT);
+        precipitationValue.setAlignment(Pos.CENTER);
+        Label winterSlipValue = new Label();
+        if (forecasts.get(time).isWinterSlipperines()) {
+            winterSlipValue.setText(YES);
+        }
+        else if (this.forecastsToVisualize.contains(WINTER_SLIP_TITLE)) {
+            winterSlipValue.setText(NO);
+        }
+        winterSlipValue.setPrefSize(GRID_CELL_WIDTH, GRID_CELL_HEIGHT);
+        winterSlipValue.setAlignment(Pos.CENTER);
+        Label overallValue = new Label(forecasts.get(time).getOverAllcondition());
+        overallValue.setPrefSize(GRID_CELL_WIDTH, GRID_CELL_HEIGHT);
+        overallValue.setAlignment(Pos.CENTER);
+        forecastGrid.addRow(row_count, timeValue, precipitationValue, 
+                winterSlipValue, overallValue);
+        row_count++;
 //        }
         
         forecastView.getChildren().addAll(tableTitle, forecastGrid);
