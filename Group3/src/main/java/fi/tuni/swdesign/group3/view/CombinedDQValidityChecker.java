@@ -44,13 +44,22 @@ public class CombinedDQValidityChecker extends DataQueryValidityChecker {
             return dateTimeValidity;
         }
         
-        if (this.combDataQuery.getSelectedObsParams().isEmpty() 
-                & this.combDataQuery.getSelectedPreParams().isEmpty()
-                & this.combDataQuery.getSelectedPerMonthParams().isEmpty()
-                & this.combDataQuery.getSelectedForecasts().isEmpty()
-                & this.combDataQuery.getSelectedTasks().isEmpty()) {
+        if (this.combDataQuery.getSubWeatherDQ().getSelectedObsParams().isEmpty() 
+                & this.combDataQuery.getSubWeatherDQ().getSelectedPreParams().isEmpty()
+                & this.combDataQuery.getSubWeatherDQ().getSelectedPerMonthParams().isEmpty()
+                & this.combDataQuery.getSubRoadDQ().getSelectedForecasts().isEmpty()
+                & this.combDataQuery.getSubRoadDQ().getSelectedTasks().isEmpty()) {
             return NO_PARAMS;
         }
+//        RoadDQValidityChecker subRoadDQVC = 
+//                (RoadDQValidityChecker) DataQueryValidityChecker
+//                        .makeDataQueryValidityChecker(mainView, 
+//                                combDataQuery.getSubRoadDQ());
+//        WeatherDQValidityChecker subWeatherDQVC = 
+//                (WeatherDQValidityChecker) DataQueryValidityChecker
+//                        .makeDataQueryValidityChecker(mainView, 
+//                                combDataQuery.getSubWeatherDQ());
+//        
         
         return DQ_IS_VALID;
     }

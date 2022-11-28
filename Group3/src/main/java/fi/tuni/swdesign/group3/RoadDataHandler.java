@@ -521,33 +521,33 @@ public class RoadDataHandler {
             CombinedDataQuery query = (CombinedDataQuery) dataQuery;
             
             //roadData
-            ArrayList<String> selectedTasks = query.getSelectedTasks();
+            ArrayList<String> selectedTasks = query.getSubRoadDQ().getSelectedTasks();
             JsonArray jsonSelectedTasks = new JsonArray();
             for(var task : selectedTasks){
                 jsonSelectedTasks.add(task);
             }
             
-            ArrayList<String> selectedForecasts = query.getSelectedForecasts();
+            ArrayList<String> selectedForecasts = query.getSubRoadDQ().getSelectedForecasts();
             JsonArray jsonSelectedForecasts = new JsonArray();
             for(var task : selectedForecasts){
                 jsonSelectedForecasts.add(task);
             }
-            String forecastTime = query.getForecastTime();
+            String forecastTime = query.getSubRoadDQ().getForecastTime();
             
             //weatherData
-            ArrayList<String> selectedObsParams = query.getSelectedObsParams();
+            ArrayList<String> selectedObsParams = query.getSubWeatherDQ().getSelectedObsParams();
             JsonArray jsonSelectedObs = new JsonArray();
             for(var param : selectedObsParams){
                 jsonSelectedObs.add(param);
             }
             
-            ArrayList<String> selectedPreParams = query.getSelectedPreParams();
+            ArrayList<String> selectedPreParams = query.getSubWeatherDQ().getSelectedPreParams();
             JsonArray jsonSelectedPre = new JsonArray();
             for(var param : selectedPreParams){
                 jsonSelectedPre.add(param);
             }
             
-            ArrayList<String> selectedPreMonthParams = query.getSelectedPerMonthParams();
+            ArrayList<String> selectedPreMonthParams = query.getSubWeatherDQ().getSelectedPerMonthParams();
             JsonArray jsonSelectedPreMonth = new JsonArray();
             for(var param : selectedPreMonthParams){
                 jsonSelectedPreMonth.add(param);
@@ -685,12 +685,12 @@ public class RoadDataHandler {
                 CombinedDataQuery castedData = (CombinedDataQuery) combinedDataQuery;
                 
                 castedData.setLocation(location);
-                castedData.setSelectedTasks(tasksList);
-                castedData.setSelectedForecasts(ForecastsList);
-                castedData.setForecastTime(forecastTime);
-                castedData.setSelectedObsParams(obsList);
-                castedData.setSelectedPreParams(preList);
-                castedData.setSelectedPerMonthParams(preMonthList);
+                castedData.getSubRoadDQ().setSelectedTasks(tasksList);
+                castedData.getSubRoadDQ().setSelectedForecasts(ForecastsList);
+                castedData.getSubRoadDQ().setForecastTime(forecastTime);
+                castedData.getSubWeatherDQ().setSelectedObsParams(obsList);
+                castedData.getSubWeatherDQ().setSelectedPreParams(preList);
+                castedData.getSubWeatherDQ().setSelectedPerMonthParams(preMonthList);
                 
                 return castedData;
             }

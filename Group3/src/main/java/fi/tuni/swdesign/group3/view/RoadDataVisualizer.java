@@ -34,6 +34,9 @@ public class RoadDataVisualizer extends DataVisualizer{
      * An ArrayList which contains the names of the maintenance tasks the user
      * has selected to be visualized.
      */
+    
+    private RoadDataQuery query;
+    
     private ArrayList<String> mTasksToVisualize;
     /**
      * An ArrayList which contains the types of the condition forecasts the user
@@ -47,9 +50,11 @@ public class RoadDataVisualizer extends DataVisualizer{
      * @param mainView the current instance of MainView.
      * @param data the data to be visualized.
      */
-    RoadDataVisualizer(MainView mainView, RoadTrafficData data) {
+    RoadDataVisualizer(MainView mainView, RoadTrafficData data, RoadDataQuery query) {
         super(mainView);
         this.data = data;
+        this.query = query;
+        
     }
     
     /**
@@ -98,19 +103,19 @@ public class RoadDataVisualizer extends DataVisualizer{
         DataTab dataTab = (DataTab) super.mainView.getTabPane().
                 getSelectionModel().getSelectedItem();
         TabPane chartTabPane = dataTab.getChartTabPane();
-        if (!this.mTasksToVisualize.isEmpty()) {
+        if (!this.query.getSelectedTasks().isEmpty()) {
             Tab maintenanceTab = new Tab(MAINTENANCE_TASKS);
             if (this.data.getMaintenanceTasks() != null) {
-                maintenanceTab.setContent(new Label(NO_DATA_STR));
+                maintenanceTab.setContent(visualizeMaintenanceTasks());
             }
             else {
-                maintenanceTab.setContent(visualizeMaintenanceTasks());
+                maintenanceTab.setContent(new Label(NO_DATA_STR));
             }
             chartTabPane.getTabs().add(maintenanceTab); 
         }
-        if (!this.forecastsToVisualize.isEmpty()) {
+        if (!this.query.getSelectedForecasts().isEmpty()) {
             Tab forecastTab = new Tab (COND_FORECAST);
-            if (!this.data.getForecasts().isEmpty()) {
+            if (this.data.getForecasts() != null) {
                 forecastTab.setContent(visualizeConditionForecast());
             }
             else {
@@ -118,6 +123,7 @@ public class RoadDataVisualizer extends DataVisualizer{
             }
             chartTabPane.getTabs().add(forecastTab);
         }
+        visualizeTrafficMsgs();
         
     }
     
@@ -132,15 +138,23 @@ public class RoadDataVisualizer extends DataVisualizer{
         final BarChart<String,Number> maintenanceChart = 
                 new BarChart<>(xAxis,yAxis);
         maintenanceChart.setTitle(MAINT_TASKS_TITLE + 
-                this.data.getLocation() + LINE_WITH_SPACES + this.data.getTime());
+                this.data.getLocation() 
+                + LINE_WITH_SPACES 
+                + this.query.getTimelineStart()[0]
+                + " " + this.query.getTimelineStart()[1] 
+                + LINE_WITH_SPACES 
+                + this.query.getTimelineEnd()[0]
+                + " " + this.query.getTimelineEnd()[1]);
         xAxis.setLabel(MAINT_TASK_AXIS_LABEL);
         yAxis.setLabel(AMOUNT_AXIS_LABEL);
         
-        for (String type : this.mTasksToVisualize) {
-            XYChart.Series series = new XYChart.Series();
-            series.setName(type);
-            series.getData().add(new XYChart.Data(type, maintenanceTasks.get(type)));
-            maintenanceChart.getData().add(series);
+        for (String type : this.query.getSelectedTasks()) {
+            if (this.data.getMaintenanceTasks().containsKey(type)) {
+                XYChart.Series series = new XYChart.Series();
+                series.setName(type);
+                series.getData().add(new XYChart.Data(type, maintenanceTasks.get(type)));
+                maintenanceChart.getData().add(series);
+            }
         }
         
         return maintenanceChart;
@@ -161,8 +175,14 @@ public class RoadDataVisualizer extends DataVisualizer{
         forecastGrid.setAlignment(Pos.CENTER);
         forecastGrid.setGridLinesVisible(true);
         
-        Label tableTitle = new Label(COND_FORECAST_TITLE + 
-                this.data.getLocation() + LINE_WITH_SPACES + this.data.getTime());
+        Label tableTitle = new Label(COND_FORECAST_TITLE 
+                + this.data.getLocation() 
+                + LINE_WITH_SPACES 
+                + this.query.getTimelineStart()[0]
+                + " " + this.query.getTimelineStart()[1] 
+                + LINE_WITH_SPACES 
+                + this.query.getTimelineEnd()[0]
+                + " " + this.query.getTimelineEnd()[1]);
         tableTitle.setAlignment(Pos.CENTER);
         
         Label timeLabel = new Label(FORECAST_TIME_TITLE);
@@ -182,8 +202,9 @@ public class RoadDataVisualizer extends DataVisualizer{
                 overallLabel);
         row_count++;
         
-        Set<String> forecastTimes = forecasts.keySet();
-        for (String time : forecastTimes) {
+//        Set<String> forecastTimes = forecasts.keySet();
+//        for (String time : this.query) {
+        String time = this.query.getForecastTime() + "h";
             Label timeValue = new Label(time);
             timeValue.setPrefSize(GRID_CELL_WIDTH, GRID_CELL_HEIGHT);
             timeValue.setAlignment(Pos.CENTER);
@@ -205,7 +226,7 @@ public class RoadDataVisualizer extends DataVisualizer{
             forecastGrid.addRow(row_count, timeValue, precipitationValue, 
                     winterSlipValue, overallValue);
             row_count++;
-        }
+//        }
         
         forecastView.getChildren().addAll(tableTitle, forecastGrid);
         

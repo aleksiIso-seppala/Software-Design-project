@@ -172,12 +172,12 @@ public abstract class DataVisualizer {
      * @return DataVisualizer corresponding the type of the data.
      */
     public static DataVisualizer makeDataVisualizer(MainView mainView, 
-            RoadData data) {
+            RoadData data, DataQuery query) {
         if (data instanceof RoadTrafficData roadTrafficData) {
-            return new RoadDataVisualizer(mainView, roadTrafficData);
+            return new RoadDataVisualizer(mainView, roadTrafficData, (RoadDataQuery) query);
         }
         else if (data instanceof RoadWeatherData roadWeatherData) {
-            return new WeatherDataVisualizer(mainView, roadWeatherData);
+            return new WeatherDataVisualizer(mainView, roadWeatherData, (WeatherDataQuery) query);
         }
         else return null;
     }

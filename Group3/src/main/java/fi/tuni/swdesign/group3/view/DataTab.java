@@ -312,11 +312,11 @@ public abstract class DataTab extends Tab {
                 RoadData[] datas = this.mainView.getViewModel()
                         .onCalculateButtonPress(dataQuery);
                 DataVisualizer dv1 = DataVisualizer
-                        .makeDataVisualizer(mainView, datas[0]);
+                        .makeDataVisualizer(mainView, datas[0], dataQuery);
                 
                 if (datas.length > 1) {
                     DataVisualizer dv2 = DataVisualizer
-                            .makeDataVisualizer(mainView, datas[1]);
+                            .makeDataVisualizer(mainView, datas[1], dataQuery);
                     this.updateChart(dataQuery, dv1, dv2);
                 }
                 else {

@@ -77,13 +77,13 @@ public class CombinedDataTab extends DataTab{
         for (DataVisualizer visualizer : visualizers) {
             if (visualizer instanceof RoadDataVisualizer roadDataVisualizer) {
                 roadDV = roadDataVisualizer;
-                roadDV.setMTasksToVisualize(combinedDQ.getSelectedTasks());
-                roadDV.setForecastsToVisualize(combinedDQ.getSelectedForecasts());
+//                roadDV.setMTasksToVisualize(combinedDQ.getSelectedTasks());
+//                roadDV.setForecastsToVisualize(combinedDQ.getSelectedForecasts());
             } else if (visualizer instanceof WeatherDataVisualizer weatherDataVisualizer) {
                 weatherDV = weatherDataVisualizer;
-                weatherDV.setObsTypesToVisualize(combinedDQ.getSelectedObsParams());
-                weatherDV.setPreTypesToVisualize(combinedDQ.getSelectedPreParams());
-                weatherDV.setPerMonthTypesToVisualize(combinedDQ.getSelectedPerMonthParams());
+//                weatherDV.setObsTypesToVisualize(combinedDQ.getSelectedObsParams());
+//                weatherDV.setPreTypesToVisualize(combinedDQ.getSelectedPreParams());
+//                weatherDV.setPerMonthTypesToVisualize(combinedDQ.getSelectedPerMonthParams());
             }
         }
         if (roadDV != null) {

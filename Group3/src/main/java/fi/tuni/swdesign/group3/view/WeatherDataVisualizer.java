@@ -35,6 +35,9 @@ public class WeatherDataVisualizer extends DataVisualizer{
      * An ArrayList which contains the types of observed values the user
      * has selected to be visualized.
      */
+    
+    private WeatherDataQuery query;
+    
     private ArrayList<String> obsTypesToVisualize;
     /**
      * An ArrayList which contains the types of predicted values the user
@@ -53,9 +56,10 @@ public class WeatherDataVisualizer extends DataVisualizer{
      * @param mainView the current instance of MainView.
      * @param data the data to be visualized.
      */
-    WeatherDataVisualizer(MainView mainView, RoadWeatherData data) {
+    WeatherDataVisualizer(MainView mainView, RoadWeatherData data, WeatherDataQuery query) {
         super(mainView);
         this.data = data;
+        this.query = query;
     }
     
     /**
@@ -122,12 +126,12 @@ public class WeatherDataVisualizer extends DataVisualizer{
         DataTab dataTab = (DataTab) super.mainView.getTabPane().
                 getSelectionModel().getSelectedItem();
         TabPane chartTabPane = dataTab.getChartTabPane();
-        if (!this.obsTypesToVisualize.isEmpty()) {
+        if (!this.query.getSelectedObsParams().isEmpty()) {
             Tab observedTab = new Tab(OBSERVED_VALUES);
             observedTab.setContent(visualizeObservedValues());
             chartTabPane.getTabs().add(observedTab);
         }
-        if (!this.preTypesToVisualize.isEmpty()) {
+        if (!this.query.getSelectedPreParams().isEmpty()) {
             Tab predictedTab = new Tab(PREDICTED_VALUES);
             predictedTab.setContent(visualizePredictedValues());
             chartTabPane.getTabs().add(predictedTab);
@@ -147,8 +151,14 @@ public class WeatherDataVisualizer extends DataVisualizer{
         observedGrid.setAlignment(Pos.CENTER);
         observedGrid.setGridLinesVisible(true);
         
-        Label tableTitle = new Label(OBS_VALUES_TITLE + 
-                this.data.getLocation() + LINE_WITH_SPACES + this.data.getTime());
+        Label tableTitle = new Label(OBS_VALUES_TITLE 
+                + this.data.getLocation() 
+                + LINE_WITH_SPACES 
+                + this.query.getTimelineStart()[0]
+                + " " + this.query.getTimelineStart()[1] 
+                + LINE_WITH_SPACES 
+                + this.query.getTimelineEnd()[0]
+                + " " + this.query.getTimelineEnd()[1]);
         tableTitle.setAlignment(Pos.CENTER);
         
         Label temperatureLabel = new Label(TEMPERATURE_TITLE);
@@ -165,21 +175,21 @@ public class WeatherDataVisualizer extends DataVisualizer{
                 cloudLabel);
         
         Label temperatureValue = new Label();
-        if (this.obsTypesToVisualize.contains(TEMPERATURE)) {
+        if (this.query.getSelectedObsParams().contains(TEMPERATURE)) {
             temperatureValue.setText(Float.toString(this.data.getTemperature()));
         }
         temperatureValue.setPrefSize(GRID_CELL_WIDTH, GRID_CELL_HEIGHT);
         temperatureValue.setAlignment(Pos.CENTER);
         
         Label windValue = new Label();
-        if (this.obsTypesToVisualize.contains(WIND_SPEED)) {
+        if (this.query.getSelectedObsParams().contains(WIND_SPEED)) {
             windValue.setText(Float.toString(this.data.getWind()));
         }
         windValue.setPrefSize(GRID_CELL_WIDTH, GRID_CELL_HEIGHT);
         windValue.setAlignment(Pos.CENTER);
         
         Label cloudValue = new Label();
-        if (this.obsTypesToVisualize.contains(CLOUDINESS)) {
+        if (this.query.getSelectedObsParams().contains(CLOUDINESS)) {
             cloudValue.setText(Float.toString(this.data.getCloudiness()));
         }
         cloudValue.setPrefSize(GRID_CELL_WIDTH, GRID_CELL_HEIGHT);
@@ -199,13 +209,19 @@ public class WeatherDataVisualizer extends DataVisualizer{
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
         final LineChart predictedChart = new LineChart(xAxis,yAxis);
-        predictedChart.setTitle(PRE_VALUES_TITLE + 
-                this.data.getLocation() + LINE_WITH_SPACES + this.data.getTime());
+        predictedChart.setTitle(PRE_VALUES_TITLE
+                + this.data.getLocation() 
+                + LINE_WITH_SPACES 
+                + this.query.getTimelineStart()[0]
+                + " " + this.query.getTimelineStart()[1] 
+                + LINE_WITH_SPACES 
+                + this.query.getTimelineEnd()[0]
+                + " " + this.query.getTimelineEnd()[1]);
         xAxis.setLabel(FORECAST_TIME_TITLE);
         yAxis.setLabel(WEATHER_VALUE_AXIS_LABEL);
         predictedChart.setCreateSymbols(false);
             
-        for (String type : this.preTypesToVisualize) {
+        for (String type : this.query.getSelectedPreParams()) {
             XYChart.Series series = new XYChart.Series();
             series.setName(type);
             for (String time : forecasts.keySet()) {
@@ -233,13 +249,20 @@ public class WeatherDataVisualizer extends DataVisualizer{
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
         final AreaChart perMonthChart = new AreaChart(xAxis, yAxis);
-        perMonthChart.setTitle(DAILY_VALUE_TITLE + 
-                this.data.getLocation() + LINE_WITH_SPACES + this.data.getTime());
+        perMonthChart.setTitle(DAILY_VALUE_TITLE 
+                + this.data.getLocation() 
+                + LINE_WITH_SPACES 
+                + LINE_WITH_SPACES 
+                + this.query.getTimelineStart()[0]
+                + " " + this.query.getTimelineStart()[1] 
+                + LINE_WITH_SPACES 
+                + this.query.getTimelineEnd()[0]
+                + " " + this.query.getTimelineEnd()[1]);
         xAxis.setLabel(DATE_AXIS_LABEL);
         yAxis.setLabel(TEMPERATURE_TITLE);
         perMonthChart.setCreateSymbols(false);
         
-        for (String type : this.perMonthTypesToVisualize) {
+        for (String type : this.query.getSelectedPreParams()) {
             XYChart.Series series = new XYChart.Series();
             series.setName(type);
             for (String date : dailyValues.keySet()) {

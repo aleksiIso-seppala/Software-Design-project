@@ -206,12 +206,15 @@ public class DataQueryPopulator {
         populateRoadDataQuery(subRoadDataQuery, root);
         populateWeatherDataQuery(subWeatherDataQuery, root);
         
-        query.setSelectedTasks(subRoadDataQuery.getSelectedTasks());
-        query.setSelectedForecasts(subRoadDataQuery.getSelectedForecasts());
-        query.setForecastTime(subRoadDataQuery.getForecastTime());
+        query.setSubRoadDQ(subRoadDataQuery);
+        query.setSubWeatherDQ(subWeatherDataQuery);
         
-        query.setSelectedObsParams(subWeatherDataQuery.getSelectedObsParams());
-        query.setSelectedPreParams(subWeatherDataQuery.getSelectedPreParams());
-        query.setSelectedPerMonthParams(subWeatherDataQuery.getSelectedPerMonthParams());
+//        query.setSelectedTasks(subRoadDataQuery.getSelectedTasks());
+//        query.setSelectedForecasts(subRoadDataQuery.getSelectedForecasts());
+//        query.setForecastTime(subRoadDataQuery.getForecastTime());
+//        
+//        query.setSelectedObsParams(subWeatherDataQuery.getSelectedObsParams());
+//        query.setSelectedPreParams(subWeatherDataQuery.getSelectedPreParams());
+//        query.setSelectedPerMonthParams(subWeatherDataQuery.getSelectedPerMonthParams());
     }
 }
