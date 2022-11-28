@@ -66,7 +66,7 @@ public class RoadDataParserJSON implements RoadDataParser{
      * @param response The starting point of the Json data Array
      * @return An ArrayList with all the names of the maintenance tasks
      */
-    public static ArrayList<String> readMaintenanceTaskNames(JsonArray response){
+    public static ArrayList<String> readMaintenanceTaskNames(JsonArray response, String textType){
         
         ArrayList<String> tasks = new ArrayList<>();
         for(var object: response){
@@ -75,7 +75,14 @@ public class RoadDataParserJSON implements RoadDataParser{
             String nameFi = task.get("nameFi").getAsString();
             String nameSv = task.get("nameSv").getAsString();
             String nameEn = task.get("nameEn").getAsString();
-            tasks.add(nameEn);
+            
+            if(textType.equals("clean")){
+                tasks.add(nameEn);                
+            }
+            else if(textType.equals("original")){
+                tasks.add(id);
+            }
+
         }
         return tasks;
 
@@ -186,7 +193,7 @@ public class RoadDataParserJSON implements RoadDataParser{
         JsonObject allData = (JsonObject) data;
         JsonArray roadConditions = allData.getAsJsonArray("roadConditions");
 
-        RoadTrafficData trafficData = new RoadTrafficData(location, coordinates,"0h");
+        RoadTrafficData trafficData = new RoadTrafficData(location, coordinates,"0");
         HashMap<String, RoadTrafficDataForecast> forecasts = new HashMap<>();
 
         for(var road : roadConditions){
@@ -194,7 +201,8 @@ public class RoadDataParserJSON implements RoadDataParser{
             JsonObject condition = road.getAsJsonObject();
             String type = condition.get("type").getAsString();
 
-            String time = condition.get("forecastName").getAsString(); 
+            String time = condition.get("forecastName").getAsString();
+            time = time.substring(0, 1);
             String overallRoadCondition = condition.get("overallRoadCondition").getAsString();
             String weatherSymbol = condition.get("weatherSymbol").getAsString();
             String temperature = condition.get("temperature").getAsString();
@@ -228,7 +236,19 @@ public class RoadDataParserJSON implements RoadDataParser{
                     String roadCondition = forecastCondition.get("roadCondition").getAsString();
                     trafficForecast.setOverAllcondition(roadCondition); 
                 }
-
+                if(forecastCondition.has("frictionCondition")){
+                    String frictionCondition = forecastCondition.get("frictionCondition").getAsString();
+                    trafficForecast.setFriction(frictionCondition);
+                }
+                if(forecastCondition.has("windCondition")){
+                    String windCondition = forecastCondition.get("windCondition").getAsString();
+                    trafficForecast.setWindCondition(windCondition);
+                }
+                if(forecastCondition.has("winterSlipperiness")){
+                    Boolean winterSlipperiness = forecastCondition.get("winterSlipperiness").getAsBoolean();
+                    trafficForecast.setWinterSlipperines(winterSlipperiness);
+                }
+                
                 forecasts.put(time, trafficForecast);
 
             }
