@@ -242,6 +242,8 @@ public class RoadDataHandler {
                 forecastObject.addProperty("friction", forecastData.getFriction());
                 forecastObject.addProperty("overAllcondition", forecastData.getOverAllcondition());
                 forecastObject.addProperty("visibility", forecastData.getVisibility());
+                forecastObject.addProperty("windCondition",forecastData.getWindCondition());
+                forecastObject.addProperty("winterSlipperiness",forecastData.isWinterSlipperines());
 
                 roadForecasts.add(forecastObject);
             }
@@ -361,6 +363,7 @@ public class RoadDataHandler {
                     String friction = forecastData.get("friction").getAsString();
                     String overAllcondition = forecastData.get("overAllcondition").getAsString();
                     String visibility = forecastData.get("visibility").getAsString();
+                    String windCondition = forecastData.get("windCondition").getAsString();
                     boolean winterSlipperiness = forecastData.get("winterSlipperiness").getAsBoolean();
                     
                     var forecastObject = new RoadTrafficDataForecast(fLocation, fCoordinates, fTime);
@@ -374,6 +377,7 @@ public class RoadDataHandler {
                     forecastObject.setOverAllcondition(overAllcondition);
                     forecastObject.setVisibility(visibility);
                     forecastObject.setWinterSlipperines(winterSlipperiness);
+                    forecastObject.setWindCondition(windCondition);
                     
                     forecastsMap.put(fTime, forecastObject);                    
                 }
@@ -708,7 +712,7 @@ public class RoadDataHandler {
         try {
             JsonArray arr = RoadDataGetterDigitraffic.getMaintenanceTaskNamesData();
             ArrayList<String> names = new ArrayList<>();
-            names = RoadDataParserJSON.readMaintenanceTaskNames(arr);
+            names = RoadDataParserJSON.readMaintenanceTaskNames(arr,"clean");
             return names;
         } catch (Exception e) {
         System.out.println("Error in maintenanceTasknames");
