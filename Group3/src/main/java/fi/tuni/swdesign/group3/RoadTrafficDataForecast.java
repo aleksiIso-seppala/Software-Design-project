@@ -13,6 +13,7 @@ public class RoadTrafficDataForecast extends RoadTrafficData{
     private String friction;
     private String overAllcondition;
     private String visibility;
+    private String windCondition;
     private boolean winterSlipperines;
     
     public RoadTrafficDataForecast(String location, String coordinates, String time){
@@ -60,6 +61,12 @@ public class RoadTrafficDataForecast extends RoadTrafficData{
         this.winterSlipperines = winterSlipperines;
     }
     
-    
+    public String getWindCondition() {
+        return windCondition;
+    }
+
+    public void setWindCondition(String windCondition) {
+        this.windCondition = windCondition;
+    }
     
 }
