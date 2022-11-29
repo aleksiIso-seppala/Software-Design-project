@@ -30,6 +30,7 @@ public class RoadDataParserXML implements RoadDataParser{
      * With the setRoadWeatherData() function
      * @param w3cDocument
      * Location values:
+     * @param location
      * @param minX
      * @param maxX
      * @param minY
@@ -43,7 +44,7 @@ public class RoadDataParserXML implements RoadDataParser{
      * @throws ProtocolException
      * @throws IOException 
      */
-    protected static RoadWeatherData getDOMParsedDocument(org.w3c.dom.Document w3cDocument, String minX, String maxX, String minY, String maxY, String lat, String lon, String startTime) throws MalformedURLException, ProtocolException, IOException {
+    protected static RoadWeatherData getDOMParsedDocument(org.w3c.dom.Document w3cDocument, String location, String minX, String maxX, String minY, String maxY, String lat, String lon, String startTime) throws MalformedURLException, ProtocolException, IOException {
         RoadWeatherData roadWeatherData = null;
         
         //Check if there's a document
@@ -62,14 +63,14 @@ public class RoadDataParserXML implements RoadDataParser{
             //Math.floor and Math.ceil give respectively the min and max int rounded value of a float
             coordinates = Math.floor(Float.parseFloat(lat)) + "/" + Math.floor(Float.parseFloat(lon)) + "/" + Math.ceil(Float.parseFloat(lat)) + "/" + Math.ceil(Float.parseFloat(lon));
         }
-        roadWeatherData = new RoadWeatherData("suomi", coordinates, startTime);
+        roadWeatherData = new RoadWeatherData(location, coordinates, startTime);
      
         //Get elmt by tag name
         NodeList weatherForecastMembers = w3cDocument.getElementsByTagName("BsWfs:BsWfsElement");
         String time = startTime;
         
         //Get all elements in a 12h timestamp
-        RoadWeatherData newRoadWeatherData = new RoadWeatherData("suomi", coordinates, time);
+        RoadWeatherData newRoadWeatherData = new RoadWeatherData(location, coordinates, time);
         for(int i = 0; i < weatherForecastMembers.getLength(); i++){
             Node weatherForecastMember = weatherForecastMembers.item(i);
             
@@ -95,7 +96,7 @@ public class RoadDataParserXML implements RoadDataParser{
                         //Change time value for Forecast up to 12h after startTime
                         if(detailElt.getTagName().equals("BsWfs:Time") && !time.equals(detailElt.getTextContent())){
                             time = detailElt.getTextContent();
-                            newRoadWeatherData = new RoadWeatherData("suomi", coordinates, time);
+                            newRoadWeatherData = new RoadWeatherData(location, coordinates, time);
                         }
                         
                         //Specific Details
@@ -169,6 +170,7 @@ public class RoadDataParserXML implements RoadDataParser{
      * The query uses fmi::observations::weather::daily::simple and fetches for the TA_PT1H_AVG,TA_PT1H_MAX,TA_PT1H_MIN parameters
      * If some days of the month are set in the future, the values are = 0.0
      * Location values:
+     * @param location
      * @param minX
      * @param maxX
      * @param minY
@@ -178,7 +180,7 @@ public class RoadDataParserXML implements RoadDataParser{
      * @throws ProtocolException
      * @throws IOException 
      */
-    protected static TreeMap<String, Float[]> getMonthlyTemperatureData(String minX, String maxX, String minY, String maxY, String date) throws ProtocolException, IOException{
+    protected static TreeMap<String, Float[]> getMonthlyTemperatureData(String location, String minX, String maxX, String minY, String maxY, String date) throws ProtocolException, IOException{
         TreeMap<String, Float[]> monthlyData = new TreeMap<>();
         
         String[] dateSplit = date.split("-");
@@ -201,7 +203,7 @@ public class RoadDataParserXML implements RoadDataParser{
             ArrayList<Float> allAvg = new ArrayList<>(), allMin = new ArrayList<>(), allMax = new ArrayList<>();
             
             //Get multiple AVG, MIN and MAX values in a day
-            RoadWeatherData daily = getDOMParsedDocument(observationDOM, minX, maxX, minY, maxY, "", "", keyDate + "00:00:00Z");
+            RoadWeatherData daily = getDOMParsedDocument(observationDOM, location, minX, maxX, minY, maxY, "", "", keyDate + "00:00:00Z");
             HashMap<String, RoadWeatherData> forecast = daily.getForecasts();
             allAvg.add(daily.getAVGTemperature());
             allMin.add(daily.getMINTemperature());
@@ -233,7 +235,7 @@ public class RoadDataParserXML implements RoadDataParser{
         //Test: Parsing Observed and Predicted Weather Data using data fetched by RoadDataGetterFMI
         System.out.println("\nEx: Observed temperature, wind speed and cloudiness for the coordinate area [23,61,24,62] between 10am and 10pm on 2022-11-16 in 2h intervals");
         org.w3c.dom.Document observationDOM = RoadDataGetterFMI.getDOMDocument("fmi::observations::weather::simple", "23", "61", "24", "62", "", "", "2022-11-16T10:00:00Z", "2022-11-16T22:00:00Z", "t2m,ws_10min,n_man,TA_PT1H_AVG,TA_PT1H_MAX,TA_PT1H_MIN");
-        RoadWeatherData test = getDOMParsedDocument(observationDOM, "23", "61", "24", "62", "", "", "2022-11-16T10:00:00Z");
+        RoadWeatherData test = getDOMParsedDocument(observationDOM, "Tampere", "23", "61", "24", "62", "", "", "2022-11-16T10:00:00Z");
         if(test != null){
             System.out.println(test.toString());
             System.out.println(test.getForecasts());
@@ -241,7 +243,7 @@ public class RoadDataParserXML implements RoadDataParser{
                 
         System.out.println("\nEx: Forecast for the temperature and the wind speed in 2h intervals for Tampere area (coordinates 61.49911 and 23.78712) for 30/11/2022 (! starting time has to be in the future else values are NaN) using the HARMONIE weather model");
         org.w3c.dom.Document forecastDOM = RoadDataGetterFMI.getDOMDocument("fmi::forecast::harmonie::surface::point::simple", "", "", "", "", "61.49911", "23.78712", "2022-11-30T06:00:00Z", "2022-11-30T18:00:00Z", "temperature,windspeedms");
-        RoadWeatherData test2 = getDOMParsedDocument(forecastDOM, "", "", "", "", "61.49911", "23.78712", "2022-11-30T06:00:00Z");
+        RoadWeatherData test2 = getDOMParsedDocument(forecastDOM, "Tampere", "", "", "", "", "61.49911", "23.78712", "2022-11-30T06:00:00Z");
         if(test2 != null){
             System.out.println(test2.toString());
             System.out.println(test2.getForecasts());
@@ -249,7 +251,7 @@ public class RoadDataParserXML implements RoadDataParser{
         
         //Ex: Observed daily temperature for a whole month in a specific location
         System.out.println("\nEx: Observed daily temperature for a whole month in a specific location");
-        TreeMap<String, Float[]> monthlyData = getMonthlyTemperatureData("23", "61", "24", "62","2022-02");
+        TreeMap<String, Float[]> monthlyData = getMonthlyTemperatureData("Tampere", "23", "61", "24", "62","2022-11");
         monthlyData.entrySet().forEach(entry -> {
             System.out.println(entry.getKey() + " " + Arrays.toString(entry.getValue()));
         });
