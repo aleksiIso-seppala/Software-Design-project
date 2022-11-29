@@ -203,11 +203,21 @@ public class DataQueryPopulator {
         WeatherDataQuery subWeatherDataQuery = (WeatherDataQuery) 
                 DataQueryFactory.makeDataQuery(WEATHER_DATA);
         
+        
+        
         populateRoadDataQuery(subRoadDataQuery, root);
         populateWeatherDataQuery(subWeatherDataQuery, root);
         
         query.setSubRoadDQ(subRoadDataQuery);
         query.setSubWeatherDQ(subWeatherDataQuery);
+        
+        query.getSubRoadDQ().setLocation(query.getLocation());
+        query.getSubRoadDQ().setTimelineStart(query.getTimelineStart());
+        query.getSubRoadDQ().setTimelineEnd(query.getTimelineEnd());
+        
+        query.getSubWeatherDQ().setLocation(query.getLocation());
+        query.getSubWeatherDQ().setTimelineStart(query.getTimelineStart());
+        query.getSubWeatherDQ().setTimelineEnd(query.getTimelineEnd());
         
 //        query.setSelectedTasks(subRoadDataQuery.getSelectedTasks());
 //        query.setSelectedForecasts(subRoadDataQuery.getSelectedForecasts());
