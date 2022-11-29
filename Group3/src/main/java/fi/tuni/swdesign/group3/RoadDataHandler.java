@@ -213,10 +213,27 @@ public class RoadDataHandler {
      */
     public void saveDataBase(RoadTrafficData roadData,RoadWeatherData weatherData, String datasetName) throws IOException{
         
+        //Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        //String fileName = "SavedData.json";
+        //JsonArray saveData = new JsonArray();
+        
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String fileName = "SavedData.json";
+        Reader reader = Files.newBufferedReader(Paths.get(fileName));
+        JsonArray saveData = gson.fromJson(reader, JsonArray.class);
         Writer writer = new FileWriter(fileName);
-        JsonArray saveData = new JsonArray();
+        
+        //check if datasetName is taken
+        for(var data : saveData){
+            var dataO = data.getAsJsonObject();
+            if(dataO.get("datasetName").getAsString().equals(datasetName)){
+                System.out.println("dataset name already taken!");
+                gson.toJson(saveData, writer);
+                writer.close();
+                reader.close();
+                return;
+            }
+        }
         
         // saving roadData
         if(roadData != null){
@@ -311,6 +328,7 @@ public class RoadDataHandler {
         
         gson.toJson(saveData, writer);
         writer.close();
+        reader.close();
         
     }
     
@@ -481,9 +499,10 @@ public class RoadDataHandler {
                 continue;
             }
         }
-        
+        reader.close();
         //no data matching the name
         if(returnData[0] == null && returnData[1] == null){
+            System.out.println("no data found");
             return null;
         }
         //roadTrafficData found
@@ -779,8 +798,10 @@ public class RoadDataHandler {
         System.out.println("test");
         RoadDataHandler test = new RoadDataHandler();
         RoadTrafficData roadData= test.fetchRoadData("Suomi");
-        test.saveDataBase(roadData,null,"testName");
-        test.loadDataBase("testName");
+        //test.saveDataBase(roadData,null,"testName");
+        var testData = test.loadDataBase("testName");
+        //RoadTrafficData castedRoad = (RoadTrafficData) testData[0];
+        //test.saveDataBase(castedRoad, null, "aste");
         /* I'll store these here for a bit.
         System.out.println(handler.fetchRoadData("Rovaniemi").getTemperature());
         System.out.println(handler.fetchWeatherData("Rovaniemi", "2022-11-16T10:00:00Z", "2022-11-16T22:00:00Z").getTemperature());
