@@ -268,19 +268,32 @@ public class WeatherDataVisualizer extends DataVisualizer{
         yAxis.setLabel(TEMPERATURE_TITLE);
         perMonthChart.setCreateSymbols(false);
         
-        for (String type : this.query.getSelectedPreParams()) {
-            XYChart.Series series = new XYChart.Series();
-            series.setName(type);
+        XYChart.Series seriesAvg = new XYChart.Series();
+        XYChart.Series seriesMin = new XYChart.Series();
+        XYChart.Series seriesMax = new XYChart.Series();
+        seriesAvg.setName(AVG_TEMPERATURE);
+        seriesMax.setName("Max temperature");
+        seriesMin.setName("Min temperature");
+        for (String type : this.query.getSelectedPerMonthParams()) {
             for (String date : dailyValues.keySet()) {
-                if (type.equals(AVG_TEMPERATURE)) {
-                    series.getData().add(new XYChart.Data(date, dailyValues.get(date)[0]));
+                
+                if (type.equals(AVG_TEMPERATURE) & !dailyValues.get(date)[0].isNaN()) {
+                    seriesAvg.getData().add(new XYChart.Data(date, dailyValues.get(date)[0]));
                 }
-                else if (type.equals(MAX_MIN_TEMPERATURE)) {
-                    series.getData().add(new XYChart.Data(date, dailyValues.get(date)[1]));
-                    series.getData().add(new XYChart.Data(date, dailyValues.get(date)[2]));
+                else if (type.equals(MAX_MIN_TEMPERATURE)
+                        & !dailyValues.get(date)[1].isNaN()
+                        & !dailyValues.get(date)[2].isNaN()) {
+                    seriesMax.getData().add(new XYChart.Data(date, dailyValues.get(date)[2]));
+                    seriesMin.getData().add(new XYChart.Data(date, dailyValues.get(date)[1]));
                 }
             }
-            perMonthChart.getData().add(series);
+            if (type.equals(AVG_TEMPERATURE)) {
+                perMonthChart.getData().add(seriesAvg);
+            }
+            else if (type.equals(MAX_MIN_TEMPERATURE)) {
+                perMonthChart.getData().add(seriesMin);
+                perMonthChart.getData().add(seriesMax);
+            }
         }
         return perMonthChart;
     }
