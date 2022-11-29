@@ -64,6 +64,10 @@ public class ViewModel {
                 String dateQuery = LocalDate.parse(date, formatter).format(formatter2); 
                 TreeMap<String, Float[]> avgs = model.getMonthlyAverages(query.location, dateQuery);
                 data.setMonthlyAverage(avgs);
+                
+                data.getMonthylAverage().forEach((key, value) -> {
+                    System.out.println(key+":"+Arrays.toString(value));
+                });
             }
             
             toReturn[0] = data;
@@ -94,6 +98,11 @@ public class ViewModel {
                 TreeMap<String, Float[]> avgs = model.getMonthlyAverages(query.location, dateQuery);
                 
                 data2.setMonthlyAverage(avgs);
+                
+                data2.getMonthylAverage().forEach((key, value) -> {
+                    System.out.println(key+":"+Arrays.toString(value));
+                });
+                
             }
             
             toReturn[0] = data;

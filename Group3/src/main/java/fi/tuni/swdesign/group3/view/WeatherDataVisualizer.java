@@ -137,6 +137,11 @@ public class WeatherDataVisualizer extends DataVisualizer{
             predictedTab.setContent(visualizePredictedValues());
             chartTabPane.getTabs().add(predictedTab);
         }
+        if (!this.query.getSelectedPerMonthParams().isEmpty()) {
+            Tab perMonthTab = new Tab("Daily values per month");
+            perMonthTab.setContent(visualizePerMonthValues());
+            chartTabPane.getTabs().add(perMonthTab);
+        }
     }
     
     /**
