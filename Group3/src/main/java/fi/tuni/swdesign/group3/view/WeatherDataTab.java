@@ -4,6 +4,8 @@
  */
 package fi.tuni.swdesign.group3.view;
 
+import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.GridPane;
@@ -61,13 +63,21 @@ public class WeatherDataTab extends DataTab {
     @Override
     public void updateChart(DataQuery query, DataVisualizer... visualizers) {
         this.chartTabPane.getTabs().clear();
-        if (visualizers.length > 0) {
-            WeatherDataVisualizer visualizer = (WeatherDataVisualizer) visualizers[0];
-            WeatherDataQuery weatherDQ = (WeatherDataQuery) query;
-            visualizer.setObsTypesToVisualize(weatherDQ.getSelectedObsParams());
-            visualizer.setPreTypesToVisualize(weatherDQ.getSelectedPreParams());
-            visualizer.setPerMonthTypesToVisualize(weatherDQ.getSelectedPerMonthParams());
-            visualizer.visualizeData();
-        }
+        DataVisualizer visualizer = visualizers[0];
+            if (visualizer != null) {
+                WeatherDataVisualizer weatherDV = (WeatherDataVisualizer) visualizer;
+                WeatherDataQuery weatherDQ = (WeatherDataQuery) query;
+                weatherDV.setObsTypesToVisualize(weatherDQ.getSelectedObsParams());
+                weatherDV.setPreTypesToVisualize(weatherDQ.getSelectedPreParams());
+                weatherDV.setPerMonthTypesToVisualize(weatherDQ.getSelectedPerMonthParams());
+                weatherDV.visualizeData();
+            }
+            else {
+                Tab noDataTab = new Tab("No data");
+                Label noDataLabel = new Label("No data was found.");
+                noDataTab.setContent(noDataLabel);
+                this.chartTabPane.getTabs().add(noDataTab);
+            }
+        
     }
 }

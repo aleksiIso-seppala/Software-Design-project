@@ -83,22 +83,34 @@ public abstract class DataQueryValidityChecker {
      */
     protected String checkDateTimeValidity() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
-        String startTimeDate = this.query.getTimelineStart()[0] + " " 
+        String startTimeStr = this.query.getTimelineStart()[0] + " " 
                 + this.query.getTimelineStart()[1];
+        LocalDateTime startDateTime;
         try {
-            LocalDateTime dateTime = LocalDateTime.parse(startTimeDate, formatter);
+            startDateTime = LocalDateTime.parse(startTimeStr, formatter);
         }
         catch (DateTimeParseException exception) {
             return INVALID_START_TIME;
         }
         
-        String endTimeDate = this.query.getTimelineEnd()[0] + " " 
+        String endTimeStr = this.query.getTimelineEnd()[0] + " " 
                 + this.query.getTimelineEnd()[1];
+        LocalDateTime endDateTime;
         try {
-            LocalDateTime dateTime = LocalDateTime.parse(endTimeDate, formatter);
+            endDateTime = LocalDateTime.parse(endTimeStr, formatter);
         }
         catch (DateTimeParseException exception) {
             return INVALID_END_TIME;
+        }
+        if (startDateTime.isAfter(endDateTime)) {
+            return "Timeline cannot be inversed!";
+        }
+        if (endDateTime.compareTo(startDateTime) > 7) {
+            return "Timeline is too long (max 7 days)!";
+        }
+        else if (endDateTime.compareTo(startDateTime) == 7
+                & endDateTime.toLocalTime().compareTo(startDateTime.toLocalTime()) > 0) {
+            return "Timeline is too long (max 7 days)!";
         }
         return DQ_IS_VALID;
     }

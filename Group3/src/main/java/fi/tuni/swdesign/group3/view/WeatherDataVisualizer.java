@@ -256,8 +256,7 @@ public class WeatherDataVisualizer extends DataVisualizer{
         final NumberAxis yAxis = new NumberAxis();
         final AreaChart perMonthChart = new AreaChart(xAxis, yAxis);
         perMonthChart.setTitle(DAILY_VALUE_TITLE 
-                + this.data.getLocation() 
-                + LINE_WITH_SPACES 
+                + this.query.getLocation()
                 + LINE_WITH_SPACES 
                 + this.query.getTimelineStart()[0]
                 + " " + this.query.getTimelineStart()[1] 
