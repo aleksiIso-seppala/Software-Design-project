@@ -212,7 +212,7 @@ public class RoadDataHandler {
      * @param weatherData
      * @throws IOException 
      */
-    public void saveDataBase(RoadTrafficData roadData,RoadWeatherData weatherData, String datasetName) throws IOException{
+    public boolean saveDataBase(RoadTrafficData roadData,RoadWeatherData weatherData, String datasetName) throws IOException{
         
         //Gson gson = new GsonBuilder().setPrettyPrinting().create();
         //String fileName = "SavedData.json";
@@ -232,7 +232,7 @@ public class RoadDataHandler {
                 gson.toJson(saveData, writer);
                 writer.close();
                 reader.close();
-                return;
+                return false;
             }
         }
         
@@ -330,7 +330,7 @@ public class RoadDataHandler {
         gson.toJson(saveData, writer);
         writer.close();
         reader.close();
-        
+        return true;
     }
     
     /**
