@@ -9,6 +9,7 @@ import static fi.tuni.swdesign.group3.view.RoadDataVisualizer.GRID_CELL_HEIGHT;
 import static fi.tuni.swdesign.group3.view.RoadDataVisualizer.GRID_CELL_WIDTH;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeMap;
 import javafx.geometry.Pos;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.CategoryAxis;
@@ -205,7 +206,7 @@ public class WeatherDataVisualizer extends DataVisualizer{
      * @return LineChart in which the data is visualized.
      */
     private LineChart visualizePredictedValues() {
-        HashMap<String, RoadWeatherData> forecasts = this.data.getForecasts();
+        TreeMap<String, RoadWeatherData> forecasts = this.data.getForecasts();
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
         final LineChart predictedChart = new LineChart(xAxis,yAxis);
