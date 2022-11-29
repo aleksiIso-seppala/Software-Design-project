@@ -58,7 +58,13 @@ public class ViewModel {
             }
             
             if(!wquery.getSelectedPerMonthParams().isEmpty()){
-                TreeMap<String, Float[]> avgs = model.getMonthlyAverages(query.location, query.timelineStart[1]);
+                String date = query.timelineStart[1].replace(".", "-");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                String dateQuery = LocalDate.parse(date, formatter).format(formatter2);
+                
+                
+                TreeMap<String, Float[]> avgs = model.getMonthlyAverages(query.location, dateQuery);
                 data.setMonthlyAverage(avgs);
             }
             

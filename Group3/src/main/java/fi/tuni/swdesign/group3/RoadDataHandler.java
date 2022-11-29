@@ -800,7 +800,7 @@ public class RoadDataHandler {
         test.saveDataBase(roadData,null,"testName");
         test.loadDataBase("testName");
         
-        TreeMap<String, Float[]> monthlyData = test.fetchMonthlyAverages("Helsinki", "2022-02-30");
+        TreeMap<String, Float[]> monthlyData = test.fetchMonthlyAverages("Helsinki", "2022-11-30");
                 monthlyData.entrySet().forEach(entry -> {
             System.out.println(entry.getKey() + " " + Arrays.toString(entry.getValue()));
         });
