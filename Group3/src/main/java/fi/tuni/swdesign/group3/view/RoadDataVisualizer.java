@@ -106,7 +106,13 @@ public class RoadDataVisualizer extends DataVisualizer{
         if (!this.query.getSelectedTasks().isEmpty()) {
             Tab maintenanceTab = new Tab(MAINTENANCE_TASKS);
             if (this.data.getMaintenanceTasks() != null) {
-                maintenanceTab.setContent(visualizeMaintenanceTasks());
+                BarChart maintenanceChart = visualizeMaintenanceTasks();
+                if (maintenanceChart.getData().isEmpty()) {
+                    maintenanceTab.setContent(new Label(NO_DATA_STR));
+                }
+                else {
+                    maintenanceTab.setContent(maintenanceChart);
+                }
             }
             else {
                 maintenanceTab.setContent(new Label(NO_DATA_STR));
@@ -149,14 +155,17 @@ public class RoadDataVisualizer extends DataVisualizer{
         yAxis.setLabel(AMOUNT_AXIS_LABEL);
         
         for (String type : this.query.getSelectedTasks()) {
-            if (this.data.getMaintenanceTasks().containsKey(type)) {
+            String typeCapsFormat = type.replace(" ", "_").toUpperCase();
+            if (this.data.getMaintenanceTasks().containsKey(typeCapsFormat)) {
                 XYChart.Series series = new XYChart.Series();
                 series.setName(type);
-                series.getData().add(new XYChart.Data(type, maintenanceTasks.get(type)));
+                series.getData().add(new XYChart.Data(type, maintenanceTasks.get(typeCapsFormat)));
                 maintenanceChart.getData().add(series);
             }
         }
         
+        maintenanceChart.setBarGap(0);
+        maintenanceChart.setCategoryGap(0);
         return maintenanceChart;
     }
     
