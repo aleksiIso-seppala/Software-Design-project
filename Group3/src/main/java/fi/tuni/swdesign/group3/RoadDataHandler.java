@@ -113,7 +113,24 @@ public class RoadDataHandler {
      * @param futureTime
      * @return RoadWeatherData object that is used to save or visualize data
      */
-    public RoadWeatherData fetchWeatherData(String location, String time, String futureTime){
+    public RoadWeatherData fetchWeatherDataPast(String location, String time, String futureTime){
+        try {
+            
+            ArrayList loc = this.digiTraficLocations.get(location);
+            org.w3c.dom.Document doc = RoadDataGetterFMI.getDOMDocument("fmi::forecast::harmonie::surface::point::simple", "", "", "", "", loc.get(3).toString(),
+                            loc.get(1).toString(), time, futureTime, 
+                            "temperature,windspeedms");
+                    
+            RoadWeatherData data = RoadDataParserXML.getDOMParsedDocument(doc, "", "", "", "", 
+                    loc.get(3).toString(), loc.get(1).toString(), time);
+            return data;
+        } catch (IOException e){
+            System.out.println("error");
+            return null;
+        }
+    }
+    
+    public RoadWeatherData fetchWeatherDataFuture(String location, String time, String futureTime){
         try {
             
             ArrayList loc = this.digiTraficLocations.get(location);

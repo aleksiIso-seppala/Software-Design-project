@@ -44,9 +44,13 @@ public class Model {
      * @param futureTime time+12hr
      * @return RoadWeatherData class
      */
-    public RoadWeatherData getRoadWeatherData(String location, String time, String futureTime){
-        return this.handler.fetchWeatherData(location, time, futureTime);
+    public RoadWeatherData getRoadWeatherDataPast(String location, String time, String futureTime){
+        return this.handler.fetchWeatherDataPast(location, time, futureTime);
     } 
+    
+    public RoadWeatherData getRoadWeatherDataFuture(String location, String time, String futureTime){
+        return this.handler.fetchWeatherDataFuture(location, time, futureTime);
+    }
     
     public ArrayList<String> getLocations(){
         if(this.locations == null){

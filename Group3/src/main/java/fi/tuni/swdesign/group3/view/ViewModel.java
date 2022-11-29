@@ -2,11 +2,14 @@ package fi.tuni.swdesign.group3.view;
 import fi.tuni.swdesign.group3.*;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.function.BiConsumer;
 import javafx.event.ActionEvent;
 
 /**
@@ -43,8 +46,13 @@ public class ViewModel {
             String start = this.parseTime(query.timelineStart[1], query.timelineStart[0]);
             String end = this.parseTime(query.timelineEnd[1], query.timelineEnd[0]);
             
-            RoadWeatherData data = model.getRoadWeatherData(query.location, start, end);
-            System.out.println(data.getCoordinates());
+            RoadWeatherData data;
+            
+            if(LocalDateTime.now(ZoneId.of("Europe/Helsinki")).toString().replace(".", ":").compareTo(start) < 0){
+                data = model.getRoadWeatherDataFuture(query.location, end, start);
+            } else {
+                data = model.getRoadWeatherDataPast(query.location, start, end);  
+            }        
             toReturn[0] = data;
             return toReturn;
         
@@ -54,7 +62,15 @@ public class ViewModel {
             String end = this.parseTime(query.timelineEnd[1], query.timelineEnd[0]);
             
             RoadTrafficData data = model.getRoadTrafficData(query.location);
-            RoadWeatherData data2 = model.getRoadWeatherData(query.location, start, end);
+            
+            RoadWeatherData data2;
+            
+            if(LocalDateTime.now(ZoneId.of("Europe/Helsinki")).toString().replace(".", ":").compareTo(start) < 0){
+                data2= model.getRoadWeatherDataFuture(query.location, end, start);
+            } else {
+                data2 = model.getRoadWeatherDataPast(query.location, start, end);
+            }
+            
             toReturn[0] = data;
             toReturn[1] = data2;
             return toReturn;
