@@ -9,6 +9,7 @@ import static fi.tuni.swdesign.group3.view.RoadDataVisualizer.GRID_CELL_HEIGHT;
 import static fi.tuni.swdesign.group3.view.RoadDataVisualizer.GRID_CELL_WIDTH;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeMap;
 import javafx.geometry.Pos;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.CategoryAxis;
@@ -205,7 +206,7 @@ public class WeatherDataVisualizer extends DataVisualizer{
      * @return LineChart in which the data is visualized.
      */
     private LineChart visualizePredictedValues() {
-        HashMap<String, RoadWeatherData> forecasts = this.data.getForecasts();
+        TreeMap<String, RoadWeatherData> forecasts = this.data.getForecasts();
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
         final LineChart predictedChart = new LineChart(xAxis,yAxis);
@@ -245,7 +246,7 @@ public class WeatherDataVisualizer extends DataVisualizer{
      * @return AreaChart in which the data is visualized.
      */
     private AreaChart visualizePerMonthValues() {
-        HashMap<String, RoadWeatherData> dailyValues = new HashMap<>();
+        TreeMap<String, Float[]> dailyValues = this.data.getMonthylAverage();
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
         final AreaChart perMonthChart = new AreaChart(xAxis, yAxis);
@@ -267,14 +268,11 @@ public class WeatherDataVisualizer extends DataVisualizer{
             series.setName(type);
             for (String date : dailyValues.keySet()) {
                 if (type.equals(AVG_TEMPERATURE)) {
-                    series.getData().add(new XYChart.Data(date, dailyValues.get(date)
-                            .getAVGTemperature()));
+                    series.getData().add(new XYChart.Data(date, dailyValues.get(date)[0]));
                 }
                 else if (type.equals(MAX_MIN_TEMPERATURE)) {
-                    series.getData().add(new XYChart.Data(date, dailyValues.get(date)
-                            .getMINTemperature()));
-                    series.getData().add(new XYChart.Data(date, dailyValues.get(date)
-                            .getMAXTemperature()));
+                    series.getData().add(new XYChart.Data(date, dailyValues.get(date)[1]));
+                    series.getData().add(new XYChart.Data(date, dailyValues.get(date)[2]));
                 }
             }
             perMonthChart.getData().add(series);

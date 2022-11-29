@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.TreeMap;
 import java.util.function.BiConsumer;
 import javafx.event.ActionEvent;
 
@@ -46,7 +47,7 @@ public class ViewModel {
             String start = this.parseTime(query.timelineStart[1], query.timelineStart[0]);
             String end = this.parseTime(query.timelineEnd[1], query.timelineEnd[0]);
             
-            
+            WeatherDataQuery wquery = (WeatherDataQuery)query;
             
             RoadWeatherData data;
             
@@ -54,7 +55,17 @@ public class ViewModel {
                 data = model.getRoadWeatherDataFuture(query.location, start, end);
             } else {
                 data = model.getRoadWeatherDataPast(query.location, start, end);  
-            }        
+            }
+            
+            if(!wquery.getSelectedPerMonthParams().isEmpty()){
+                String date = query.timelineStart[1].replace(".", "-");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                String dateQuery = LocalDate.parse(date, formatter).format(formatter2); 
+                TreeMap<String, Float[]> avgs = model.getMonthlyAverages(query.location, dateQuery);
+                data.setMonthlyAverage(avgs);
+            }
+            
             toReturn[0] = data;
             return toReturn;
         
@@ -73,6 +84,16 @@ public class ViewModel {
                 data2= model.getRoadWeatherDataFuture(cbquery.location, start, end);
             } else {
                 data2 = model.getRoadWeatherDataPast(cbquery.location, start, end);
+            }
+            
+            if(!cbquery.getSubWeatherDQ().getSelectedPerMonthParams().isEmpty()){
+                String date = query.timelineStart[1].replace(".", "-");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                String dateQuery = LocalDate.parse(date, formatter).format(formatter2); 
+                TreeMap<String, Float[]> avgs = model.getMonthlyAverages(query.location, dateQuery);
+                
+                data2.setMonthlyAverage(avgs);
             }
             
             toReturn[0] = data;

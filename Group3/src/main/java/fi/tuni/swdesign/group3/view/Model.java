@@ -3,6 +3,7 @@ import fi.tuni.swdesign.group3.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.TreeMap;
 
 /**
  *
@@ -68,5 +69,9 @@ public class Model {
             this.mntTaskTypes = handler.getMaintenanceTaskNames();
         }
         return this.mntTaskTypes;
+    }
+    
+    public TreeMap<String, Float[]> getMonthlyAverages(String location, String month){
+        return this.handler.fetchMonthlyAverages(location, month);
     }
 }

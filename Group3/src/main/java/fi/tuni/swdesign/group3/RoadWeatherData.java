@@ -4,6 +4,7 @@
  */
 package fi.tuni.swdesign.group3;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
 
@@ -23,7 +24,8 @@ public class RoadWeatherData extends RoadData{
     // forecasts are the same as the observed so no need to do a new
     // class for them
     private TreeMap<String, RoadWeatherData> forecasts;
-    //private TreeMap<String, float>
+    private TreeMap<String, Float[]> avgMonthlyTemp;
+
 
     /**
      * Default constructor for RoadWeatherData
@@ -145,6 +147,14 @@ public class RoadWeatherData extends RoadData{
      */
     public void setMINTemperature(float MINTemperature) {
         this.MINTemperature = MINTemperature;
+    }
+    
+    public void setMonthlyAverage(TreeMap<String, Float[]> cont){
+        this.avgMonthlyTemp = cont;
+    }
+    
+    public TreeMap<String, Float[]> getMonthylAverage(){
+        return this.avgMonthlyTemp;
     }
 
     /**

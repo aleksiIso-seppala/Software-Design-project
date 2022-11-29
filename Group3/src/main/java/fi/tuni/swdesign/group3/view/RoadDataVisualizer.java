@@ -224,7 +224,7 @@ public class RoadDataVisualizer extends DataVisualizer{
         if (forecasts.get(time).isWinterSlipperines()) {
             winterSlipValue.setText(YES);
         }
-        else if (this.forecastsToVisualize.contains(WINTER_SLIP_TITLE)) {
+        else if (this.query.getSelectedForecasts().contains(WINTER_SLIP_TITLE)) {
             winterSlipValue.setText(NO);
         }
         winterSlipValue.setPrefSize(GRID_CELL_WIDTH, GRID_CELL_HEIGHT);

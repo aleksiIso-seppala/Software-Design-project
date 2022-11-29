@@ -174,9 +174,15 @@ public abstract class DataVisualizer {
     public static DataVisualizer makeDataVisualizer(MainView mainView, 
             RoadData data, DataQuery query) {
         if (data instanceof RoadTrafficData roadTrafficData) {
+            if (query instanceof CombinedDataQuery combinedDataQuery) {
+                return new RoadDataVisualizer(mainView, roadTrafficData, combinedDataQuery.getSubRoadDQ());
+            }
             return new RoadDataVisualizer(mainView, roadTrafficData, (RoadDataQuery) query);
         }
         else if (data instanceof RoadWeatherData roadWeatherData) {
+            if (query instanceof CombinedDataQuery combinedDataQuery) {
+                return new WeatherDataVisualizer(mainView, roadWeatherData, combinedDataQuery.getSubWeatherDQ());
+            }
             return new WeatherDataVisualizer(mainView, roadWeatherData, (WeatherDataQuery) query);
         }
         else return null;

@@ -18,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import fi.tuni.swdesign.group3.view.*;
+import java.util.Arrays;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -788,7 +789,24 @@ public class RoadDataHandler {
             names = RoadDataParserJSON.readMaintenanceTaskNames(arr,"clean");
             return names;
         } catch (Exception e) {
-        System.out.println("Error in maintenanceTasknames");
+            System.out.println("Error in maintenanceTasknames");
+        }
+        return null;
+    }
+    
+    public TreeMap<String, Float[]> fetchMonthlyAverages(String location, String month){
+        try {
+            ArrayList loc = this.digiTraficLocations.get(location);
+            String[] parsed = month.split("-");
+            
+            
+            TreeMap<String, Float[]> monthlyData = RoadDataParserXML.getMonthlyTemperatureData(location, loc.get(0).toString(),
+                            loc.get(2).toString(), loc.get(1).toString(),
+                            
+                            loc.get(3).toString(), parsed[0]+"-"+parsed[1]);
+            return monthlyData;
+        } catch (Exception e){
+            System.out.println("Error in monthlyAverages");
         }
         return null;
     }
@@ -798,10 +816,12 @@ public class RoadDataHandler {
         System.out.println("test");
         RoadDataHandler test = new RoadDataHandler();
         RoadTrafficData roadData= test.fetchRoadData("Suomi");
-        //test.saveDataBase(roadData,null,"testName");
-        var testData = test.loadDataBase("testName");
-        //RoadTrafficData castedRoad = (RoadTrafficData) testData[0];
-        //test.saveDataBase(castedRoad, null, "aste");
+        
+        TreeMap<String, Float[]> monthlyData = test.fetchMonthlyAverages("Helsinki", "2022-11-30");
+                monthlyData.entrySet().forEach(entry -> {
+            System.out.println(entry.getKey() + " " + Arrays.toString(entry.getValue()));
+        });
+
         /* I'll store these here for a bit.
         System.out.println(handler.fetchRoadData("Rovaniemi").getTemperature());
         System.out.println(handler.fetchWeatherData("Rovaniemi", "2022-11-16T10:00:00Z", "2022-11-16T22:00:00Z").getTemperature());
