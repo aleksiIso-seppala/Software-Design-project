@@ -219,8 +219,8 @@ public class RoadDataParserXML implements RoadDataParser{
             
             //Get one AVG, MIN, MAX values from the multiple values (different hours) in one day
             float dailyAVG = (Collections.max(allAvg) + Collections.min(allAvg))/2;
-            dailyAVG /= Math.pow(10, (int) Math.log10(dailyAVG));
-            dailyAVG = ((int) (dailyAVG * 10)) / 10.0f; // One digit floor
+            //dailyAVG /= Math.pow(10, (int) Math.log10(dailyAVG));
+            //dailyAVG = ((int) (dailyAVG * 10)) / 10.0f; // One digit floor
             float dailyMIN = Collections.min(allMin);
             float dailyMAX = Collections.max(allMax);
 
@@ -251,7 +251,7 @@ public class RoadDataParserXML implements RoadDataParser{
         
         //Ex: Observed daily temperature for a whole month in a specific location
         System.out.println("\nEx: Observed daily temperature for a whole month in a specific location");
-        TreeMap<String, Float[]> monthlyData = getMonthlyTemperatureData("Tampere", "23", "61", "24", "62","2022-11");
+        TreeMap<String, Float[]> monthlyData = getMonthlyTemperatureData("Helsinki", "24.93545", "60.16952", "25", "61","2022-11");
         monthlyData.entrySet().forEach(entry -> {
             System.out.println(entry.getKey() + " " + Arrays.toString(entry.getValue()));
         });
