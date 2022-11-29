@@ -4,8 +4,6 @@
  */
 package fi.tuni.swdesign.group3;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.TreeMap;
 
 /**

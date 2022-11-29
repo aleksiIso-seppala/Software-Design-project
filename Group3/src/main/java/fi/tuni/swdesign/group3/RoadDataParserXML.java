@@ -13,7 +13,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.TreeMap;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

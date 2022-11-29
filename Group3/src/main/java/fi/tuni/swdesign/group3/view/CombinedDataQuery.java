@@ -4,7 +4,6 @@
  */
 package fi.tuni.swdesign.group3.view;
 
-import java.util.ArrayList;
 
 /**
  * A class for storing the CombinedData parameters given by the user into an

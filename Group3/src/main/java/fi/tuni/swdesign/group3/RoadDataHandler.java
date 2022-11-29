@@ -19,8 +19,6 @@ import java.nio.file.Paths;
 
 import fi.tuni.swdesign.group3.view.*;
 import java.util.Arrays;
-
-import java.util.Map;
 import java.util.TreeMap;
 
 /**
@@ -206,12 +204,14 @@ public class RoadDataHandler {
         return null;
     }
     
-    /**
-     * 
-     * @param roadData
-     * @param weatherData
-     * @throws IOException 
-     */
+/**
+ * Method for saving the database containing the weather and road data
+ * @param roadData, roadData object
+ * @param weatherData, weatherData object
+ * @param datasetName, name of the dataset
+ * @return true if the saving was succesfull, false otherwise
+ * @throws IOException 
+ */
     public boolean saveDataBase(RoadTrafficData roadData,RoadWeatherData weatherData, String datasetName) throws IOException{
         
         //Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -333,10 +333,12 @@ public class RoadDataHandler {
         return true;
     }
     
-    /**
-     * 
-     * @throws IOException 
-     */
+/**
+ * Method for loading the database from a json file
+ * @param datasetName, name of the dataset to load
+ * @return true if the loading was succesfull, false otherwise
+ * @throws IOException 
+ */
     public RoadData[] loadDataBase(String datasetName) throws IOException{
         
         Gson gson = new Gson();
@@ -497,7 +499,6 @@ public class RoadDataHandler {
             
             //name not matching
             else{
-                continue;
             }
         }
         reader.close();
@@ -523,8 +524,8 @@ public class RoadDataHandler {
     }
     
     /**
-     * 
-     * @param dataQuery
+     * Method for saving the preferences for data visualization from the GUI
+     * @param dataQuery, object containing the preferences
      * @throws IOException 
      */
     public void savePreferences(DataQuery dataQuery) throws IOException{
@@ -641,7 +642,9 @@ public class RoadDataHandler {
     }
     
     /**
-     * 
+     * A method for loading the user preferences for GUI
+     * @return DataQuery containing the preferences
+     * @throws IOException 
      */
     public DataQuery loadPreferences() throws IOException{
         
@@ -782,6 +785,10 @@ public class RoadDataHandler {
         return this.digiTraficLocations;
     }
     
+    /**
+     * Method for getting the maintenancetask names for the GUI
+     * @return ArrayList containing the maintenancetask names
+     */
     public ArrayList<String> getMaintenanceTaskNames(){
         try {
             JsonArray arr = RoadDataGetterDigitraffic.getMaintenanceTaskNamesData();
@@ -794,6 +801,12 @@ public class RoadDataHandler {
         return null;
     }
     
+    /**
+     * Method for getting monthly averages of temperatures for a given location
+     * @param location given as a String
+     * @param month, given as a String
+     * @return TreeMap containing the monthly averages
+     */
     public TreeMap<String, Float[]> fetchMonthlyAverages(String location, String month){
         try {
             ArrayList loc = this.digiTraficLocations.get(location);
