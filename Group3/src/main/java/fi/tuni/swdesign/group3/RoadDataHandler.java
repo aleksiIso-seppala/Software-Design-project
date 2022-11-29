@@ -113,16 +113,16 @@ public class RoadDataHandler {
      * @param futureTime
      * @return RoadWeatherData object that is used to save or visualize data
      */
-    public RoadWeatherData fetchWeatherDataPast(String location, String time, String futureTime){
+    public RoadWeatherData fetchWeatherDataFuture(String location, String time, String futureTime){
         try {
             
             ArrayList loc = this.digiTraficLocations.get(location);
-            org.w3c.dom.Document doc = RoadDataGetterFMI.getDOMDocument("fmi::forecast::harmonie::surface::point::simple", "", "", "", "", loc.get(3).toString(),
-                            loc.get(1).toString(), time, futureTime, 
+            org.w3c.dom.Document doc = RoadDataGetterFMI.getDOMDocument("fmi::forecast::harmonie::surface::point::simple", "", "", "", "", loc.get(2).toString(),
+                            loc.get(0).toString(), time, futureTime, 
                             "temperature,windspeedms");
                     
             RoadWeatherData data = RoadDataParserXML.getDOMParsedDocument(doc, "", "", "", "", 
-                    loc.get(3).toString(), loc.get(1).toString(), time);
+                    loc.get(2).toString(), loc.get(0).toString(), time);
             return data;
         } catch (IOException e){
             System.out.println("error");
@@ -130,12 +130,12 @@ public class RoadDataHandler {
         }
     }
     
-    public RoadWeatherData fetchWeatherDataFuture(String location, String time, String futureTime){
+    public RoadWeatherData fetchWeatherDataPast(String location, String time, String futureTime){
         try {
             
             ArrayList loc = this.digiTraficLocations.get(location);
-            org.w3c.dom.Document doc = RoadDataGetterFMI.getDOMDocument("fmi::observations::weather::simple", loc.get(0).toString(),
-                            loc.get(2).toString(), loc.get(1).toString(),
+            org.w3c.dom.Document doc = RoadDataGetterFMI.getDOMDocument("fmi::observations::weather::simple", loc.get(0).toString().split("\\.",2)[0],
+                            loc.get(2).toString().split("\\.",2)[0], loc.get(1).toString(),
                             loc.get(3).toString(), "", "", time, futureTime, 
                             "t2m,ws_10min,n_man,TA_PT1H_AVG,TA_PT1H_MAX,TA_PT1H_MIN");
                     

@@ -49,7 +49,7 @@ public class ViewModel {
             RoadWeatherData data;
             
             if(LocalDateTime.now(ZoneId.of("Europe/Helsinki")).toString().replace(".", ":").compareTo(start) < 0){
-                data = model.getRoadWeatherDataFuture(query.location, end, start);
+                data = model.getRoadWeatherDataFuture(query.location, start, end);
             } else {
                 data = model.getRoadWeatherDataPast(query.location, start, end);  
             }        
@@ -66,7 +66,7 @@ public class ViewModel {
             RoadWeatherData data2;
             
             if(LocalDateTime.now(ZoneId.of("Europe/Helsinki")).toString().replace(".", ":").compareTo(start) < 0){
-                data2= model.getRoadWeatherDataFuture(query.location, end, start);
+                data2= model.getRoadWeatherDataFuture(query.location, start, end);
             } else {
                 data2 = model.getRoadWeatherDataPast(query.location, start, end);
             }

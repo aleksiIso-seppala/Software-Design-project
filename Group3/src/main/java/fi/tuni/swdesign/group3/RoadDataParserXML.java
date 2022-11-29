@@ -240,8 +240,8 @@ public class RoadDataParserXML implements RoadDataParser{
         }
                 
         System.out.println("\nEx: Forecast for the temperature and the wind speed in 2h intervals for Tampere area (coordinates 61.49911 and 23.78712) for 30/11/2022 (! starting time has to be in the future else values are NaN) using the HARMONIE weather model");
-        org.w3c.dom.Document forecastDOM = RoadDataGetterFMI.getDOMDocument("fmi::forecast::harmonie::surface::point::simple", "", "", "", "", "61.49911", "23.78712", "2022-11-25T06:00:00Z", "2022-11-25T18:00:00Z", "temperature,windspeedms");
-        RoadWeatherData test2 = getDOMParsedDocument(forecastDOM, "", "", "", "", "61.49911", "23.78712", "2022-11-25T06:00:00Z");
+        org.w3c.dom.Document forecastDOM = RoadDataGetterFMI.getDOMDocument("fmi::forecast::harmonie::surface::point::simple", "", "", "", "", "61.49911", "23.78712", "2022-11-30T06:00:00Z", "2022-11-30T18:00:00Z", "temperature,windspeedms");
+        RoadWeatherData test2 = getDOMParsedDocument(forecastDOM, "", "", "", "", "61.49911", "23.78712", "2022-11-30T06:00:00Z");
         if(test2 != null){
             System.out.println(test2.toString());
             System.out.println(test2.getForecasts());
