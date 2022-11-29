@@ -121,7 +121,7 @@ public class RoadDataHandler {
                             loc.get(2).toString(), loc.get(1).toString(),
                             loc.get(3).toString(), "", "", time, futureTime, 
                             "t2m,ws_10min,n_man,TA_PT1H_AVG,TA_PT1H_MAX,TA_PT1H_MIN");
-            
+                    
             RoadWeatherData data = RoadDataParserXML.getDOMParsedDocument(doc, loc.get(0).toString(),
                             loc.get(2).toString(), loc.get(1).toString(),
                             loc.get(3).toString(), "", "", time);
