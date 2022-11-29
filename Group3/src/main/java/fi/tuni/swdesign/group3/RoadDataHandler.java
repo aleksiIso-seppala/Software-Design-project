@@ -800,8 +800,8 @@ public class RoadDataHandler {
             String[] parsed = month.split("-");
             
             
-            TreeMap<String, Float[]> monthlyData = RoadDataParserXML.getMonthlyTemperatureData(location, loc.get(0).toString(),
-                            loc.get(2).toString(), loc.get(1).toString(),
+            TreeMap<String, Float[]> monthlyData = RoadDataParserXML.getMonthlyTemperatureData(location, loc.get(0).toString().split("\\.",2)[0],
+                            loc.get(2).toString().split("\\.",2)[0], loc.get(1).toString(),
                             
                             loc.get(3).toString(), parsed[0]+"-"+parsed[1]);
             return monthlyData;
