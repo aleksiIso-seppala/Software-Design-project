@@ -20,6 +20,7 @@ import java.nio.file.Paths;
 import fi.tuni.swdesign.group3.view.*;
 
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * A class which handles the fetching and saving of data from the two different
@@ -121,7 +122,7 @@ public class RoadDataHandler {
                             loc.get(0).toString(), time, futureTime, 
                             "temperature,windspeedms");
                     
-            RoadWeatherData data = RoadDataParserXML.getDOMParsedDocument(doc, "", "", "", "", 
+            RoadWeatherData data = RoadDataParserXML.getDOMParsedDocument(doc, location, "", "", "", "", 
                     loc.get(2).toString(), loc.get(0).toString(), time);
             return data;
         } catch (IOException e){
@@ -139,7 +140,7 @@ public class RoadDataHandler {
                             loc.get(3).toString(), "", "", time, futureTime, 
                             "t2m,ws_10min,n_man,TA_PT1H_AVG,TA_PT1H_MAX,TA_PT1H_MIN");
                     
-            RoadWeatherData data = RoadDataParserXML.getDOMParsedDocument(doc, loc.get(0).toString(),
+            RoadWeatherData data = RoadDataParserXML.getDOMParsedDocument(doc, location, loc.get(0).toString(),
                             loc.get(2).toString(), loc.get(1).toString(),
                             loc.get(3).toString(), "", "", time);
             return data;
@@ -446,7 +447,7 @@ public class RoadDataHandler {
                 
                 //getting forecast data
                 JsonArray forecastArray = roadData.getAsJsonArray("weatherForecasts");
-                HashMap<String, RoadWeatherData> forecasts = new HashMap<>();
+                TreeMap<String, RoadWeatherData> forecasts = new TreeMap<>();
                 for(var forecastData : forecastArray){
                     JsonObject forecastObject = (JsonObject) forecastData;
                     

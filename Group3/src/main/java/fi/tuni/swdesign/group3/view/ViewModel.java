@@ -46,6 +46,8 @@ public class ViewModel {
             String start = this.parseTime(query.timelineStart[1], query.timelineStart[0]);
             String end = this.parseTime(query.timelineEnd[1], query.timelineEnd[0]);
             
+            
+            
             RoadWeatherData data;
             
             if(LocalDateTime.now(ZoneId.of("Europe/Helsinki")).toString().replace(".", ":").compareTo(start) < 0){
@@ -56,25 +58,28 @@ public class ViewModel {
             toReturn[0] = data;
             return toReturn;
         
-        } else {
+        } else if ("Combined data".equals(query.dataType)){
             
-            String start = this.parseTime(query.timelineStart[1], query.timelineStart[0]);
-            String end = this.parseTime(query.timelineEnd[1], query.timelineEnd[0]);
+            CombinedDataQuery cbquery = (CombinedDataQuery) query;
             
-            RoadTrafficData data = model.getRoadTrafficData(query.location);
+            String start = this.parseTime(cbquery.timelineStart[1], cbquery.timelineStart[0]);
+            String end = this.parseTime(cbquery.timelineStart[1], cbquery.timelineEnd[0]);
+            
+            RoadTrafficData data = model.getRoadTrafficData(cbquery.location);
             
             RoadWeatherData data2;
             
             if(LocalDateTime.now(ZoneId.of("Europe/Helsinki")).toString().replace(".", ":").compareTo(start) < 0){
-                data2= model.getRoadWeatherDataFuture(query.location, start, end);
+                data2= model.getRoadWeatherDataFuture(cbquery.location, start, end);
             } else {
-                data2 = model.getRoadWeatherDataPast(query.location, start, end);
+                data2 = model.getRoadWeatherDataPast(cbquery.location, start, end);
             }
             
             toReturn[0] = data;
             toReturn[1] = data2;
             return toReturn;
         }
+        return null;
     }
     
     /*

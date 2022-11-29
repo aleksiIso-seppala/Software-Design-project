@@ -53,7 +53,7 @@ public class RoadDataParserXML implements RoadDataParser{
             return roadWeatherData;
         }
         
-        HashMap<String, RoadWeatherData> forecasts = new HashMap<>();
+        TreeMap<String, RoadWeatherData> forecasts = new TreeMap<>();
         
         String coordinates;
         if(minX.length() != 0){
@@ -204,7 +204,7 @@ public class RoadDataParserXML implements RoadDataParser{
             
             //Get multiple AVG, MIN and MAX values in a day
             RoadWeatherData daily = getDOMParsedDocument(observationDOM, location, minX, maxX, minY, maxY, "", "", keyDate + "00:00:00Z");
-            HashMap<String, RoadWeatherData> forecast = daily.getForecasts();
+            TreeMap<String, RoadWeatherData> forecast = daily.getForecasts();
             allAvg.add(daily.getAVGTemperature());
             allMin.add(daily.getMINTemperature());
             allMax.add(daily.getMAXTemperature());

@@ -5,6 +5,7 @@
 package fi.tuni.swdesign.group3;
 
 import java.util.HashMap;
+import java.util.TreeMap;
 
 /**
  * A Class describing the data from FMI
@@ -21,7 +22,8 @@ public class RoadWeatherData extends RoadData{
     // String is the time (2, 4, 6 etc) and then the forecast
     // forecasts are the same as the observed so no need to do a new
     // class for them
-    private HashMap<String, RoadWeatherData> forecasts;
+    private TreeMap<String, RoadWeatherData> forecasts;
+    //private TreeMap<String, float>
 
     /**
      * Default constructor for RoadWeatherData
@@ -85,7 +87,7 @@ public class RoadWeatherData extends RoadData{
      * Getter for the forecasts
      * @return forecasts in a HashMap containing data every 2h for 12hrs
      */
-    public HashMap<String, RoadWeatherData> getForecasts() {
+    public TreeMap<String, RoadWeatherData> getForecasts() {
         return forecasts;
     }
 
@@ -93,7 +95,7 @@ public class RoadWeatherData extends RoadData{
      * Setter for the forecasts
      * @param forecasts stored in a HashMap
      */
-    public void setForecasts(HashMap<String, RoadWeatherData> forecasts) {
+    public void setForecasts(TreeMap<String, RoadWeatherData> forecasts) {
         this.forecasts = forecasts;
     }
 
