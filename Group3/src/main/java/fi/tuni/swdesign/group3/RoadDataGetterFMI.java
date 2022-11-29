@@ -86,7 +86,9 @@ public class RoadDataGetterFMI implements RoadDataGetter {
             //Check if the connection is made
             int resCode = con.getResponseCode();
             if(resCode != 200){
-                throw new RuntimeException("HttpResponseCode: " + resCode);
+                //throw new RuntimeException("HttpResponseCode: " + resCode);
+                System.out.println("HttpResponseCode: " + resCode);
+                return w3cDocument;
             } else {
                 //Test: Get data from the API
                 StringBuilder infoString = new StringBuilder();
