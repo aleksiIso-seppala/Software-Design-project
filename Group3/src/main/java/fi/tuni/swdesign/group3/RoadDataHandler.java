@@ -775,7 +775,7 @@ public class RoadDataHandler {
         return null;
     }
     
-    public TreeMap<String, Float[]> getMonthlyAverages(String location, String month){
+    public TreeMap<String, Float[]> fetchMonthlyAverages(String location, String month){
         try {
             ArrayList loc = this.digiTraficLocations.get(location);
             String[] parsed = month.split("-");
@@ -800,7 +800,7 @@ public class RoadDataHandler {
         test.saveDataBase(roadData,null,"testName");
         test.loadDataBase("testName");
         
-        TreeMap<String, Float[]> monthlyData = test.getMonthlyAverages("Helsinki", "2022-02-30");
+        TreeMap<String, Float[]> monthlyData = test.fetchMonthlyAverages("Helsinki", "2022-02-30");
                 monthlyData.entrySet().forEach(entry -> {
             System.out.println(entry.getKey() + " " + Arrays.toString(entry.getValue()));
         });
