@@ -1,5 +1,6 @@
 package fi.tuni.swdesign.group3.view;
 import fi.tuni.swdesign.group3.*;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -14,6 +15,8 @@ import java.util.TreeMap;
  */
 public class ViewModel {
     private final Model model;
+    private RoadTrafficData rdata;
+    private RoadWeatherData wdata;
     
     /**
      * Default constructor for a viewModel
@@ -33,6 +36,8 @@ public class ViewModel {
         RoadData[] toReturn = new RoadData[2];
         if("Road data".equals(query.dataType)){
             RoadTrafficData data = model.getRoadTrafficData(query.location);
+            
+            this.rdata = data;
             toReturn[0] = data;
             return toReturn;
             
@@ -64,6 +69,7 @@ public class ViewModel {
                 });
             }
             
+            this.wdata = data;
             toReturn[0] = data;
             return toReturn;
         
@@ -99,6 +105,8 @@ public class ViewModel {
                 
             }
             
+            this.rdata = data;
+            this.wdata = data2;
             toReturn[0] = data;
             toReturn[1] = data2;
             return toReturn;
@@ -120,6 +128,34 @@ public class ViewModel {
      */
     public ArrayList<String> getMaintenanceTaskTypes(){
         return model.getMaintenaneTaskTypes();
+    }
+    
+    /**
+     * Method for saving data from GUI
+     * @param id, name of the dataset to save
+     * @param data, the object to save
+     * @return true if saving was succesfull, false otherwise
+     * @throws IOException 
+     */
+    public boolean saveData(String id, RoadData data) throws IOException{
+        if(data instanceof RoadTrafficData roadTrafficData){
+            return model.saveData(roadTrafficData, null, id);
+        } else if (data instanceof RoadWeatherData roadWeatherData){
+            return model.saveData(null, roadWeatherData, id);
+        }
+        return false;
+    }
+    
+    /**
+     * Method for saving combined data from GUI
+     * @param id, name of the dataset to save
+     * @param data1, RoadTrafficData object
+     * @param data2, RoadWeatherData object
+     * @return true if saving was succesfull, false otherwise
+     * @throws IOException 
+     */
+    public boolean saveData(String id, RoadTrafficData data1, RoadWeatherData data2) throws IOException{
+        return model.saveData(data1, data2, id);
     }
     
     /**

@@ -1,5 +1,6 @@
 package fi.tuni.swdesign.group3.view;
 import fi.tuni.swdesign.group3.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,10 +24,21 @@ public class Model {
     }
     
     /**
-     * Method for updating data, not yet implemented
+     * Method for saving data to dataset with given name
+     * @param data1, first object or null
+     * @param data2, second object or null
+     * @param name, name of the dataset
+     * @return true if saving was succesfull, false otherwise
+     * @throws IOException 
      */
-    public void updateData(){
-        
+    public boolean saveData(RoadData data1, RoadData data2, String name) throws IOException{
+        if(data2 == null){
+            return handler.saveDataBase((RoadTrafficData)data1, null, name);
+        } else if (data1 == null){
+            return handler.saveDataBase(null, (RoadWeatherData)data2, name);
+        } else {
+            return handler.saveDataBase((RoadTrafficData)data1, (RoadWeatherData)data2, name);
+        }
     }
     
     /**
