@@ -119,46 +119,6 @@ public class RoadDataParserJSON implements RoadDataParser{
         
     }
     
-    
-//    private static void readRoadConditions(String minX, String maxX, String minY, String maxY){
-//        
-//        String sUrl = "https://tie.digitraffic.fi/api/v3/data/road-conditions/";        
-//        String coordinates = minX+"/"+minY+"/"+maxX+"/"+maxY; 
-//        String fullUrl = sUrl+coordinates;
-//        
-//        URL url = new URL(fullUrl);
-//        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-//        con.setRequestMethod("GET");
-//        con.setRequestProperty("accept", "*/*");
-//        con.setRequestProperty("Accept-Encoding", "gzip");
-//        
-//        GZIPInputStream gzipInput = new GZIPInputStream(con.getInputStream());
-//        InputStreamReader reader = new InputStreamReader(gzipInput, "UTF-8");
-//        
-//        Gson gson = new Gson();
-//        JsonObject response = gson.fromJson(reader, JsonObject.class);
-//        JsonArray weatherData = response.getAsJsonArray("weatherData");
-//        
-//        for(var data: weatherData){
-//            JsonObject forecast = (JsonObject) data;
-//            JsonArray roadConditions = forecast.getAsJsonArray("roadConditions");
-//            for(var road : roadConditions){
-//                JsonObject condition = road.getAsJsonObject();
-//                String time = condition.get("forecastName").getAsString();
-//                String overallRoadCondition = condition.get("overallRoadCondition").getAsString();
-//                String weatherSymbol = condition.get("weatherSymbol").getAsString();
-//
-//                if(condition.get("type").getAsString().equals("FORECAST")){
-//                    JsonObject forecastCondition = condition.getAsJsonObject("forecastConditionReason");
-//
-//                    forecastCondition.get("precipitationCondition").getAsString();
-//                    forecastCondition.get("roadCondition").getAsString();
-//
-//                }
-//            }
-//        }
-//    }
-
     /**
      * A function that goes through the roadCondition data that and gets the 
      * first complete set of data from it. This includes an observation of the
@@ -281,35 +241,6 @@ public class RoadDataParserJSON implements RoadDataParser{
         }
         return messages;
         
-//        for(var element : trafficMessages){
-//            JsonObject trafficMessage = (JsonObject) element;
-//            
-//            JsonObject geometry = trafficMessage.get("geometry").getAsJsonObject();
-//            JsonArray coordinates = geometry.get("coordinates").getAsJsonArray();
-//            for(var coordinate : coordinates){
-//                
-//            }
-//            
-//            JsonObject properties = trafficMessage.get("properties").getAsJsonObject();
-//            String situationType = properties.get("situationType").getAsString();
-//            JsonArray announcements = properties.get("announcements").getAsJsonArray();
-//            
-//            for (var object : announcements){
-//                JsonObject announcement = (JsonObject) object;
-//                
-//                String title = announcement.get("title").getAsString();
-//                JsonObject location = announcement.get("location").getAsJsonObject();
-//                String description = location.get("description").getAsString();
-//                
-//                JsonArray features = announcement.get("features").getAsJsonArray();
-//                
-//                for(var feature : features){
-//                    JsonObject featureO = (JsonObject) feature;
-//                    String name = featureO.get("name").getAsString(); 
-//                }
-//
-//            }
-//        }
     }
     
 }
