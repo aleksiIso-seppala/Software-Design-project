@@ -722,7 +722,10 @@ public class RoadDataHandler {
         String fileName = "SavedPreferences.json";
         Reader reader = Files.newBufferedReader(Paths.get(fileName));
         JsonArray response = gson.fromJson(reader, JsonArray.class);
-        
+        if(response == null){
+            System.out.println("no data was found.");
+            return null;
+        }
         for(var preference : response){
             JsonObject preferenceO = (JsonObject) preference;
             
@@ -915,7 +918,7 @@ public class RoadDataHandler {
 //        var weather2 = (RoadWeatherData) load[1];
 //        var road2 = (RoadTrafficData) load[0];
 //        test.saveDataBase(road2, weather2,null, "save3");
-        test.savePreferences(null, "test");
+          test.loadPreferences("test");
         
 //        TreeMap<String, Float[]> monthlyData = test.fetchMonthlyAverages("Helsinki", "2022-11-30");
 //                monthlyData.entrySet().forEach(entry -> {
