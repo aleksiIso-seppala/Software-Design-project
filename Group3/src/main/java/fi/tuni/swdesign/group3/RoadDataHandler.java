@@ -307,7 +307,21 @@ public class RoadDataHandler {
             weatherPackage.addProperty("AVGTemperature",weatherData.getAVGTemperature());
             weatherPackage.addProperty("MAXTemperature",weatherData.getMAXTemperature());
             weatherPackage.addProperty("MINTemperature",weatherData.getMINTemperature());
+            
+            JsonArray avgMonthlyTemp = new JsonArray();
+            for(var temp : weatherData.getMonthylAverage().entrySet()){
+                JsonObject tempO = new JsonObject();
+                tempO.addProperty("date",temp.getKey());
+                Float[] floatList = temp.getValue();
+                tempO.addProperty("dailyAVG",floatList[0].toString());
+                tempO.addProperty("dailyMIN",floatList[1].toString());
+                tempO.addProperty("dailyMAX",floatList[2].toString());
 
+                avgMonthlyTemp.add(tempO);
+            }
+            
+            weatherPackage.add("avgMonthlyTemp", avgMonthlyTemp);
+            
             JsonArray weatherForecasts = new JsonArray();
             for(var forecast : weatherData.getForecasts().entrySet()){
                 JsonObject forecastObject = new JsonObject();
@@ -472,6 +486,21 @@ public class RoadDataHandler {
                 roadWeatherData.setAVGTemperature(AVGTemperature);
                 roadWeatherData.setMAXTemperature(MAXTemperaturee);
                 roadWeatherData.setMINTemperature(MINTemperature);
+                
+                JsonArray avgArray = roadData.getAsJsonArray("avgMonthlyTemp");
+                TreeMap<String, Float[]> avgMonthlyTemp = new TreeMap<>();
+                
+                for(var avgdata : avgArray){
+                    JsonObject avgO = (JsonObject) avgdata;
+                    String date = avgO.get("date").getAsString();
+                    float dailyAVG = avgO.get("dailyAVG").getAsFloat();
+                    float dailyMIN = avgO.get("dailyMIN").getAsFloat();
+                    float dailyMAX = avgO.get("dailyMAX").getAsFloat();
+                    
+                    Float[] floatList = {dailyAVG,dailyMIN,dailyMAX};
+                    avgMonthlyTemp.put(date, floatList);
+                }
+                roadWeatherData.setMonthlyAverage(avgMonthlyTemp);
                 
                 //getting forecast data
                 JsonArray forecastArray = roadData.getAsJsonArray("weatherForecasts");
@@ -835,7 +864,7 @@ public class RoadDataHandler {
     public static void main(String args[]) throws Exception{
         
         RoadDataHandler test = new RoadDataHandler();
-        RoadTrafficData roadData= test.fetchRoadData("Helsinki");
+        RoadTrafficData roadData= test.fetchRoadData("Oulu");
         RoadWeatherData weatherData = test.fetchWeatherDataPast("Helsinki", "2022-11-28T14:00:00Z", "2022-11-29T14:00:00Z");
         test.saveDataBase(roadData, weatherData, "test2");
         var load = test.loadDataBase("test2");
