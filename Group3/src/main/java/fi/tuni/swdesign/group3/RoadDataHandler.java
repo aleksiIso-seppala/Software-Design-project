@@ -222,6 +222,9 @@ public class RoadDataHandler {
         String fileName = "SavedData.json";
         Reader reader = Files.newBufferedReader(Paths.get(fileName));
         JsonArray saveData = gson.fromJson(reader, JsonArray.class);
+        if(saveData == null){
+            saveData = new JsonArray();
+        }
         Writer writer = new FileWriter(fileName);
         
         //check if datasetName is taken
@@ -345,6 +348,10 @@ public class RoadDataHandler {
         String fileName = "SavedData.json";
         Reader reader = Files.newBufferedReader(Paths.get(fileName));
         JsonArray response = gson.fromJson(reader, JsonArray.class);
+        if(response == null){
+            System.out.println("no saved data was found");
+            return null;
+        }
         RoadData[] returnData = {null, null};
         
         for(var data : response){
@@ -471,7 +478,7 @@ public class RoadDataHandler {
                 TreeMap<String, RoadWeatherData> forecasts = new TreeMap<>();
                 for(var forecastData : forecastArray){
                     JsonObject forecastObject = (JsonObject) forecastData;
-                    
+
                     String fLocation = forecastObject.get("location").getAsString();
                     String fCoordinates = forecastObject.get("coordinates").getAsString();
                     String fTime = forecastObject.get("time").getAsString();
@@ -491,7 +498,7 @@ public class RoadDataHandler {
                     roadForecastData.setMAXTemperature(fMAXTemperaturee);
                     roadForecastData.setMINTemperature(fMINTemperature);
                     
-                    forecasts.put(time, roadForecastData);                    
+                    forecasts.put(fTime, roadForecastData);
                 }
                 roadWeatherData.setForecasts(forecasts);
                 returnData[1] = roadWeatherData;
@@ -829,8 +836,14 @@ public class RoadDataHandler {
         
         RoadDataHandler test = new RoadDataHandler();
         RoadTrafficData roadData= test.fetchRoadData("Helsinki");
-        //RoadWeatherData weatherData = test.fetchWeatherDataPast("Helsiki", "2022-10-30T14:00:00Z", "2022-11-30T14:00:00Z");
-        test.saveDataBase(roadData, null, "test2");
+        RoadWeatherData weatherData = test.fetchWeatherDataPast("Helsinki", "2022-11-28T14:00:00Z", "2022-11-29T14:00:00Z");
+        test.saveDataBase(roadData, weatherData, "test2");
+        var load = test.loadDataBase("test2");
+        var weather2 = (RoadWeatherData) load[1];
+        var road2 = (RoadTrafficData) load[0];
+        test.saveDataBase(road2, weather2, "save3");
+        
+        
 //        TreeMap<String, Float[]> monthlyData = test.fetchMonthlyAverages("Helsinki", "2022-11-30");
 //                monthlyData.entrySet().forEach(entry -> {
 //            System.out.println(entry.getKey() + " " + Arrays.toString(entry.getValue()));
