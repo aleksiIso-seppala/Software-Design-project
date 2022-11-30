@@ -15,8 +15,6 @@ import java.util.TreeMap;
  */
 public class ViewModel {
     private final Model model;
-    private RoadTrafficData rdata;
-    private RoadWeatherData wdata;
     
     /**
      * Default constructor for a viewModel
@@ -37,7 +35,6 @@ public class ViewModel {
         if("Road data".equals(query.dataType)){
             RoadTrafficData data = model.getRoadTrafficData(query.location);
             
-            this.rdata = data;
             toReturn[0] = data;
             return toReturn;
             
@@ -69,7 +66,6 @@ public class ViewModel {
                 });
             }
             
-            this.wdata = data;
             toReturn[0] = data;
             return toReturn;
         
@@ -105,8 +101,6 @@ public class ViewModel {
                 
             }
             
-            this.rdata = data;
-            this.wdata = data2;
             toReturn[0] = data;
             toReturn[1] = data2;
             return toReturn;
@@ -156,6 +150,35 @@ public class ViewModel {
      */
     public boolean saveData(String id, RoadTrafficData data1, RoadWeatherData data2) throws IOException{
         return model.saveData(data1, data2, id);
+    }
+    
+    /**
+     * Method for loading from the database to GUI
+     * @param name, name of the dataset
+     * @return RoadData object list
+     * @throws IOException 
+     */
+    public RoadData[] loadDataBase(String name) throws IOException{
+        return this.model.loadData(name);
+    }
+    
+    /**
+     * Method for saving the user GUI preferences
+     * @param query, containing the preferences
+     * @return true if saving was succesfull, false otherwise
+     * @throws IOException 
+     */
+    public boolean savePreferences(DataQuery query) throws IOException{
+        return this.model.savePreferences(query);
+    }
+    
+    /**
+     * Method for loading the user preferences from saved file
+     * @return the preferences in dataQuery object
+     * @throws IOException 
+     */
+    public DataQuery loadPreferences() throws IOException{
+        return this.model.loadPreferences();
     }
     
     /**
