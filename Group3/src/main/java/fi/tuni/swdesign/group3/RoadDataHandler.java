@@ -212,7 +212,8 @@ public class RoadDataHandler {
  * @return true if the saving was succesfull, false otherwise
  * @throws IOException 
  */
-    public boolean saveDataBase(RoadTrafficData roadData,RoadWeatherData weatherData, String datasetName) throws IOException{
+    public String saveDataBase(RoadTrafficData roadData,RoadWeatherData weatherData,
+            DataQuery preference, String datasetName) throws IOException{
         
         //Gson gson = new GsonBuilder().setPrettyPrinting().create();
         //String fileName = "SavedData.json";
@@ -231,11 +232,10 @@ public class RoadDataHandler {
         for(var data : saveData){
             var dataO = data.getAsJsonObject();
             if(dataO.get("datasetName").getAsString().equals(datasetName)){
-                System.out.println("dataset name already taken!");
                 gson.toJson(saveData, writer);
                 writer.close();
                 reader.close();
-                return false;
+                return "dataset name already taken!";
             }
         }
         
@@ -344,10 +344,13 @@ public class RoadDataHandler {
             saveData.add(weatherPackage);
         }
         
+        //saving preference
+        savePreferences(preference, datasetName);
+        
         gson.toJson(saveData, writer);
         writer.close();
         reader.close();
-        return true;
+        return "OK";
     }
     
 /**
@@ -564,11 +567,28 @@ public class RoadDataHandler {
      * @param dataQuery, object containing the preferences
      * @throws IOException 
      */
-    public boolean savePreferences(DataQuery dataQuery) throws IOException{
+    public String savePreferences(DataQuery dataQuery, String datasetName) throws IOException{
         
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String fileName = "SavedPreferences.json";
+        String fileName = "SavedPreference.json";
+        Reader reader = Files.newBufferedReader(Paths.get(fileName));
+        JsonArray saveData = gson.fromJson(reader, JsonArray.class);
+        if(saveData == null){
+            saveData = new JsonArray();
+        }        
+        
         Writer writer = new FileWriter(fileName);
+        
+        //check if datasetName is taken
+        for(var data : saveData){
+            var dataO = data.getAsJsonObject();
+            if(dataO.get("datasetName").getAsString().equals(datasetName)){
+                gson.toJson(saveData, writer);
+                writer.close();
+                reader.close();
+                return "dataset name already taken!";
+            }
+        }
         
         JsonObject userPreferences = new JsonObject();
         
@@ -581,6 +601,7 @@ public class RoadDataHandler {
         String timelineEndH = timelineEnd[0];
         String timelineEndM = timelineEnd[1]; 
         
+        userPreferences.addProperty("datasetName",datasetName);
         userPreferences.addProperty("dataType", dataType);
         userPreferences.addProperty("location", location);
         userPreferences.addProperty("timelineStartH",timelineStartH);
@@ -681,9 +702,11 @@ public class RoadDataHandler {
             userPreferences.add("selectedPreMonthParams",jsonSelectedPreMonth);
          
         }
-        gson.toJson(userPreferences,writer);
+        saveData.add(userPreferences);
+        
+        gson.toJson(saveData,writer);
         writer.close();
-        return true;
+        return "OK";
     }
     
     /**
@@ -691,7 +714,7 @@ public class RoadDataHandler {
      * @return DataQuery containing the preferences
      * @throws IOException 
      */
-    public DataQuery loadPreferences() throws IOException{
+    public DataQuery loadPreferences(String datasetName) throws IOException{
         
         Gson gson = new Gson();
         String fileName = "SavedPreferences.json";
@@ -700,6 +723,10 @@ public class RoadDataHandler {
         
         for(var preference : response){
             JsonObject preferenceO = (JsonObject) preference;
+            
+            if(!datasetName.equals(preferenceO.get("datasetName").getAsString())){
+                continue;
+            }
             
             String dataType = preferenceO.get("dataType").getAsString();
             String location = preferenceO.get("location").getAsString();
@@ -824,6 +851,7 @@ public class RoadDataHandler {
             }
             
         }
+        System.out.println("no data found with name");
         return null;
     }
     
@@ -880,11 +908,11 @@ public class RoadDataHandler {
         RoadDataHandler test = new RoadDataHandler();
         RoadTrafficData roadData= test.fetchRoadData("Oulu");
         RoadWeatherData weatherData = test.fetchWeatherDataPast("Helsinki", "2022-11-28T14:00:00Z", "2022-11-29T14:00:00Z");
-        test.saveDataBase(roadData, weatherData, "test2");
+        test.saveDataBase(roadData, weatherData,null, "test2");
         var load = test.loadDataBase("test2");
         var weather2 = (RoadWeatherData) load[1];
         var road2 = (RoadTrafficData) load[0];
-        test.saveDataBase(road2, weather2, "save3");
+        test.saveDataBase(road2, weather2,null, "save3");
         
         
 //        TreeMap<String, Float[]> monthlyData = test.fetchMonthlyAverages("Helsinki", "2022-11-30");
