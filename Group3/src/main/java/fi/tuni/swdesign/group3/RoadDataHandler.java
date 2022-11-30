@@ -575,10 +575,18 @@ public class RoadDataHandler {
         String dataType = dataQuery.getDataType();
         String location = dataQuery.getLocation();
         String[] timelineStart = dataQuery.getTimelineStart();
+        String timelineStartH = timelineStart[0];
+        String timelineStartM = timelineStart[1];
         String[] timelineEnd = dataQuery.getTimelineEnd();
+        String timelineEndH = timelineEnd[0];
+        String timelineEndM = timelineEnd[1]; 
         
         userPreferences.addProperty("dataType", dataType);
         userPreferences.addProperty("location", location);
+        userPreferences.addProperty("timelineStartH",timelineStartH);
+        userPreferences.addProperty("timelineStartM",timelineStartM);
+        userPreferences.addProperty("timelineEndH",timelineEndH);
+        userPreferences.addProperty("timelineEndM",timelineEndM);        
         
         if(dataQuery instanceof RoadDataQuery){
             RoadDataQuery query = (RoadDataQuery) dataQuery;
@@ -695,9 +703,13 @@ public class RoadDataHandler {
             
             String dataType = preferenceO.get("dataType").getAsString();
             String location = preferenceO.get("location").getAsString();
+            String timelineStartH = preferenceO.get("timelineStartH").getAsString();
+            String timelineStartM = preferenceO.get("timelineStartM").getAsString();
+            String timelineEndH = preferenceO.get("timelineEndH").getAsString();
+            String timelineEndM = preferenceO.get("timelineEndM").getAsString();
             
-            //String[] timelineStart = preferenceO.get("timelineStart");
-            //String[] timelineEnd = preferenceO.get("timelineEnd");
+            String[] timelineStart = {timelineStartH,timelineStartM};
+            String[] timelineEnd = {timelineEndH,timelineEndM};
             
             
             if(dataType.equals("Road data")){
@@ -720,6 +732,8 @@ public class RoadDataHandler {
                 RoadDataQuery castedData = (RoadDataQuery) roadDataQuery;
                 
                 castedData.setLocation(location);
+                castedData.setTimelineStart(timelineStart);
+                castedData.setTimelineEnd(timelineEnd);
                 castedData.setSelectedTasks(tasksList);
                 castedData.setSelectedForecasts(ForecastsList);
                 castedData.setForecastTime(forecastTime);
