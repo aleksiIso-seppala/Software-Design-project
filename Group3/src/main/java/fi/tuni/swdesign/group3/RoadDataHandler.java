@@ -572,7 +572,7 @@ public class RoadDataHandler {
     public String savePreferences(DataQuery dataQuery, String datasetName) throws IOException{
         
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String fileName = "SavedPreference.json";
+        String fileName = "SavedPreferences.json";
         Reader reader = Files.newBufferedReader(Paths.get(fileName));
         JsonArray saveData = gson.fromJson(reader, JsonArray.class);
         if(saveData == null){
@@ -908,14 +908,14 @@ public class RoadDataHandler {
     public static void main(String args[]) throws Exception{
         
         RoadDataHandler test = new RoadDataHandler();
-        RoadTrafficData roadData= test.fetchRoadData("Oulu");
-        RoadWeatherData weatherData = test.fetchWeatherDataPast("Helsinki", "2022-11-28T14:00:00Z", "2022-11-29T14:00:00Z");
-        test.saveDataBase(roadData, weatherData,null, "test2");
-        var load = test.loadDataBase("test2");
-        var weather2 = (RoadWeatherData) load[1];
-        var road2 = (RoadTrafficData) load[0];
-        test.saveDataBase(road2, weather2,null, "save3");
-        
+//        RoadTrafficData roadData= test.fetchRoadData("Oulu");
+//        RoadWeatherData weatherData = test.fetchWeatherDataPast("Helsinki", "2022-11-28T14:00:00Z", "2022-11-29T14:00:00Z");
+//        test.saveDataBase(roadData, weatherData,null, "test2");
+//        var load = test.loadDataBase("test2");
+//        var weather2 = (RoadWeatherData) load[1];
+//        var road2 = (RoadTrafficData) load[0];
+//        test.saveDataBase(road2, weather2,null, "save3");
+        test.savePreferences(null, "test");
         
 //        TreeMap<String, Float[]> monthlyData = test.fetchMonthlyAverages("Helsinki", "2022-11-30");
 //                monthlyData.entrySet().forEach(entry -> {
