@@ -30,13 +30,13 @@ public class Model {
      * @return true if saving was succesfull, false otherwise
      * @throws IOException 
      */
-    public boolean saveData(RoadData data1, RoadData data2, String name) throws IOException{
+    public String saveData(RoadData data1, RoadData data2, DataQuery query, String name) throws IOException{
         if(data2 == null){
-            return handler.saveDataBase((RoadTrafficData)data1, null, name);
+            return handler.saveDataBase((RoadTrafficData)data1, null, query, name);
         } else if (data1 == null){
-            return handler.saveDataBase(null, (RoadWeatherData)data2, name);
+            return handler.saveDataBase(null, (RoadWeatherData)data2, query, name);
         } else {
-            return handler.saveDataBase((RoadTrafficData)data1, (RoadWeatherData)data2, name);
+            return handler.saveDataBase((RoadTrafficData)data1, (RoadWeatherData)data2, query, name);
         }
     }
     
@@ -103,8 +103,8 @@ public class Model {
      * @return true if saving was succesfull, false otherwise
      * @throws IOException 
      */
-    public boolean savePreferences(DataQuery query) throws IOException{
-        return this.handler.savePreferences(query);
+    public String savePreferences(DataQuery query, String prefId) throws IOException{
+        return this.handler.savePreferences(query, prefId);
     }
     
     /**
@@ -112,8 +112,8 @@ public class Model {
      * @return the preferences in dataQuery object
      * @throws IOException 
      */
-    public DataQuery loadPreferences() throws IOException{
-        return this.handler.loadPreferences();
+    public DataQuery loadPreferences(String prefId) throws IOException{
+        return this.handler.loadPreferences(prefId);
     }
     
     /**

@@ -137,13 +137,13 @@ public class ViewModel {
      * @return true if saving was succesfull, false otherwise
      * @throws IOException 
      */
-    public boolean saveData(String id, RoadData data) throws IOException{
+    public String saveData(String id, RoadData data, DataQuery query) throws IOException{
         if(data instanceof RoadTrafficData roadTrafficData){
-            return model.saveData(roadTrafficData, null, id);
+            return model.saveData(roadTrafficData, null, query, id);
         } else if (data instanceof RoadWeatherData roadWeatherData){
-            return model.saveData(null, roadWeatherData, id);
+            return model.saveData(null, roadWeatherData, query, id);
         }
-        return false;
+        return "Error in ViewModel!";
     }
     
     /**
@@ -154,8 +154,8 @@ public class ViewModel {
      * @return true if saving was succesfull, false otherwise
      * @throws IOException 
      */
-    public boolean saveData(String id, RoadTrafficData data1, RoadWeatherData data2) throws IOException{
-        return model.saveData(data1, data2, id);
+    public String saveData(String id, RoadTrafficData data1, RoadWeatherData data2, DataQuery query) throws IOException{
+        return model.saveData(data1, data2, query, id);
     }
     
     /**
@@ -174,8 +174,8 @@ public class ViewModel {
      * @return true if saving was succesfull, false otherwise
      * @throws IOException 
      */
-    public boolean savePreferences(DataQuery query) throws IOException{
-        return this.model.savePreferences(query);
+    public String savePreferences(DataQuery query, String prefId) throws IOException{
+        return this.model.savePreferences(query, prefId);
     }
     
     /**
@@ -183,8 +183,8 @@ public class ViewModel {
      * @return the preferences in dataQuery object
      * @throws IOException 
      */
-    public DataQuery loadPreferences() throws IOException{
-        return this.model.loadPreferences();
+    public DataQuery loadPreferences(String prefId) throws IOException{
+        return this.model.loadPreferences(prefId);
     }
     
     /**
