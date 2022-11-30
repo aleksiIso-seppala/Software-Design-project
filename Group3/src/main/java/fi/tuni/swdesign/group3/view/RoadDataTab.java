@@ -4,6 +4,7 @@
  */
 package fi.tuni.swdesign.group3.view;
 
+import fi.tuni.swdesign.group3.RoadTrafficData;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -27,6 +28,8 @@ public class RoadDataTab extends DataTab {
      * The label that shows the current amount of traffic messages.
      */
     private Label trafficMsgLabel;
+    
+    private RoadTrafficData recentData;
     
     /**
      * A constructor in which the visual elements of the RoadDataTab and its 
@@ -79,9 +82,10 @@ public class RoadDataTab extends DataTab {
         if (visualizers.length > 0) {
             RoadDataVisualizer visualizer = (RoadDataVisualizer) visualizers[0];
             RoadDataQuery roadDQ = (RoadDataQuery) query;
-            visualizer.setMTasksToVisualize(roadDQ.getSelectedTasks());
-            visualizer.setForecastsToVisualize(roadDQ.getSelectedForecasts());
+//            visualizer.setMTasksToVisualize(roadDQ.getSelectedTasks());
+//            visualizer.setForecastsToVisualize(roadDQ.getSelectedForecasts());
             visualizer.visualizeData();
+            this.recentData = visualizer.getData();
         }
     }
     

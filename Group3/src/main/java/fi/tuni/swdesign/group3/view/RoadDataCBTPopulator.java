@@ -38,6 +38,9 @@ public class RoadDataCBTPopulator extends CheckBoxTreePopulator {
         TreeItem maintenanceItem = new TreeItem(MAINTENANCE);
         TreeItem conditionItem = new TreeItem(COND_FORECAST);
         root.getChildren().addAll(maintenanceItem, conditionItem);
+        CheckBox allCBox = new CheckBox("All");
+        TreeItem allItem = new TreeItem(allCBox);
+        maintenanceItem.getChildren().add(allItem);
         for (var taskType : super.mainView.getViewModel().getMaintenanceTaskTypes()) {
             CheckBox checkBox = new CheckBox(taskType);
             TreeItem checkBoxItem = new TreeItem(checkBox);
@@ -48,7 +51,7 @@ public class RoadDataCBTPopulator extends CheckBoxTreePopulator {
         TreeItem precipitationItem = new TreeItem(precipitationCheckBox);
         CheckBox slipperinessCheckBox = new CheckBox(WINTER_SLIP);
         TreeItem slipperinessItem = new TreeItem(slipperinessCheckBox);
-        CheckBox overallCheckBox = new CheckBox(OVERALL);
+        CheckBox overallCheckBox = new CheckBox(OVERALL_COND);
         TreeItem overallItem = new TreeItem(overallCheckBox);
         conditionItem.getChildren().addAll( 
                 precipitationItem, slipperinessItem, overallItem);

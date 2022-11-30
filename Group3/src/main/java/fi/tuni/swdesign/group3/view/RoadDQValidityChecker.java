@@ -39,10 +39,10 @@ public class RoadDQValidityChecker extends DataQueryValidityChecker{
             return locationValidity;
         }
         
-        String dateTimeValidity = super.checkDateTimeValidity();
-        if (!dateTimeValidity.equals(DQ_IS_VALID)) {
-            return dateTimeValidity;
-        }
+//        String dateTimeValidity = super.checkDateTimeValidity();
+//        if (!dateTimeValidity.equals(DQ_IS_VALID)) {
+//            return dateTimeValidity;
+//        }
         
         if (this.roadDataQuery.getSelectedForecasts().isEmpty() & 
                 this.roadDataQuery.getSelectedTasks().isEmpty()) {

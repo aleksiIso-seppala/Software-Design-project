@@ -4,6 +4,8 @@
  */
 package fi.tuni.swdesign.group3.view;
 
+import fi.tuni.swdesign.group3.RoadTrafficData;
+import fi.tuni.swdesign.group3.RoadWeatherData;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -23,6 +25,9 @@ public class CombinedDataTab extends DataTab{
      * The label that shows the current amount of traffic messages.
      */
     private Label trafficMsgLabel;
+    
+    private RoadTrafficData recentRoadData;
+    private RoadWeatherData recentWeatherData;
     
     /**
      * A constructor in which the visual elements of the CombinedDataTab and its 
@@ -73,24 +78,20 @@ public class CombinedDataTab extends DataTab{
         this.chartTabPane.getTabs().clear();
         RoadDataVisualizer roadDV = null;
         WeatherDataVisualizer weatherDV = null;
-        CombinedDataQuery combinedDQ = (CombinedDataQuery) query;
         for (DataVisualizer visualizer : visualizers) {
             if (visualizer instanceof RoadDataVisualizer roadDataVisualizer) {
                 roadDV = roadDataVisualizer;
-//                roadDV.setMTasksToVisualize(combinedDQ.getSelectedTasks());
-//                roadDV.setForecastsToVisualize(combinedDQ.getSelectedForecasts());
             } else if (visualizer instanceof WeatherDataVisualizer weatherDataVisualizer) {
                 weatherDV = weatherDataVisualizer;
-//                weatherDV.setObsTypesToVisualize(combinedDQ.getSelectedObsParams());
-//                weatherDV.setPreTypesToVisualize(combinedDQ.getSelectedPreParams());
-//                weatherDV.setPerMonthTypesToVisualize(combinedDQ.getSelectedPerMonthParams());
             }
         }
         if (roadDV != null) {
             roadDV.visualizeData();
+            this.recentRoadData = roadDV.getData();
         }
         if (weatherDV != null) {
             weatherDV.visualizeData();
+            this.recentWeatherData = weatherDV.getData();
         }
     }
     

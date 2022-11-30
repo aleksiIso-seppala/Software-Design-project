@@ -102,11 +102,15 @@ public class DataQueryPopulator {
         for (var object : root.getChildren()) {
             TreeItem treeItem = (TreeItem) object;
             if (treeItem.getValue().equals(MAINTENANCE)) {
+                boolean isAllSelected = false;
                 ArrayList<String> selectedTasks = new ArrayList<>();
                 for (var taskObject : treeItem.getChildren()) {
                     TreeItem taskItem = (TreeItem) taskObject;
                     CheckBox taskBox = (CheckBox) taskItem.getValue();
-                    if (taskBox.isSelected()) {
+                    if (taskBox.getText().equals("All") & taskBox.isSelected()) {
+                        isAllSelected = true;
+                    }
+                    if (taskBox.isSelected() | isAllSelected) {
                         selectedTasks.add(taskBox.getText());
                     }
                 }
