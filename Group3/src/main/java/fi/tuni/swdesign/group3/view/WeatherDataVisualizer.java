@@ -8,7 +8,6 @@ import fi.tuni.swdesign.group3.RoadWeatherData;
 import static fi.tuni.swdesign.group3.view.RoadDataVisualizer.GRID_CELL_HEIGHT;
 import static fi.tuni.swdesign.group3.view.RoadDataVisualizer.GRID_CELL_WIDTH;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.TreeMap;
 import javafx.geometry.Pos;
 import javafx.scene.chart.AreaChart;
@@ -39,17 +38,17 @@ public class WeatherDataVisualizer extends DataVisualizer{
     
     private WeatherDataQuery query;
     
-    private ArrayList<String> obsTypesToVisualize;
-    /**
-     * An ArrayList which contains the types of predicted values the user
-     * has selected to be visualized.
-     */
-    private ArrayList<String> preTypesToVisualize;
-    /**
-     * An ArrayList which contains the types of daily values per month the user
-     * has selected to be visualized.
-     */
-    private ArrayList<String> perMonthTypesToVisualize;
+//    private ArrayList<String> obsTypesToVisualize;
+//    /**
+//     * An ArrayList which contains the types of predicted values the user
+//     * has selected to be visualized.
+//     */
+//    private ArrayList<String> preTypesToVisualize;
+//    /**
+//     * An ArrayList which contains the types of daily values per month the user
+//     * has selected to be visualized.
+//     */
+//    private ArrayList<String> perMonthTypesToVisualize;
     
     /**
      * A constructor in which the current instance of MainView is stored to the
@@ -63,59 +62,65 @@ public class WeatherDataVisualizer extends DataVisualizer{
         this.query = query;
     }
     
-    /**
-     * A getter-method for the types of observed values selected by the user to
-     * be visualized.
-     * @return the types of observed values selected.
-     */
-    public ArrayList<String> getObsTypesToVisualize() {
-        return this.obsTypesToVisualize;
+//    /**
+//     * A getter-method for the types of observed values selected by the user to
+//     * be visualized.
+//     * @return the types of observed values selected.
+//     */
+//    public ArrayList<String> getObsTypesToVisualize() {
+//        return this.obsTypesToVisualize;
+//    }
+//    
+//    /**
+//     * A setter-method for the types of observed values selected by the user to
+//     * be visualized.
+//     * @param values the types of observed values selected.
+//     */
+//    public void setObsTypesToVisualize(ArrayList<String> values) {
+//        this.obsTypesToVisualize = values;
+//    }
+//    
+//    /**
+//     * A getter-method for the types of predicted values selected by the user to
+//     * be visualized.
+//     * @return the types of predicted values selected.
+//     */
+//    public ArrayList<String> getPreTypesToVisualize() {
+//        return this.preTypesToVisualize;
+//    }
+//    
+//    /**
+//     * A setter-method for the types of predicted values selected by the user to
+//     * be visualized.
+//     * @param forecasts the types of predicted values selected.
+//     */
+//    public void setPreTypesToVisualize(ArrayList<String> forecasts) {
+//        this.preTypesToVisualize = forecasts;
+//    }
+//    
+//    /**
+//     * A getter-method for the types ofdaily values per month selected by the 
+//     * user to be visualized.
+//     * @return the types ofdaily values per month selected.
+//     */
+//    public ArrayList<String> getPerMonthTypesToVisualize() {
+//        return perMonthTypesToVisualize;
+//    }
+//    
+//    /**
+//     * A getter-method for the types ofdaily values per month selected by the 
+//     * user to be visualized.
+//     * @param perMonthTypesToVisualize the types ofdaily values per month selected
+//     */
+//    public void setPerMonthTypesToVisualize(ArrayList<String> perMonthTypesToVisualize) {
+//        this.perMonthTypesToVisualize = perMonthTypesToVisualize;
+//    }
+
+    public RoadWeatherData getData() {
+        return data;
     }
     
-    /**
-     * A setter-method for the types of observed values selected by the user to
-     * be visualized.
-     * @param values the types of observed values selected.
-     */
-    public void setObsTypesToVisualize(ArrayList<String> values) {
-        this.obsTypesToVisualize = values;
-    }
     
-    /**
-     * A getter-method for the types of predicted values selected by the user to
-     * be visualized.
-     * @return the types of predicted values selected.
-     */
-    public ArrayList<String> getPreTypesToVisualize() {
-        return this.preTypesToVisualize;
-    }
-    
-    /**
-     * A setter-method for the types of predicted values selected by the user to
-     * be visualized.
-     * @param forecasts the types of predicted values selected.
-     */
-    public void setPreTypesToVisualize(ArrayList<String> forecasts) {
-        this.preTypesToVisualize = forecasts;
-    }
-    
-    /**
-     * A getter-method for the types ofdaily values per month selected by the 
-     * user to be visualized.
-     * @return the types ofdaily values per month selected.
-     */
-    public ArrayList<String> getPerMonthTypesToVisualize() {
-        return perMonthTypesToVisualize;
-    }
-    
-    /**
-     * A getter-method for the types ofdaily values per month selected by the 
-     * user to be visualized.
-     * @param perMonthTypesToVisualize the types ofdaily values per month selected
-     */
-    public void setPerMonthTypesToVisualize(ArrayList<String> perMonthTypesToVisualize) {
-        this.perMonthTypesToVisualize = perMonthTypesToVisualize;
-    }
     
     /**
      * A method for visualizing the data. Calls appropriate methods for visualizing
@@ -242,7 +247,6 @@ public class WeatherDataVisualizer extends DataVisualizer{
             }
             predictedChart.getData().add(series);
         }
-        
         return predictedChart;
     }
     
@@ -257,7 +261,7 @@ public class WeatherDataVisualizer extends DataVisualizer{
         final AreaChart perMonthChart = new AreaChart(xAxis, yAxis);
         perMonthChart.setTitle(DAILY_VALUE_TITLE 
                 + this.query.getLocation()
-                + LINE_WITH_SPACES 
+                + ": "
                 + this.query.getTimelineStart()[0]
                 + " " + this.query.getTimelineStart()[1] 
                 + LINE_WITH_SPACES 

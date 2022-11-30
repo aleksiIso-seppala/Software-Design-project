@@ -48,7 +48,7 @@ public abstract class CheckBoxTreePopulator {
     /**
      * A constant string representing overall condition.
      */
-    protected static final String OVERALL = "Overall";
+    protected static final String OVERALL_COND = "Overall condition";
     /**
      * A constant string representing the forecast time in hours.
      */

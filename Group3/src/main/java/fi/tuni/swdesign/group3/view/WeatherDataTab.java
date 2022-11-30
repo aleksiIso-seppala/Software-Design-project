@@ -4,6 +4,7 @@
  */
 package fi.tuni.swdesign.group3.view;
 
+import fi.tuni.swdesign.group3.RoadWeatherData;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
@@ -20,6 +21,8 @@ public class WeatherDataTab extends DataTab {
      * The TreeView in which the parameter CheckBoxes are placed.
      */
     private TreeView checkBoxTree;
+    
+    private RoadWeatherData recentData;
     
     /**
      * A constructor in which the visual elements of the WeatherDataTab and its 
@@ -67,10 +70,11 @@ public class WeatherDataTab extends DataTab {
             if (visualizer != null) {
                 WeatherDataVisualizer weatherDV = (WeatherDataVisualizer) visualizer;
                 WeatherDataQuery weatherDQ = (WeatherDataQuery) query;
-                weatherDV.setObsTypesToVisualize(weatherDQ.getSelectedObsParams());
-                weatherDV.setPreTypesToVisualize(weatherDQ.getSelectedPreParams());
-                weatherDV.setPerMonthTypesToVisualize(weatherDQ.getSelectedPerMonthParams());
+//                weatherDV.setObsTypesToVisualize(weatherDQ.getSelectedObsParams());
+//                weatherDV.setPreTypesToVisualize(weatherDQ.getSelectedPreParams());
+//                weatherDV.setPerMonthTypesToVisualize(weatherDQ.getSelectedPerMonthParams());
                 weatherDV.visualizeData();
+                this.recentData = weatherDV.getData();
             }
             else {
                 Tab noDataTab = new Tab("No data");
