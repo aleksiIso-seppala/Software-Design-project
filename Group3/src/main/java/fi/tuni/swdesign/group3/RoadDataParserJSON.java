@@ -202,7 +202,7 @@ public class RoadDataParserJSON implements RoadDataParser{
             String type = condition.get("type").getAsString();
 
             String time = condition.get("forecastName").getAsString();
-            time = time.substring(0, 1);
+            time = time.substring(0, time.length()-1);
             String overallRoadCondition = condition.get("overallRoadCondition").getAsString();
             String weatherSymbol = condition.get("weatherSymbol").getAsString();
             String temperature = condition.get("temperature").getAsString();
@@ -216,6 +216,8 @@ public class RoadDataParserJSON implements RoadDataParser{
                 trafficData.setWindSpeed(windSpeed);                
             }
             else if(type.equals("FORECAST")){
+                
+                
                 RoadTrafficDataForecast trafficForecast = 
                         new RoadTrafficDataForecast(location,coordinates,time);                    
 
