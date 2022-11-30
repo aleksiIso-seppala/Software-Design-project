@@ -1,26 +1,19 @@
 package fi.tuni.swdesign.group3.view;
 import fi.tuni.swdesign.group3.*;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.TreeMap;
-import java.util.function.BiConsumer;
-import javafx.event.ActionEvent;
 
 /**
- *
+ * Class describing the viewModel
  * @author jukka
  */
 public class ViewModel {
     private final Model model;
-    private RoadTrafficData trafficData;
-    private RoadWeatherData weatherData;
     
     /**
      * Default constructor for a viewModel
@@ -31,9 +24,10 @@ public class ViewModel {
     }
      
     /**
-     * 
-     * @param query
-     * @return 
+     * Method for getting the wanted data based on user inputs
+     * @param query, DataQuery object containing the user inputted preferences
+     * @return RoadData object, which can be either TrafficData or WeatherData
+     *         or both in an Array.
      */
     public RoadData[] onCalculateButtonPress(DataQuery query){
         RoadData[] toReturn = new RoadData[2];
@@ -112,28 +106,29 @@ public class ViewModel {
         return null;
     }
     
-    /*
-    public RoadWeatherData onWeatherDataCalculateButton(ActionEvent e, HashMap<String, String> parameters){
-        RoadWeatherData data = model.getRoadWeatherData(parameters.get("location"), 
-                parameters.get("time"), parameters.get("futuretime"));
-        return data;
-    }
-    
-    public void onCombinedDataCalculateButton(ActionEvent e, HashMap<String, String> parameters){
-        RoadTrafficData rdata = model.getRoadTrafficData(parameters.get("location"));
-        RoadWeatherData wdata = model.getRoadWeatherData(parameters.get("location"), 
-                parameters.get("time"), parameters.get("futuretime"));
-                
-    }*/
-    
+    /**
+     * Getter for the locations to show in GUI dropdown menu
+     * @return the location names as an ArrayList
+     */
     public ArrayList<String> getLocations(){
         return model.getLocations();
     }
     
+    /**
+     * Getter for the maintenance task types to show in the GUI dropdown
+     * @return the task names as an ArrayList
+     */
     public ArrayList<String> getMaintenanceTaskTypes(){
         return model.getMaintenaneTaskTypes();
     }
     
+    /**
+     * Helper function to parse the user inputted time to correct format for
+     * data fetching
+     * @param day, day, month, year in dd.MM.yyyy format
+     * @param time, hours and minutes in hh.mm format
+     * @return the parsed time in ISO 8601 format ie. yyyy-MM-ddThh:mm:ssZ
+     */
     private String parseTime(String day, String time){
             //Some parsing needed for the user input.
             String date = day.replace(".", "-");
