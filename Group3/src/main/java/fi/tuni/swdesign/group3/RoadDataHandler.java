@@ -345,8 +345,10 @@ public class RoadDataHandler {
         }
         
         //saving preference
-        savePreferences(preference, datasetName);
-        
+        String errors = savePreferences(preference, datasetName);
+        if(!errors.equals("OK")){
+            return errors;
+        }
         gson.toJson(saveData, writer);
         writer.close();
         reader.close();
