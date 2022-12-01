@@ -92,7 +92,7 @@ Make sure you have Java JDK installed
 
  Also the visualization preferences can be saved or loaded
 
- ![dataPreferences.png](./Documents/Pictures/save&load.png)
+ ![dataPreferences.png](./Documents/Pictures/dataPreferences.png)
  
 
 ## Contact
