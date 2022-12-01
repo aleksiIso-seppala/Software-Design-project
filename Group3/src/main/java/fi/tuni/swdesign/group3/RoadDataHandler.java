@@ -18,7 +18,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import fi.tuni.swdesign.group3.view.*;
-import java.util.Arrays;
 import java.util.TreeMap;
 
 /**
@@ -209,6 +208,7 @@ public class RoadDataHandler {
  * @param roadData, roadData object
  * @param weatherData, weatherData object
  * @param datasetName, name of the dataset
+ * @param preference, user GUI preferences
  * @return true if the saving was succesfull, false otherwise
  * @throws IOException 
  */
@@ -574,6 +574,7 @@ public class RoadDataHandler {
     /**
      * Method for saving the preferences for data visualization from the GUI
      * @param dataQuery, object containing the preferences
+     * @param datasetName, name for the file to save the preferences
      * @throws IOException 
      */
     public String savePreferences(DataQuery dataQuery, String datasetName) throws IOException{
@@ -720,6 +721,7 @@ public class RoadDataHandler {
     
     /**
      * A method for loading the user preferences for GUI
+     * @param datasetName, the preference file to load from
      * @return DataQuery containing the preferences
      * @throws IOException 
      */

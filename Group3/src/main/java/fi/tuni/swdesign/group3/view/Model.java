@@ -26,6 +26,7 @@ public class Model {
      * Method for saving data to dataset with given name
      * @param data1, first object or null
      * @param data2, second object or null
+     * @param query, query containing the user preferences for GUI
      * @param name, name of the dataset
      * @return true if saving was succesfull, false otherwise
      * @throws IOException 
@@ -100,6 +101,7 @@ public class Model {
     /**
      * Method for saving the user GUI preferences
      * @param query, containing the preferences
+     * @param prefId, name to for the saved file
      * @return true if saving was succesfull, false otherwise
      * @throws IOException 
      */
@@ -109,6 +111,7 @@ public class Model {
     
     /**
      * Method for loading the user preferences from saved file
+     * @param prefId if of the preferences to load
      * @return the preferences in dataQuery object
      * @throws IOException 
      */
