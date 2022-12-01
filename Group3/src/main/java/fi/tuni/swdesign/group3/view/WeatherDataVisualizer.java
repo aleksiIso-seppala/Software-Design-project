@@ -1,13 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package fi.tuni.swdesign.group3.view;
 
 import fi.tuni.swdesign.group3.RoadWeatherData;
-import static fi.tuni.swdesign.group3.view.RoadDataVisualizer.GRID_CELL_HEIGHT;
-import static fi.tuni.swdesign.group3.view.RoadDataVisualizer.GRID_CELL_WIDTH;
-import java.util.ArrayList;
 import java.util.TreeMap;
 import javafx.geometry.Pos;
 import javafx.scene.chart.AreaChart;
@@ -30,25 +23,12 @@ public class WeatherDataVisualizer extends DataVisualizer{
     /**
      * The data to be visualized.
      */
-    private RoadWeatherData data;
+    private final RoadWeatherData data;
     /**
-     * An ArrayList which contains the types of observed values the user
-     * has selected to be visualized.
+     * The DataQuery associated with the data to be visualized.
      */
+    private final WeatherDataQuery query;
     
-    private WeatherDataQuery query;
-    
-//    private ArrayList<String> obsTypesToVisualize;
-//    /**
-//     * An ArrayList which contains the types of predicted values the user
-//     * has selected to be visualized.
-//     */
-//    private ArrayList<String> preTypesToVisualize;
-//    /**
-//     * An ArrayList which contains the types of daily values per month the user
-//     * has selected to be visualized.
-//     */
-//    private ArrayList<String> perMonthTypesToVisualize;
     
     /**
      * A constructor in which the current instance of MainView is stored to the
@@ -62,60 +42,6 @@ public class WeatherDataVisualizer extends DataVisualizer{
         this.query = query;
     }
     
-//    /**
-//     * A getter-method for the types of observed values selected by the user to
-//     * be visualized.
-//     * @return the types of observed values selected.
-//     */
-//    public ArrayList<String> getObsTypesToVisualize() {
-//        return this.obsTypesToVisualize;
-//    }
-//    
-//    /**
-//     * A setter-method for the types of observed values selected by the user to
-//     * be visualized.
-//     * @param values the types of observed values selected.
-//     */
-//    public void setObsTypesToVisualize(ArrayList<String> values) {
-//        this.obsTypesToVisualize = values;
-//    }
-//    
-//    /**
-//     * A getter-method for the types of predicted values selected by the user to
-//     * be visualized.
-//     * @return the types of predicted values selected.
-//     */
-//    public ArrayList<String> getPreTypesToVisualize() {
-//        return this.preTypesToVisualize;
-//    }
-//    
-//    /**
-//     * A setter-method for the types of predicted values selected by the user to
-//     * be visualized.
-//     * @param forecasts the types of predicted values selected.
-//     */
-//    public void setPreTypesToVisualize(ArrayList<String> forecasts) {
-//        this.preTypesToVisualize = forecasts;
-//    }
-//    
-//    /**
-//     * A getter-method for the types ofdaily values per month selected by the 
-//     * user to be visualized.
-//     * @return the types ofdaily values per month selected.
-//     */
-//    public ArrayList<String> getPerMonthTypesToVisualize() {
-//        return perMonthTypesToVisualize;
-//    }
-//    
-//    /**
-//     * A getter-method for the types ofdaily values per month selected by the 
-//     * user to be visualized.
-//     * @param perMonthTypesToVisualize the types ofdaily values per month selected
-//     */
-//    public void setPerMonthTypesToVisualize(ArrayList<String> perMonthTypesToVisualize) {
-//        this.perMonthTypesToVisualize = perMonthTypesToVisualize;
-//    }
-
     public RoadWeatherData getData() {
         return data;
     }
@@ -128,23 +54,27 @@ public class WeatherDataVisualizer extends DataVisualizer{
     
     /**
      * A method for visualizing the data.Calls appropriate methods for visualizing
- different types of data. Overrides the abstract function of base class
- DataVisualizer.
-     * @param chartTabPane
+     * different types of data. Overrides the abstract function of base class
+     * DataVisualizer.
+     * @param chartTabPane The TabPane in which the Tabs with the visualized 
+     * data will be added.
      */
     @Override
     public void visualizeData(TabPane chartTabPane) {
         if (!this.query.getSelectedObsParams().isEmpty()) {
+            // Visualizing the Observed values.
             Tab observedTab = new Tab(OBSERVED_VALUES);
             observedTab.setContent(visualizeObservedValues());
             chartTabPane.getTabs().add(observedTab);
         }
         if (!this.query.getSelectedPreParams().isEmpty()) {
+            // Visualizing the Predicted values.
             Tab predictedTab = new Tab(PREDICTED_VALUES);
             predictedTab.setContent(visualizePredictedValues());
             chartTabPane.getTabs().add(predictedTab);
         }
         if (!this.query.getSelectedPerMonthParams().isEmpty()) {
+            // Visualizing the Values per month.
             Tab perMonthTab = new Tab("Daily values per month");
             perMonthTab.setContent(visualizePerMonthValues());
             chartTabPane.getTabs().add(perMonthTab);
@@ -156,59 +86,48 @@ public class WeatherDataVisualizer extends DataVisualizer{
      * @return VBox which contains the table (GridPane) and its title.
      */
     private VBox visualizeObservedValues() {
+        // Initializing the table.
         VBox observedView = new VBox();
         observedView.setAlignment(Pos.CENTER);
         observedView.setSpacing(V_GAP);
-        
         GridPane observedGrid = new GridPane();
         observedGrid.setAlignment(Pos.CENTER);
         observedGrid.setGridLinesVisible(true);
-        
         Label tableTitle = new Label(OBS_VALUES_TITLE 
                 + this.data.getLocation() 
+                + COLON + SPACE
+                + this.query.getTimelineStart()[TIME_I]
+                + COMMA + SPACE 
+                + this.query.getTimelineStart()[DATE_I] 
                 + LINE_WITH_SPACES 
-                + this.query.getTimelineStart()[0]
-                + " " + this.query.getTimelineStart()[1] 
-                + LINE_WITH_SPACES 
-                + this.query.getTimelineEnd()[0]
-                + " " + this.query.getTimelineEnd()[1]);
+                + this.query.getTimelineEnd()[TIME_I]
+                + COMMA + SPACE 
+                + this.query.getTimelineEnd()[DATE_I]);
         tableTitle.setAlignment(Pos.CENTER);
+        int col_count = 0;
         
-        Label temperatureLabel = new Label(TEMPERATURE_TITLE);
-        temperatureLabel.setPrefSize(GRID_CELL_WIDTH, GRID_CELL_HEIGHT);
-        temperatureLabel.setAlignment(Pos.CENTER);
-        Label windLabel = new Label(WIND_SPEED_TITLE);
-        windLabel.setPrefSize(GRID_CELL_WIDTH, GRID_CELL_HEIGHT);
-        windLabel.setAlignment(Pos.CENTER);
-        Label cloudLabel = new Label(CLOUDINESS_TITLE);
-        cloudLabel.setPrefSize(GRID_CELL_WIDTH, GRID_CELL_HEIGHT);
-        cloudLabel.setAlignment(Pos.CENTER);
-        
-        observedGrid.addRow(0, temperatureLabel, windLabel,
-                cloudLabel);
-        
-        Label temperatureValue = new Label();
-        if (this.query.getSelectedObsParams().contains(TEMPERATURE)) {
-            temperatureValue.setText(Float.toString(this.data.getTemperature()));
+        // Initializing the columns.
+        for (String obsType : this.query.getSelectedObsParams()) {
+            Label obsTypeLabel = new Label(obsType);
+            obsTypeLabel.setPrefSize(GRID_CELL_WIDTH, GRID_CELL_HEIGHT);
+            obsTypeLabel.setAlignment(Pos.CENTER);
+            Label obsValueLabel = new Label();
+            obsValueLabel.setPrefSize(GRID_CELL_WIDTH, GRID_CELL_HEIGHT);
+            obsValueLabel.setAlignment(Pos.CENTER);
+            switch (obsType) {
+                case TEMPERATURE -> obsValueLabel
+                        .setText(Float.toString(this.data.getTemperature()));
+                case WIND_SPEED -> obsValueLabel
+                        .setText(Float.toString(this.data.getWind()));
+                case CLOUDINESS -> obsValueLabel
+                        .setText(Float.toString(this.data.getCloudiness()));
+                default -> {
+                }
+            }
+            observedGrid.addColumn(col_count, obsTypeLabel, obsValueLabel);
+            col_count++;
         }
-        temperatureValue.setPrefSize(GRID_CELL_WIDTH, GRID_CELL_HEIGHT);
-        temperatureValue.setAlignment(Pos.CENTER);
         
-        Label windValue = new Label();
-        if (this.query.getSelectedObsParams().contains(WIND_SPEED)) {
-            windValue.setText(Float.toString(this.data.getWind()));
-        }
-        windValue.setPrefSize(GRID_CELL_WIDTH, GRID_CELL_HEIGHT);
-        windValue.setAlignment(Pos.CENTER);
-        
-        Label cloudValue = new Label();
-        if (this.query.getSelectedObsParams().contains(CLOUDINESS)) {
-            cloudValue.setText(Float.toString(this.data.getCloudiness()));
-        }
-        cloudValue.setPrefSize(GRID_CELL_WIDTH, GRID_CELL_HEIGHT);
-        cloudValue.setAlignment(Pos.CENTER);
-        
-        observedGrid.addRow(1, temperatureValue, windValue, cloudValue);
         observedView.getChildren().addAll(tableTitle, observedGrid);
         return observedView;
     }
@@ -218,22 +137,26 @@ public class WeatherDataVisualizer extends DataVisualizer{
      * @return LineChart in which the data is visualized.
      */
     private LineChart visualizePredictedValues() {
+        // Initializing the LineChart.
         TreeMap<String, RoadWeatherData> forecasts = this.data.getForecasts();
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
         final LineChart predictedChart = new LineChart(xAxis,yAxis);
         predictedChart.setTitle(PRE_VALUES_TITLE
                 + this.data.getLocation() 
+                + COLON + SPACE
+                + this.query.getTimelineStart()[TIME_I]
+                + COMMA + SPACE
+                + this.query.getTimelineStart()[DATE_I] 
                 + LINE_WITH_SPACES 
-                + this.query.getTimelineStart()[0]
-                + " " + this.query.getTimelineStart()[1] 
-                + LINE_WITH_SPACES 
-                + this.query.getTimelineEnd()[0]
-                + " " + this.query.getTimelineEnd()[1]);
+                + this.query.getTimelineEnd()[TIME_I]
+                + COMMA + SPACE 
+                + this.query.getTimelineEnd()[DATE_I]);
         xAxis.setLabel(FORECAST_TIME_TITLE);
         yAxis.setLabel(WEATHER_VALUE_AXIS_LABEL);
         predictedChart.setCreateSymbols(false);
             
+        // Initializing the data and adding it into the chart.
         for (String type : this.query.getSelectedPreParams()) {
             XYChart.Series series = new XYChart.Series();
             series.setName(type);
@@ -257,22 +180,26 @@ public class WeatherDataVisualizer extends DataVisualizer{
      * @return AreaChart in which the data is visualized.
      */
     private AreaChart visualizePerMonthValues() {
+        // Initializing the AreaChart.
         TreeMap<String, Float[]> dailyValues = this.data.getMonthylAverage();
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
         final AreaChart perMonthChart = new AreaChart(xAxis, yAxis);
         perMonthChart.setTitle(DAILY_VALUE_TITLE 
                 + this.query.getLocation()
-                + ": "
-                + this.query.getTimelineStart()[0]
-                + " " + this.query.getTimelineStart()[1] 
+                + COLON + SPACE
+                + this.query.getTimelineStart()[TIME_I]
+                + COMMA + SPACE 
+                + this.query.getTimelineStart()[DATE_I] 
                 + LINE_WITH_SPACES 
-                + this.query.getTimelineEnd()[0]
-                + " " + this.query.getTimelineEnd()[1]);
+                + this.query.getTimelineEnd()[TIME_I]
+                + COMMA + SPACE
+                + this.query.getTimelineEnd()[DATE_I]);
         xAxis.setLabel(DATE_AXIS_LABEL);
         yAxis.setLabel(TEMPERATURE_TITLE);
         perMonthChart.setCreateSymbols(false);
         
+        // Initializing and adding the data into the chart.
         XYChart.Series seriesAvg = new XYChart.Series();
         XYChart.Series seriesMin = new XYChart.Series();
         XYChart.Series seriesMax = new XYChart.Series();

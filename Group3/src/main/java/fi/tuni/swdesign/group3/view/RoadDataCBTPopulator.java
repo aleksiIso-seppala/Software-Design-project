@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package fi.tuni.swdesign.group3.view;
 
 import javafx.scene.control.CheckBox;
@@ -38,6 +34,8 @@ public class RoadDataCBTPopulator extends CheckBoxTreePopulator {
         TreeItem maintenanceItem = new TreeItem(MAINTENANCE);
         TreeItem conditionItem = new TreeItem(COND_FORECAST);
         root.getChildren().addAll(maintenanceItem, conditionItem);
+        
+        // Populating the Maintenance item.
         CheckBox allCBox = new CheckBox("All");
         TreeItem allItem = new TreeItem(allCBox);
         maintenanceItem.getChildren().add(allItem);
@@ -46,7 +44,8 @@ public class RoadDataCBTPopulator extends CheckBoxTreePopulator {
             TreeItem checkBoxItem = new TreeItem(checkBox);
             maintenanceItem.getChildren().add(checkBoxItem);
         }
-
+        
+        // Populating the Condition forecast item.
         CheckBox precipitationCheckBox = new CheckBox(PRECIPITATION);
         TreeItem precipitationItem = new TreeItem(precipitationCheckBox);
         CheckBox slipperinessCheckBox = new CheckBox(WINTER_SLIP);
@@ -56,6 +55,7 @@ public class RoadDataCBTPopulator extends CheckBoxTreePopulator {
         conditionItem.getChildren().addAll( 
                 precipitationItem, slipperinessItem, overallItem);
         
+        // Populating the Forecast time item.
         TreeItem timeItem = new TreeItem(FORECAST_TIME);
         RadioButton radioButton1 = new RadioButton(TWO_HOURS);
         RadioButton radioButton2 = new RadioButton(FOUR_HOURS);
@@ -70,7 +70,6 @@ public class RoadDataCBTPopulator extends CheckBoxTreePopulator {
                 radioButton3, radioButton4);
         timeHBox.setSpacing(CheckBoxTreePopulator.SHORT_H_GAP);
         TreeItem timeHBoxItem = new TreeItem(timeHBox);
-        
         conditionItem.getChildren().add(timeItem);
         timeItem.getChildren().add(timeHBoxItem);
     }

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package fi.tuni.swdesign.group3.view;
 
 /**
@@ -31,7 +27,8 @@ public class DataQueryFactory {
     /**
      * A factory-method for creating different types of DataQuerys.
      * @param dataType The type of the DataQuery to be created.
-     * @return an instance of the chosen type of DataQuery.
+     * @return an instance of the chosen type of DataQuery. Null if dataType
+     * not implemented.
      */
     public static DataQuery makeDataQuery(String dataType) {
         return switch (dataType) {

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package fi.tuni.swdesign.group3.view;
 
 import fi.tuni.swdesign.group3.RoadTrafficData;
@@ -28,9 +24,20 @@ public class CombinedDataTab extends DataTab{
      * The label that shows the current amount of traffic messages.
      */
     private Label trafficMsgLabel;
-    
+    /**
+     * RoadTrafficData containing the most recent data fetched in the current
+     * runtime.
+     */
     private RoadTrafficData recentRoadData;
+    /**
+     * RoadWeatherData containing the most recent data fetched in the current
+     * runtime.
+     */
     private RoadWeatherData recentWeatherData;
+    /**
+     * CombinedDataQuery containing the most recent query associated with the
+     * most recent data fetch.
+     */
     private CombinedDataQuery recentQuery;
     
     /**
@@ -39,20 +46,26 @@ public class CombinedDataTab extends DataTab{
      * @param mainView the current instance of MainView.
      */
     CombinedDataTab(MainView mainView) {
+        // Initializing the default structure of DataTab.
         super(mainView);
+        
         this.setText(COMBINED_DATA);
         GridPane gridPane = (GridPane) super.getContent();
         
+        // Initializing the label for traffic messages.
         this.trafficMsgLabel = new Label(TRAFFIC_MSG_AMOUNT);
         this.trafficMsgLabel.setPrefWidth(DataTab.LONG_ELEMENT_WIDTH);
         
+        // Initializing the CheckBoxTree.
         this.checkBoxTree = new TreeView();
         this.checkBoxTree.setPrefSize(DataTab.CHECK_BOX_TREE_WIDTH, DataTab.CHECK_BOX_TREE_HEIGHT);
         
+        // Adding the additional visual components to the Tab.
         gridPane.add(this.trafficMsgLabel, THIRD_COL, FOURTH_ROW);
         gridPane.add(this.checkBoxTree, THIRD_COL, SECOND_ROW, 
                 COL_SPAN_OF_1, ROW_SPAN_OF_2);
         
+        // Populating the CheckBoxTree with appropriate parameters.
         TreeItem root = new TreeItem();
         this.checkBoxTree.setRoot(root);
         this.checkBoxTree.setShowRoot(false);
@@ -70,23 +83,44 @@ public class CombinedDataTab extends DataTab{
     public TreeItem getCbTreeRoot() {
         return this.checkBoxTree.getRoot();
     }
+    
+    /**
+     * A getter-method for the traffic message label.
+     * @return the label in which the amount of traffic messages is shown.
+     */
+    public Label getTrafficMsgLabel() {
+        return trafficMsgLabel;
+    }
 
+    /**
+     * A getter-method for the most recent RoadTrafficData fetched during 
+     * current runtime.
+     * @return the most recent RoadTrafficData fetched.
+     */
     public RoadTrafficData getRecentRoadData() {
         return recentRoadData;
     }
 
+    /**
+     * A getter-method for the most recent RoadWeatherData fetched during 
+     * current runtime.
+     * @return the most recent RoadWeatherData fetched.
+     */
     public RoadWeatherData getRecentWeatherData() {
         return recentWeatherData;
     }
 
+    /**
+     * A getter method for the CombinedDataQuery associated with the most
+     * recent data fetch.
+     * @return CombinedDataQuery associated with the most recent data fetch.
+     */
     public CombinedDataQuery getRecentQuery() {
         return recentQuery;
     }
     
-    
-
     /**
-     * A method for updating the data visualizations.Overrides the abstract
+     * A method for updating the data visualizations. Overrides the abstract
      * method in base class DataTab
      * @param query the query used to fetch the data.
      * @param visualizers the DataVisualizers used for the visualization.
@@ -94,6 +128,8 @@ public class CombinedDataTab extends DataTab{
     @Override
     public void updateChart(DataQuery query, DataVisualizer... visualizers) {
         this.chartTabPane.getTabs().clear();
+        
+        // Visualizing the Road- and WeatherData individually.
         RoadDataVisualizer roadDV = null;
         WeatherDataVisualizer weatherDV = null;
         for (DataVisualizer visualizer : visualizers) {
@@ -106,6 +142,8 @@ public class CombinedDataTab extends DataTab{
         if (roadDV != null) {
             roadDV.visualizeData(this.chartTabPane);
             this.recentRoadData = roadDV.getData();
+            this.trafficMsgLabel.setText(TRAFFIC_MSG_AMOUNT 
+                    + this.recentRoadData.getNumberOfTrafficMessages());
         }
         if (weatherDV != null) {
             weatherDV.visualizeData(this.chartTabPane);
@@ -113,62 +151,70 @@ public class CombinedDataTab extends DataTab{
         }
         this.recentQuery = (CombinedDataQuery) query;
     }
-    
-    /**
-     * A getter-method for the traffic message label.
-     * @return the label in which the amount of traffic messages is shown.
-     */
-    public Label getTrafficMsgLabel() {
-        return trafficMsgLabel;
-    }
 
+    /**
+     * A method for updating the parameters according to the loaded preferences.
+     * Overrides the abstract method in base class DataTab.
+     * @param query DataQuery containing the loaded preferences.
+     */
     @Override
     public void updateParams(DataQuery query) {
         CombinedDataQuery combinedDQ = (CombinedDataQuery) query;
+        
+        // Updating the LocationChoiceBox.
         super.locationBox.getSelectionModel().select(combinedDQ.getLocation());
+        
+        // Updating the CheckBoxTree.
         TreeItem root = this.checkBoxTree.getRoot();
         for (Object object : root.getChildren()) {
             TreeItem item = (TreeItem) object;
             for (Object subObject : item.getChildren()) {
                 TreeItem subItem = (TreeItem) subObject;
-                if (item.getValue().equals("Maintenance")) {
+                if (item.getValue().equals(MAINTENANCE)) {
                     CheckBox taskBox = (CheckBox) subItem.getValue();
-                    if (combinedDQ.getSubRoadDQ().getSelectedTasks().contains(taskBox.getText())) {
+                    if (combinedDQ.getSubRoadDQ().getSelectedTasks()
+                            .contains(taskBox.getText())) {
                         taskBox.setSelected(true);
                     }
                 }
-                else if (item.getValue().equals("Condition forecast")) {
+                else if (item.getValue().equals(COND_FORECAST)) {
                     if (subItem.getValue() instanceof CheckBox checkBox) {
-                        if (combinedDQ.getSubRoadDQ().getSelectedForecasts().contains(checkBox.getText())) {
+                        if (combinedDQ.getSubRoadDQ().getSelectedForecasts()
+                                .contains(checkBox.getText())) {
                             checkBox.setSelected(true);
                         }
                     }
                     else {
-                        TreeItem toggleGroupItem = (TreeItem) subItem.getChildren().get(0);
+                        TreeItem toggleGroupItem = 
+                                (TreeItem) subItem.getChildren().get(TOGGLE_GROUP_I);
                         HBox hBox = (HBox) toggleGroupItem.getValue();
                         for (var node : hBox.getChildren()) {
                             RadioButton timeButton = (RadioButton) node;
-                            if (combinedDQ.getSubRoadDQ().getForecastTime().equals(timeButton.getText())) {
+                            if (combinedDQ.getSubRoadDQ().getForecastTime()
+                                    .equals(timeButton.getText())) {
                                 timeButton.setSelected(true);
                             }
                         }
                     }
                 }
-                if (item.getValue().equals("Observed values")) {
+                if (item.getValue().equals(OBS_VALUES)) {
                     CheckBox obsValueBox = (CheckBox) subItem.getValue();
-                    if (combinedDQ.getSubWeatherDQ().getSelectedObsParams().contains(obsValueBox.getText())) {
+                    if (combinedDQ.getSubWeatherDQ().getSelectedObsParams()
+                            .contains(obsValueBox.getText())) {
                         obsValueBox.setSelected(true);
                     }
                 }
-                if (item.getValue().equals("Predicted values")) {
+                if (item.getValue().equals(PRE_VALUES)) {
                     CheckBox preValueBox = (CheckBox) subItem.getValue();
-                    if (combinedDQ.getSubWeatherDQ().getSelectedPreParams().contains(preValueBox.getText())) {
+                    if (combinedDQ.getSubWeatherDQ().getSelectedPreParams()
+                            .contains(preValueBox.getText())) {
                         preValueBox.setSelected(true);
                     }
                 }                
-                if (item.getValue().equals("Values per month")) {
+                if (item.getValue().equals(PER_MONTH_VALUES)) {
                     CheckBox dailyValueBox = (CheckBox) subItem.getValue();
-                    if (combinedDQ.getSubWeatherDQ().getSelectedPerMonthParams().contains(dailyValueBox.getText())) {
+                    if (combinedDQ.getSubWeatherDQ().getSelectedPerMonthParams()
+                            .contains(dailyValueBox.getText())) {
                         dailyValueBox.setSelected(true);
                     }
                 }

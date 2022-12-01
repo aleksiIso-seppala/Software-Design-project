@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package fi.tuni.swdesign.group3.view;
 
 import fi.tuni.swdesign.group3.RoadData;
@@ -42,7 +38,7 @@ public abstract class DataTab extends Tab {
     /**
      * A constant that represents the width of a long-width visual element.
      */
-    protected final static int LONG_ELEMENT_WIDTH = 220;
+    protected final static int LONG_ELEMENT_WIDTH = 275;
     /**
      * A constant that represents the width of a medium-width visual element.
      */
@@ -58,7 +54,7 @@ public abstract class DataTab extends Tab {
     /**
      * A constant that represents the height of the check box treeview.
      */
-    protected static final int CHECK_BOX_TREE_HEIGHT = 300;
+    protected static final int CHECK_BOX_TREE_HEIGHT = 325;
     /**
      * A constant that represents the width of the check box treeview.
      */
@@ -111,6 +107,11 @@ public abstract class DataTab extends Tab {
      * A constant representing a length span of two rows.
      */
     protected static final int ROW_SPAN_OF_2 = 2;
+    /**
+     * A constant representing the index of the toggle group in CheckboxTree
+     * of WeatherDataTab and CombinedDataTab.
+     */
+    protected static final int TOGGLE_GROUP_I = 0;
     /**
      * A constant string representing location.
      */
@@ -170,6 +171,26 @@ public abstract class DataTab extends Tab {
      */
     protected static final String TRAFFIC_MSG_AMOUNT = "Amount of traffic messages: ";
     /**
+     * A constant string representing the Maintenance label in CheckBoxTree.
+     */
+    protected static final String MAINTENANCE = "Maintenance";
+    /**
+     * A constant string representing the Condition forecast label in CheckBoxTree.
+     */
+    protected static final String COND_FORECAST = "Condition forecast";
+    /**
+     * A constant string representing the Observed values label in CheckBoxTree.
+     */
+    protected static final String OBS_VALUES = "Observed values";
+    /**
+     * A constant string representing the Predicted values label in CheckBoxTree.
+     */
+    protected static final String PRE_VALUES = "Predicted values";
+    /**
+     * A constant string representing the Values per month label in CheckBoxTree.
+     */
+    protected static final String PER_MONTH_VALUES = "Values per month";
+    /**
      * The current instance of the MainView.
      */
     protected MainView mainView;
@@ -209,66 +230,70 @@ public abstract class DataTab extends Tab {
      */
     DataTab(MainView mainView) {
         super();
-        
         this.mainView = mainView;
+        
+        // Initializing layout.
         GridPane gridPane = new GridPane();
         gridPane.setHgap(H_GAP);
         gridPane.setVgap(V_GAP);
         gridPane.setAlignment(Pos.CENTER);
         
+        // Initializing the Location ChoiceBox.
         Label locationLabel = new Label(LOCATION);
-        
         this.locationBox = new ChoiceBox();
         this.locationBox.setPrefWidth(MED_ELEMENT_WIDTH);
         this.locationBox.getItems().addAll(this.mainView.getLocations());
         this.locationBox.getSelectionModel().selectFirst();
         
+        // Initializing the Timeline TextFields.
         Label timelineLabel = new Label(TIMELINE);
-        
         this.startTimeField = new TextField();
         this.startDateField = new TextField();
         this.endTimeField = new TextField();
         this.endDateField = new TextField();
-        
         this.startTimeField.setPromptText(TIME_FORMAT);
         this.startDateField.setPromptText(DATE_FORMAT);
         this.endTimeField.setPromptText(TIME_FORMAT);
         this.endDateField.setPromptText(DATE_FORMAT);
-        
         Label lineLabel = new Label(LINE);
-        
         HBox timelineHBox = new HBox();
         timelineHBox.getChildren().addAll(this.startTimeField, this.startDateField, 
                 lineLabel, this.endTimeField, this.endDateField);
         timelineHBox.setSpacing(SHORT_H_GAP);
         timelineHBox.setAlignment(Pos.CENTER_LEFT);
-        
         this.startTimeField.setPrefWidth(VERY_SHORT_ELEMENT_WIDTH);
         this.startDateField.setPrefWidth(SHORT_ELEMENT_WIDTH);
         this.endTimeField.setPrefWidth(VERY_SHORT_ELEMENT_WIDTH);
         this.endDateField.setPrefWidth(SHORT_ELEMENT_WIDTH);
         
+        // Initializing the ChartTabPane.
         this.chartTabPane = new TabPane();
         
+        // Initializing the Calculate button.
         Button calculateButton = new Button(CALCULATE);
         calculateButton.setPrefWidth(SHORT_ELEMENT_WIDTH);
         
+        // Initializing the ErrorInfoLabel.
         this.errorInfoLabel = new Label();
         this.errorInfoLabel.setTextFill(Color.RED);
         this.errorInfoLabel.setPrefWidth(LONG_ELEMENT_WIDTH);
         
+        // Initializing the Data button.
         Button dataButton = new Button(DATA);
         dataButton.setPrefWidth(SHORT_ELEMENT_WIDTH);
         
+        // Initializing the Preferences button.
         Button prefButton = new Button(PREFERENCES);
         prefButton.setPrefWidth(SHORT_ELEMENT_WIDTH);
         
+        // Initializing the layout of the buttons.
         HBox buttonHBox = new HBox();
         buttonHBox.setSpacing(SHORT_H_GAP);
         buttonHBox.setAlignment(Pos.CENTER_LEFT);
         buttonHBox.getChildren().addAll(calculateButton, this.errorInfoLabel, 
                 dataButton, prefButton);
         
+        // Inserting visual components into the layout.
         gridPane.add(locationLabel, FIRST_COL, FIRST_ROW);
         gridPane.add(this.locationBox, FIRST_COL, SECOND_ROW);
         gridPane.add(timelineLabel, SECOND_COL, FIRST_ROW);
@@ -277,24 +302,26 @@ public abstract class DataTab extends Tab {
                 COL_SPAN_OF_2, ROW_SPAN_OF_1);
         gridPane.add(buttonHBox, FIRST_COL, FOURTH_ROW, 
                 COL_SPAN_OF_2, ROW_SPAN_OF_1);
-        
         this.setContent(gridPane);
         
+        // Handling a click of the Data button.
         dataButton.setOnAction((ActionEvent t) -> {
             DataMenuView dataMenuView = new DataMenuView(DataTab.this.
                     mainView);
             dataMenuView.show();
         });
         
+        // Handling a click of the Preferences button.
         prefButton.setOnAction((ActionEvent t) -> {
             PreferencesMenuView prefMenuView = new PreferencesMenuView(
                     DataTab.this.mainView);
             prefMenuView.show();
         });
         
+        // Handling a click of the Calculate button.
         calculateButton.setOnAction((ActionEvent t) -> {
+            // Making and populating a DataQuery.
             DataQuery dataQuery = DataQueryFactory.makeDataQuery(DataTab.this.getText());
-            
             DataQueryPopulator.populateDataQuery(dataQuery,
                     DataTab.this.locationBox.getValue().toString(),
                     new String[]{DataTab.this.startTimeField.getText(),
@@ -302,7 +329,7 @@ public abstract class DataTab extends Tab {
                     new String[]{DataTab.this.endTimeField.getText(),
                         DataTab.this.endDateField.getText()},
                     DataTab.this.getCbTreeRoot());
-            
+            // Checking the validity of the DataQuery.
             DataQueryValidityChecker dqValidityChecker =
                     DataQueryValidityChecker.makeDataQueryValidityChecker(
                             mainView, dataQuery);
@@ -311,9 +338,9 @@ public abstract class DataTab extends Tab {
                 DataTab.this.errorInfoLabel.setText(EMPTY_STR);
                 RoadData[] datas = this.mainView.getViewModel()
                         .onCalculateButtonPress(dataQuery);
+                // Initializing the DataVisualizers and updating the chart.
                 DataVisualizer dv1 = DataVisualizer
                         .makeDataVisualizer(mainView, datas[0], dataQuery);
-                
                 if (datas.length > 1) {
                     DataVisualizer dv2 = DataVisualizer
                             .makeDataVisualizer(mainView, datas[1], dataQuery);
@@ -342,55 +369,52 @@ public abstract class DataTab extends Tab {
     public TabPane getChartTabPane() {
         return this.chartTabPane;
     }
-
+    /**
+     * A getter-method for the Location ChoiceBox.
+     * @return the Location ChoiceBox.
+     */
     public ChoiceBox getLocationBox() {
         return locationBox;
     }
-
-    public void setLocationBox(ChoiceBox locationBox) {
-        this.locationBox = locationBox;
-    }
-
+    /**
+     * A getter-method for the StartTime TextField.
+     * @return the StartTime TextField.
+     */
     public TextField getStartTimeField() {
         return startTimeField;
     }
-
-    public void setStartTimeField(TextField startTimeField) {
-        this.startTimeField = startTimeField;
-    }
-
+    /**
+     * A getter-method for the StartDate TextField.
+     * @return the StartDate TextField.
+     */
     public TextField getStartDateField() {
         return startDateField;
     }
-
-    public void setStartDateField(TextField startDateField) {
-        this.startDateField = startDateField;
-    }
-
+    /**
+     * A getter-method for the EndTime TextField.
+     * @return the EndTime TextField.
+     */
     public TextField getEndTimeField() {
         return endTimeField;
     }
-
-    public void setEndTimeField(TextField endTimeField) {
-        this.endTimeField = endTimeField;
-    }
-
+    /**
+     * A getter-method for the EndDate TextField.
+     * @return the EndDate TextField.
+     */
     public TextField getEndDateField() {
         return endDateField;
     }
-
-    public void setEndDateField(TextField endDateField) {
-        this.endDateField = endDateField;
-    }
-    
-    
     
     /**
      * An abstract method for updating the visualization of the data.
-     * @param query
+     * @param query A DataQuery associated with the data fetch.
      * @param visualizers DataVisualizers used for visualizing the data.
      */
     public abstract void updateChart(DataQuery query, DataVisualizer... visualizers);
     
+    /**
+     * An abstract method for updating the parameters of the DataTab.
+     * @param query The DataQuery containing the parameters.
+     */
     public abstract void updateParams(DataQuery query);
 }

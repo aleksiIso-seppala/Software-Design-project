@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package fi.tuni.swdesign.group3.view;
 
 import javafx.scene.control.TreeView;
@@ -9,7 +5,7 @@ import javafx.scene.control.TreeView;
 /**
  * A subclass of CheckBoxTreePopulator for populating the checkbox treeview in 
  * the CombinedDataTab.
- * @author Lauri
+ * @author Lauri Puoskari
  */
 public class CombinedDataCBTPopulator extends CheckBoxTreePopulator {
 

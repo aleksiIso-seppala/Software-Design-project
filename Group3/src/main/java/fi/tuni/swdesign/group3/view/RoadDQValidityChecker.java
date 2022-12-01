@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package fi.tuni.swdesign.group3.view;
 
 /**
@@ -13,7 +9,7 @@ public class RoadDQValidityChecker extends DataQueryValidityChecker{
     /**
      * The RoadDataQuery to be checked.
      */
-    private RoadDataQuery roadDataQuery;
+    private final RoadDataQuery roadDataQuery;
     
     /**
      * A constructor in which the current instance of the MainView and DataQuery
@@ -39,11 +35,7 @@ public class RoadDQValidityChecker extends DataQueryValidityChecker{
             return locationValidity;
         }
         
-//        String dateTimeValidity = super.checkDateTimeValidity();
-//        if (!dateTimeValidity.equals(DQ_IS_VALID)) {
-//            return dateTimeValidity;
-//        }
-        
+        // Checking if no parameters are selected in the CheckBoxTree.
         if (this.roadDataQuery.getSelectedForecasts().isEmpty() & 
                 this.roadDataQuery.getSelectedTasks().isEmpty()) {
             return NO_PARAMS;

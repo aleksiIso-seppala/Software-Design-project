@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package fi.tuni.swdesign.group3.view;
 
 import fi.tuni.swdesign.group3.RoadTrafficData;
@@ -31,8 +27,14 @@ public class RoadDataTab extends DataTab {
      * The label that shows the current amount of traffic messages.
      */
     private Label trafficMsgLabel;
-    
+    /**
+     * RoadTrafficData that contains the most recent data fetched during current
+     * runtime.
+     */
     private RoadTrafficData recentData;
+    /**
+     * RoadDataQuery associated with the most recent data fetch.
+     */
     private RoadDataQuery recentQuery;
     
     /**
@@ -41,21 +43,26 @@ public class RoadDataTab extends DataTab {
      * @param mainView the current instance of MainView.
      */
     RoadDataTab(MainView mainView) {
+        // Initializing the default structure of the DataTab.
         super(mainView);
         this.setText(ROAD_DATA);
         this.gridPane = (GridPane) super.getContent();
         
+        // Initializing the TrafficMessage Label.
         this.trafficMsgLabel = new Label(TRAFFIC_MSG_AMOUNT);
         this.trafficMsgLabel.setPrefWidth(DataTab.LONG_ELEMENT_WIDTH);
         
+        // Initializing the CheckBoxTree.
         this.checkBoxTree = new TreeView();
         this.checkBoxTree.setPrefSize(DataTab.CHECK_BOX_TREE_WIDTH, 
                 DataTab.CHECK_BOX_TREE_HEIGHT);
         
+        // Adding the visual components into the layout.
         this.gridPane.add(this.trafficMsgLabel, THIRD_COL, FOURTH_ROW);
         this.gridPane.add(this.checkBoxTree, THIRD_COL, SECOND_ROW, 
                 COL_SPAN_OF_1, ROW_SPAN_OF_2);
         
+        // Populating the CheckBoxTree.
         TreeItem root = new TreeItem();
         this.checkBoxTree.setRoot(root);
         this.checkBoxTree.setShowRoot(false);
@@ -85,7 +92,6 @@ public class RoadDataTab extends DataTab {
         this.chartTabPane.getTabs().clear();
         if (visualizers.length > 0) {
             RoadDataVisualizer visualizer = (RoadDataVisualizer) visualizers[0];
-            RoadDataQuery roadDQ = (RoadDataQuery) query;
             visualizer.visualizeData(this.chartTabPane);
             this.trafficMsgLabel.setText(TRAFFIC_MSG_AMOUNT 
                     + visualizer.getData().getNumberOfTrafficMessages());
@@ -102,29 +108,48 @@ public class RoadDataTab extends DataTab {
         return trafficMsgLabel;
     }
 
+    /**
+     * A getter-method for the most recent data fetched during current runtime.
+     * @return the most recent data fetched during current runtime.
+     */
     public RoadTrafficData getRecentData() {
         return recentData;
     }
 
+    /**
+     * A getter-method for the DataQuery associated with the most recent data fetch.
+     * @return the DataQuery associated with the most recent data fetch.
+     */
     public RoadDataQuery getRecentQuery() {
         return recentQuery;
     }
 
+    /**
+     * A method for updating the parameters of the DataTab according to the 
+     * loaded preferences. Overrides the abstract method of base class DataTab.
+     * @param query The DataQuery containing the parameters.
+     */
     @Override
     public void updateParams(DataQuery query) {
         RoadDataQuery roadDQ = (RoadDataQuery) query;
+        
+        // Updating the Location ChoiceBox.
         super.locationBox.getSelectionModel().select(roadDQ.getLocation());
+        
+        // Updating the CheckBoxTree.
         TreeItem root = this.checkBoxTree.getRoot();
         for (Object object : root.getChildren()) {
             TreeItem item = (TreeItem) object;
             for (Object subObject : item.getChildren()) {
                 TreeItem subItem = (TreeItem) subObject;
+                // Updating the Maintenance item.
                 if (item.getValue().equals("Maintenance")) {
                     CheckBox taskBox = (CheckBox) subItem.getValue();
                     if (roadDQ.getSelectedTasks().contains(taskBox.getText())) {
                         taskBox.setSelected(true);
                     }
                 }
+                // Updating the Condition forecast item.
                 else if (item.getValue().equals("Condition forecast")) {
                     if (subItem.getValue() instanceof CheckBox checkBox) {
                         if (roadDQ.getSelectedForecasts().contains(checkBox.getText())) {
@@ -147,9 +172,4 @@ public class RoadDataTab extends DataTab {
         }
         
     }
-    
-   
-    
-    
-
 }

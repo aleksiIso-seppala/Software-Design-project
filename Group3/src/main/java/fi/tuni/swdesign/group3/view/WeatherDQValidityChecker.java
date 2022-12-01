@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package fi.tuni.swdesign.group3.view;
 
 /**
@@ -44,6 +40,7 @@ public class WeatherDQValidityChecker extends DataQueryValidityChecker{
             return dateTimeValidity;
         }
         
+        // Checking no parameters were selected in the CheckBoxTree.
         if (this.weatherDataQuery.getSelectedObsParams().isEmpty()
                 & this.weatherDataQuery.getSelectedPreParams().isEmpty()
                 & this.weatherDataQuery.getSelectedPerMonthParams().isEmpty()) {

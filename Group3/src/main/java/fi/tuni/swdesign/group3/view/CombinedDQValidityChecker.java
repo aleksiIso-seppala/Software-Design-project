@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package fi.tuni.swdesign.group3.view;
 
 /**
@@ -13,7 +9,7 @@ public class CombinedDQValidityChecker extends DataQueryValidityChecker {
     /**
      * The CombinedDataQuery to be checked.
      */
-    private CombinedDataQuery combDataQuery;
+    private final CombinedDataQuery combDataQuery;
     
     /**
      * A constructor in which the current instance of the MainView and DataQuery
@@ -44,6 +40,7 @@ public class CombinedDQValidityChecker extends DataQueryValidityChecker {
             return dateTimeValidity;
         }
         
+        // Check if no parameters are selected in the CheckBoxTree.
         if (this.combDataQuery.getSubWeatherDQ().getSelectedObsParams().isEmpty() 
                 & this.combDataQuery.getSubWeatherDQ().getSelectedPreParams().isEmpty()
                 & this.combDataQuery.getSubWeatherDQ().getSelectedPerMonthParams().isEmpty()
@@ -51,16 +48,6 @@ public class CombinedDQValidityChecker extends DataQueryValidityChecker {
                 & this.combDataQuery.getSubRoadDQ().getSelectedTasks().isEmpty()) {
             return NO_PARAMS;
         }
-//        RoadDQValidityChecker subRoadDQVC = 
-//                (RoadDQValidityChecker) DataQueryValidityChecker
-//                        .makeDataQueryValidityChecker(mainView, 
-//                                combDataQuery.getSubRoadDQ());
-//        WeatherDQValidityChecker subWeatherDQVC = 
-//                (WeatherDQValidityChecker) DataQueryValidityChecker
-//                        .makeDataQueryValidityChecker(mainView, 
-//                                combDataQuery.getSubWeatherDQ());
-//        
-        
         return DQ_IS_VALID;
     }
 }

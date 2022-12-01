@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package fi.tuni.swdesign.group3.view;
 
 import java.util.ArrayList;
@@ -56,6 +52,10 @@ public class DataQueryPopulator {
      * A constant string representing daily values of month TreeItem.
      */
     private final static String PER_MONTH_VALUES = "Values per month";
+    /**
+     * A constant string representing the maintenance task checkbox "All";
+     */
+    private final static String ALL = "All";
     
     /**
      * An empty constructor.
@@ -98,16 +98,17 @@ public class DataQueryPopulator {
      */
     private static void populateRoadDataQuery(DataQuery dataQuery, TreeItem root) {
         RoadDataQuery query = (RoadDataQuery) dataQuery;
-        
+        // Checking the CheckBoxTree for selected parameters.
         for (var object : root.getChildren()) {
             TreeItem treeItem = (TreeItem) object;
             if (treeItem.getValue().equals(MAINTENANCE)) {
                 boolean isAllSelected = false;
                 ArrayList<String> selectedTasks = new ArrayList<>();
+                // Checking the maintenance tasks.
                 for (var taskObject : treeItem.getChildren()) {
                     TreeItem taskItem = (TreeItem) taskObject;
                     CheckBox taskBox = (CheckBox) taskItem.getValue();
-                    if (taskBox.getText().equals("All") & taskBox.isSelected()) {
+                    if (taskBox.getText().equals(ALL) & taskBox.isSelected()) {
                         isAllSelected = true;
                     }
                     if (taskBox.isSelected() | isAllSelected) {
@@ -120,9 +121,11 @@ public class DataQueryPopulator {
                 ArrayList<String> selectedForecasts = new ArrayList<>();
                 String forecastTime = EMPTY_STR;
                 for (var forecastObject : treeItem.getChildren()) {
+                    // Checking the condition forecasts.
                     TreeItem forecastItem = (TreeItem) forecastObject;
                     if (forecastItem.getValue().equals(FORECAST_TIME)) {
-                        TreeItem fcTimeItem = (TreeItem) forecastItem.getChildren().get(0);
+                        TreeItem fcTimeItem = 
+                                (TreeItem) forecastItem.getChildren().get(0);
                         HBox hBox = (HBox) fcTimeItem.getValue();
                         for (var node : hBox.getChildren()) {
                             RadioButton timeButton = (RadioButton) node;
@@ -153,11 +156,12 @@ public class DataQueryPopulator {
      */
     private static void populateWeatherDataQuery(DataQuery dataQuery, TreeItem root) {
         WeatherDataQuery query = (WeatherDataQuery) dataQuery;
-        
+        // Checking the CheckBoxTree for selected parameters.
         for (var object : root.getChildren()) {
             TreeItem treeItem = (TreeItem) object;
             if (treeItem.getValue().equals(OBSERVED_VALUES)) {
                 ArrayList<String> selectedObsParams = new ArrayList<>();
+                // Checking the observed values.
                 for (var paramObject : treeItem.getChildren()) {
                     TreeItem paramItem = (TreeItem) paramObject;
                     CheckBox paramBox = (CheckBox) paramItem.getValue();
@@ -169,6 +173,7 @@ public class DataQueryPopulator {
             }
             else if (treeItem.getValue().equals(PREDICTED_VALUES)) {
                 ArrayList<String> selectedPreParams = new ArrayList<>();
+                // Checking the predicted values.
                 for (var paramObject : treeItem.getChildren()) {
                     TreeItem paramItem = (TreeItem) paramObject;
                     CheckBox paramBox = (CheckBox) paramItem.getValue();
@@ -180,6 +185,7 @@ public class DataQueryPopulator {
             }
             else if (treeItem.getValue().equals(PER_MONTH_VALUES)) {
                 ArrayList<String> selectedPerMonthParams = new ArrayList<>();
+                // Checking the values per month.
                 for (var paramObject : treeItem.getChildren()) {
                     TreeItem paramItem = (TreeItem) paramObject;
                     CheckBox paramBox = (CheckBox) paramItem.getValue();
@@ -201,20 +207,19 @@ public class DataQueryPopulator {
      */
     private static void populateCombinedDataQuery(DataQuery dataQuery, TreeItem root) {
         CombinedDataQuery query = (CombinedDataQuery) dataQuery;
-        
+        // Initializing subDataQuerys.
         RoadDataQuery subRoadDataQuery = (RoadDataQuery) 
                 DataQueryFactory.makeDataQuery(ROAD_DATA);
         WeatherDataQuery subWeatherDataQuery = (WeatherDataQuery) 
                 DataQueryFactory.makeDataQuery(WEATHER_DATA);
-        
-        
-        
+        // Populating subDataQuerys.
         populateRoadDataQuery(subRoadDataQuery, root);
         populateWeatherDataQuery(subWeatherDataQuery, root);
         
         query.setSubRoadDQ(subRoadDataQuery);
         query.setSubWeatherDQ(subWeatherDataQuery);
         
+        // Storing the location/time parameters into the subDataQuerys as well.
         query.getSubRoadDQ().setLocation(query.getLocation());
         query.getSubRoadDQ().setTimelineStart(query.getTimelineStart());
         query.getSubRoadDQ().setTimelineEnd(query.getTimelineEnd());
@@ -222,13 +227,5 @@ public class DataQueryPopulator {
         query.getSubWeatherDQ().setLocation(query.getLocation());
         query.getSubWeatherDQ().setTimelineStart(query.getTimelineStart());
         query.getSubWeatherDQ().setTimelineEnd(query.getTimelineEnd());
-        
-//        query.setSelectedTasks(subRoadDataQuery.getSelectedTasks());
-//        query.setSelectedForecasts(subRoadDataQuery.getSelectedForecasts());
-//        query.setForecastTime(subRoadDataQuery.getForecastTime());
-//        
-//        query.setSelectedObsParams(subWeatherDataQuery.getSelectedObsParams());
-//        query.setSelectedPreParams(subWeatherDataQuery.getSelectedPreParams());
-//        query.setSelectedPerMonthParams(subWeatherDataQuery.getSelectedPerMonthParams());
     }
 }

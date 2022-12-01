@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package fi.tuni.swdesign.group3.view;
 
 /**
@@ -41,7 +37,7 @@ public abstract class DataQuery {
     
     /**
      * A getter-method for the data type of the query.
-     * @return 
+     * @return a string representing the type of data.
      */
     public String getDataType() {
         return this.dataType;
@@ -98,9 +94,4 @@ public abstract class DataQuery {
     public String[] getTimelineEnd() {
         return this.timelineEnd;
     }
-    
-    /**
-     * An abstract method for printing the contents of the query.
-     */
-    public abstract void testPrint();
 }

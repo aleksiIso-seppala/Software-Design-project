@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package fi.tuni.swdesign.group3.view;
 
 import javafx.scene.control.CheckBox;
@@ -11,7 +7,7 @@ import javafx.scene.control.TreeView;
 /**
  * A subclass of CheckBoxTreePopulator for populating the checkbox treeview in 
  * the WeatherDataTab.
- * @author Lauri
+ * @author Lauri Puoskari
  */
 public class WeatherDataCBTPopulator extends CheckBoxTreePopulator{
 
@@ -37,28 +33,27 @@ public class WeatherDataCBTPopulator extends CheckBoxTreePopulator{
         TreeItem perMonthItem = new TreeItem(VALUES_PER_MONTH);
         root.getChildren().addAll(observedItem, predictedItem, perMonthItem);
 
-        CheckBox averageTempBox = new CheckBox(AVG_TEMPERATURE);
-        CheckBox maxMinTempBox = new CheckBox(MAX_MIN_TEMPERATURE);
+        // Populating the Observed values item.
         CheckBox obsTempBox = new CheckBox(TEMPERATURE);
-        CheckBox preTempBox = new CheckBox(TEMPERATURE);
-        TreeItem averageTempItem = new TreeItem(averageTempBox);
-        TreeItem maxMinTempItem = new TreeItem(maxMinTempBox);
         TreeItem obsTempItem = new TreeItem(obsTempBox);
-        TreeItem preTempItem = new TreeItem(preTempBox);
-        observedItem.getChildren().add(obsTempItem);
-        predictedItem.getChildren().add(preTempItem);
-        perMonthItem.getChildren().addAll(averageTempItem, maxMinTempItem);
         CheckBox obsWindBox = new CheckBox(WIND_SPEED);
-        CheckBox preWindBox = new CheckBox(WIND_SPEED);
         TreeItem obsWindItem = new TreeItem(obsWindBox);
-        TreeItem preWindItem = new TreeItem(preWindBox);
-        observedItem.getChildren().add(obsWindItem);
-        predictedItem.getChildren().add(preWindItem);
-
         CheckBox obsCloudBox = new CheckBox(CLOUDINESS);
         TreeItem obsCloudItem = new TreeItem(obsCloudBox);
-        observedItem.getChildren().add(obsCloudItem);
+        observedItem.getChildren().addAll(obsTempItem, obsWindItem, obsCloudItem);
         
+        // Populating the Predicted values item.
+        CheckBox preTempBox = new CheckBox(TEMPERATURE);
+        TreeItem preTempItem = new TreeItem(preTempBox);
+        CheckBox preWindBox = new CheckBox(WIND_SPEED);
+        TreeItem preWindItem = new TreeItem(preWindBox);
+        predictedItem.getChildren().addAll(preTempItem, preWindItem);
+        
+        // Populating the Values per month item.
+        CheckBox averageTempBox = new CheckBox(AVG_TEMPERATURE);
+        TreeItem averageTempItem = new TreeItem(averageTempBox);
+        CheckBox maxMinTempBox = new CheckBox(MAX_MIN_TEMPERATURE);
+        TreeItem maxMinTempItem = new TreeItem(maxMinTempBox);
+        perMonthItem.getChildren().addAll(averageTempItem, maxMinTempItem);
     }
-    
 }

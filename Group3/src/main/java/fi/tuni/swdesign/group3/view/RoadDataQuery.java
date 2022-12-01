@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package fi.tuni.swdesign.group3.view;
 
 import java.util.ArrayList;
@@ -83,19 +79,5 @@ public class RoadDataQuery extends DataQuery {
      */
     public String getForecastTime() {
         return this.forecastTime;
-    }
-
-    /**
-     * A method for printing the contents of the query. Implements the abstract
-     * method of the class DataQuery.
-     */
-    @Override
-    public void testPrint() {
-        System.out.println(super.location + ": " + super.timelineStart[0] + " "
-            + super.timelineStart[1] + " - " + super.timelineEnd[0] + " "
-            + super.timelineEnd[1]);
-        System.out.println(this.selectedTasks);
-        System.out.println(this.selectedForecasts);
-        System.out.println(this.forecastTime);
     }
 }

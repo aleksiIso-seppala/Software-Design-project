@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package fi.tuni.swdesign.group3.view;
 
 import fi.tuni.swdesign.group3.*;
@@ -24,6 +20,14 @@ public abstract class DataVisualizer {
      * elements.
      */
     protected static final int V_GAP = 10;
+    /**
+     * A constant representing the index of the time.
+     */
+    protected static final int TIME_I = 0;
+    /**
+     * A constant representing the index of the date.
+     */
+    protected static final int DATE_I = 1;
     /**
      * A constant string used communicating to user that no data was found.
      */
@@ -153,6 +157,23 @@ public abstract class DataVisualizer {
      */
     protected static final String MAX_MIN_TEMPERATURE = "Max & min temperatures";
     /**
+     * A constant string representing the format in which the time and date of
+     * the data is to be shown.
+     */
+    protected static final String DATE_TIME_FORMAT = "HH.mm, dd.MM.uuuu";
+    /**
+     * A constant string representing a comma.
+     */
+    protected static final String COMMA = ",";
+    /**
+     * A constant string representing a space.
+     */
+    protected static final String SPACE = " ";
+    /**
+     * A constant string representing a colon.
+     */
+    protected static final String COLON = ":";
+    /**
      * The current instance of MainView.
      */
     protected MainView mainView;
@@ -176,21 +197,27 @@ public abstract class DataVisualizer {
             RoadData data, DataQuery query) {
         if (data instanceof RoadTrafficData roadTrafficData) {
             if (query instanceof CombinedDataQuery combinedDataQuery) {
-                return new RoadDataVisualizer(mainView, roadTrafficData, combinedDataQuery.getSubRoadDQ());
+                return new RoadDataVisualizer(mainView, roadTrafficData,
+                        combinedDataQuery.getSubRoadDQ());
             }
-            return new RoadDataVisualizer(mainView, roadTrafficData, (RoadDataQuery) query);
+            return new RoadDataVisualizer(mainView, roadTrafficData,
+                    (RoadDataQuery) query);
         }
         else if (data instanceof RoadWeatherData roadWeatherData) {
             if (query instanceof CombinedDataQuery combinedDataQuery) {
-                return new WeatherDataVisualizer(mainView, roadWeatherData, combinedDataQuery.getSubWeatherDQ());
+                return new WeatherDataVisualizer(mainView, roadWeatherData, 
+                        combinedDataQuery.getSubWeatherDQ());
             }
-            return new WeatherDataVisualizer(mainView, roadWeatherData, (WeatherDataQuery) query);
+            return new WeatherDataVisualizer(mainView, roadWeatherData, 
+                    (WeatherDataQuery) query);
         }
         else return null;
     }
     
     /**
      * An abstract method for visualizing the data.
+     * @param chartTabPane the TabPane in which the Tabs with the visualized data 
+     * will be added.
      */
     public abstract void visualizeData(TabPane chartTabPane);
 }

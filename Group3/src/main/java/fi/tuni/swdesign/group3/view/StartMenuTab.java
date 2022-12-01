@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package fi.tuni.swdesign.group3.view;
 
 import javafx.event.ActionEvent;
@@ -13,7 +9,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 
 /**
- * A class for a tab which contains the starting menu.
+ * A class for a tab which contains the start menu.
  * @author Lauri Puoskari
  */
 public class StartMenuTab extends Tab {
@@ -94,45 +90,55 @@ public class StartMenuTab extends Tab {
      * @param mainView the current instance of MainView.
      */
     public StartMenuTab(MainView mainView) {
+        // Initializing the Tab.
         super(START_MENU);
         this.setClosable(false);
-        
         this.mainView = mainView;
         
+        // Initializing the layout.
         GridPane gridPane = new GridPane();
         gridPane.setHgap(H_GAP);
         gridPane.setVgap(V_GAP);
+        gridPane.setAlignment(Pos.CENTER);
+        
+        // Initializing the welcome message.
         Label startMenuLabel = new Label(WELCOME_PROMPT);
         startMenuLabel.setFont(new Font(TITLE_FONT_SIZE));
-        gridPane.add(startMenuLabel, FIRST_COL, FIRST_ROW, COL_SPAN_OF_5, ROW_SPAN_OF_1);
+        
+        // Initilaizing the buttons.
         Button roadDataButton = new Button(ROAD_DATA);
         Button weatherDataButton = new Button(WEATHER_DATA);
         Button combinedDataButton = new Button(COMBINED_DATA);
-        gridPane.add(roadDataButton, FIRST_COL, SECOND_ROW);
-        gridPane.add(weatherDataButton, THIRD_COL, SECOND_ROW);
-        gridPane.add(combinedDataButton, FIFTH_COL, SECOND_ROW);
         roadDataButton.setMinWidth(BUTTON_WIDTH);
         weatherDataButton.setMinWidth(BUTTON_WIDTH);
         combinedDataButton.setMinWidth(BUTTON_WIDTH);
-        gridPane.setAlignment(Pos.CENTER);
+        
+        // Adding the visual components into the layout.
+        gridPane.add(startMenuLabel, FIRST_COL, FIRST_ROW, COL_SPAN_OF_5, ROW_SPAN_OF_1);
+        gridPane.add(roadDataButton, FIRST_COL, SECOND_ROW);
+        gridPane.add(weatherDataButton, THIRD_COL, SECOND_ROW);
+        gridPane.add(combinedDataButton, FIFTH_COL, SECOND_ROW);
         this.setContent(gridPane);
         
+        // Handling a click of the RoadData button.
         roadDataButton.setOnAction((ActionEvent t) -> {
             RoadDataTab roadDataTab = new RoadDataTab(StartMenuTab.this.mainView);
             StartMenuTab.this.getTabPane().getTabs().add(roadDataTab);
             StartMenuTab.this.getTabPane().getSelectionModel().select(roadDataTab);
         });
         
+        // Handling a click of the WeatherDataButton.
         weatherDataButton.setOnAction((ActionEvent t) -> {
             WeatherDataTab weatherDataTab = new WeatherDataTab(StartMenuTab.this.mainView);
             StartMenuTab.this.getTabPane().getTabs().add(weatherDataTab);
             StartMenuTab.this.getTabPane().getSelectionModel().select(weatherDataTab);
         });
         
+        // Handling a click of the CombinedDataButton.
         combinedDataButton.setOnAction((ActionEvent t) -> {
             CombinedDataTab combinedDataTab = new CombinedDataTab(StartMenuTab.this.mainView);
             StartMenuTab.this.getTabPane().getTabs().add(combinedDataTab);
             StartMenuTab.this.getTabPane().getSelectionModel().select(combinedDataTab);
         });
     }
-    }
+}
