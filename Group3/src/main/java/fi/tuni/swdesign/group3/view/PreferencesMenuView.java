@@ -4,17 +4,13 @@
  */
 package fi.tuni.swdesign.group3.view;
 
-import fi.tuni.swdesign.group3.RoadData;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
@@ -68,6 +64,9 @@ public class PreferencesMenuView {
     /**
      * A constant representing the lenght of a column span of two.
      */
+    
+    private final static int THIRD_ROW = 2;
+    
     private final static int COL_SPAN_OF_2 = 2;
     /**
      * A constant representing the lenght of a row span of one.
@@ -76,7 +75,23 @@ public class PreferencesMenuView {
     /**
      * A constant representing the font size of a title.
      */
-    private final static int TITLE_FONT_SIZE = 16;
+    private final static int TITLE_FONT_SIZE = 12;
+    
+    
+    private static final Pattern ASCII_PATTERN = Pattern.compile("\\p{ASCII}+");
+    
+    private final static String PREF_ID_PROMPT = "ID for the preference (ASCII)";
+    private final static String INVALID_ID = "Invalid ID!";
+    private final static String DQ_IS_VALID = "Data query is valid.";
+    private final static String INVALID_PARAMS = "Invalid parameters in DataTab!";
+    private final static String IOEX_OCCURRED = "IOException occurred!";
+    private final static String OK = "OK";
+    private final static String SAVE_OK = "Preferences successfully saved.";
+    private final static String NO_PREF_FOUND = "No preferences found.";
+    private final static String LOAD_OK = "Preferences successfully loaded.";
+    private final static String INVALID_MATCH = "Preferences and DataTab do not\nmatch!";
+    private final static String INVALID_TAB = "Invalid DataTab!";
+    
     /**
      * A constant string representing the title of the preferences menu.
      */
@@ -124,7 +139,7 @@ public class PreferencesMenuView {
         infoLabel.setFont(new Font(TITLE_FONT_SIZE));
         
         TextField prefIdField = new TextField();
-        prefIdField.setPromptText("ID for the preference");
+        prefIdField.setPromptText(PREF_ID_PROMPT);
         
         Button saveButton = new Button(SAVE);
         saveButton.setPrefWidth(SHORT_ELEMENT_WIDTH);
@@ -132,23 +147,23 @@ public class PreferencesMenuView {
         loadButton.setPrefWidth(SHORT_ELEMENT_WIDTH);
         gridPane.add(infoLabel, FIRST_COL, FIRST_ROW, 
                 COL_SPAN_OF_2, ROW_SPAN_OF_1);
-        gridPane.add(prefIdField, FIRST_COL, SECOND_ROW, 2, 1);
-        gridPane.add(saveButton, FIRST_COL, 2);
-        gridPane.add(loadButton, SECOND_COL, 2);
+        gridPane.add(prefIdField, FIRST_COL, SECOND_ROW, 
+                COL_SPAN_OF_2, ROW_SPAN_OF_1);
+        gridPane.add(saveButton, FIRST_COL, THIRD_ROW);
+        gridPane.add(loadButton, SECOND_COL, THIRD_ROW);
         Scene prefScene = new Scene(gridPane, MENU_WIDTH, MENU_HEIGHT);
         this.stage.setScene(prefScene);
         saveButton.requestFocus();
         
         saveButton.setOnAction((ActionEvent t) -> {
             String prefId = prefIdField.getText();
-            if (prefId.equals("")) {
-                infoLabel.setText("Invalid ID");
+            if (!ASCII_PATTERN.matcher(prefId).matches()) {
+                infoLabel.setText(INVALID_ID);
             }
             else {
-                String infoMessage = "";
+                String infoMessage;
                 DataTab dataTab = (DataTab) this.mainView.getTabPane()
                         .getSelectionModel().getSelectedItem();
-                
                 DataQuery query = DataQueryFactory.makeDataQuery(dataTab.getText());
                 DataQueryPopulator.populateDataQuery(query, 
                         dataTab.getLocationBox().getSelectionModel().getSelectedItem().toString(), 
@@ -160,38 +175,78 @@ public class PreferencesMenuView {
                 DataQueryValidityChecker dQChecker = 
                         DataQueryValidityChecker.makeDataQueryValidityChecker(this.mainView, query);
                 String dqValidity = dQChecker.checkDataQueryValidity();
-                if (!dqValidity.equals("Data query is valid.")) {
-                    infoMessage = "Invalid parameters!";
+                if (!dqValidity.equals(DQ_IS_VALID)) {
+                    infoMessage = INVALID_PARAMS;
                 }
                 else {
                     try {
                         infoMessage = this.mainView.getViewModel().savePreferences(query, prefId);
                     } catch (IOException ex) {
-                        infoMessage = "IOException occurred!";
+                        infoMessage = IOEX_OCCURRED;
                     }
                     
                 }
 
-                if (infoMessage.equals("OK")) {
-                    infoLabel.setText("Data successfully saved.");
+                if (infoMessage.equals(OK)) {
+                    infoMessage = SAVE_OK;
                 }
-                else {
-                    infoLabel.setText(infoMessage);
-                }
+                infoLabel.setText(infoMessage);
+                
             }
         });
         
         loadButton.setOnAction((ActionEvent t) -> {
-            boolean isLoadSuccessful = true;
-            try {
-                DataQuery query = this.mainView.getViewModel()
-                        .loadPreferences(prefIdField.getText());
-                DataTab dataTab = (DataTab) this.mainView.getTabPane()
-                        .getSelectionModel().getSelectedItem();
-                dataTab.updateParams(query);
-            } catch (IOException ex) {
-                isLoadSuccessful = false;
+            String infoMessage;
+            String prefId = prefIdField.getText();
+            if (!ASCII_PATTERN.matcher(prefId).matches()) {
+                infoMessage = INVALID_ID;
+            } 
+            else {
+                try {
+                    DataQuery query = this.mainView.getViewModel()
+                            .loadPreferences(prefIdField.getText());
+                    if (query == null) {
+                        infoMessage = NO_PREF_FOUND;
+                    }
+                    else {
+                        DataTab dataTab = (DataTab) this.mainView.getTabPane()
+                            .getSelectionModel().getSelectedItem();
+                        if (dataTab instanceof RoadDataTab) {
+                            if (query instanceof RoadDataQuery) {
+                                dataTab.updateParams(query);
+                                infoMessage = LOAD_OK;
+                            }
+                            else {
+                                infoMessage = INVALID_MATCH;
+                            }
+                        }
+                        else if (dataTab instanceof WeatherDataTab) {
+                            if (query instanceof WeatherDataQuery) {
+                                dataTab.updateParams(query);
+                                infoMessage = LOAD_OK;
+                            }
+                            else {
+                                infoMessage = INVALID_MATCH;
+                            }
+                        }
+                        else if (dataTab instanceof CombinedDataTab) {
+                            if (query instanceof CombinedDataQuery) {
+                                dataTab.updateParams(query);
+                                infoMessage = LOAD_OK;
+                            }
+                            else {
+                                infoMessage = INVALID_MATCH;
+                            }
+                        }
+                        else {
+                            infoMessage = INVALID_TAB;
+                        }
+                    }
+                } catch (IOException ex) {
+                    infoMessage = IOEX_OCCURRED;
+                }
             }
+            infoLabel.setText(infoMessage);
         });
     }
     

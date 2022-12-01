@@ -6,6 +6,7 @@ package fi.tuni.swdesign.group3.view;
 
 import fi.tuni.swdesign.group3.RoadData;
 import java.io.IOException;
+import java.util.regex.Pattern;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -25,7 +26,6 @@ import javafx.stage.Stage;
  * @author Lauri Puoskari
  */
 public class DataMenuView {
-
     /**
      * A constant representing the width of the menu.
      */
@@ -67,7 +67,28 @@ public class DataMenuView {
     /**
      * A constant string representing the prompt of giving the name of the dataset.
      */
-    private final static String DATASET_NAME_PROMPT = "Name of the dataset";
+    private final static String DATASET_ID_PROMPT = "ID of the dataset (ASCII)";
+    
+    private static final String EMPTY_STR = "";
+    private static final String INVALID_ID = "Invalid ID!";
+    private static final String IOEX_OCCURRED = "IOException occurred!";
+    private static final String SAVE_OK = "Data successfully saved.";
+    private static final String OK = "OK";
+    private static final String NO_DATA_FOUND = "No data found.";
+    private static final String TRAFFIC_MSG_AMOUNT = "Amount of traffic messages: " ;
+    private static final String LOAD_OK = "Data successfully loaded.";
+    
+    
+    private static final Pattern ASCII_PATTERN = Pattern.compile("\\p{ASCII}+");
+    
+    
+    
+    
+    
+    private static final int LARGE_FONT = 16;
+    
+    
+    
      /**
      * A constant representing the first row of a grid.
      */
@@ -128,9 +149,9 @@ public class DataMenuView {
         gridPane.setVgap(V_GAP);
         gridPane.setHgap(SHORT_H_GAP);
         Label infoLabel = new Label(SAVE_OR_LOAD);
-        infoLabel.setFont(new Font(16));
+        infoLabel.setFont(new Font(LARGE_FONT));
         TextField dataSetIdField = new TextField();
-        dataSetIdField.setPromptText(DATASET_NAME_PROMPT);
+        dataSetIdField.setPromptText(DATASET_ID_PROMPT);
         Button saveButton = new Button(SAVE);
         saveButton.setPrefWidth(SHORT_ELEMENT_WIDTH);
         Button loadButton = new Button(LOAD);
@@ -147,19 +168,20 @@ public class DataMenuView {
         
         saveButton.setOnAction((ActionEvent t) -> {
             String dataSetId = dataSetIdField.getText();
-            if (dataSetId.equals("")) {
-                infoLabel.setText("Invalid ID");
+            if (!ASCII_PATTERN.matcher(dataSetId).matches()) {
+                infoLabel.setText(INVALID_ID);
             }
             else {
-                String infoMessage = "";
-                Tab dataTab = this.mainView.getTabPane().getSelectionModel().getSelectedItem();
+                String infoMessage = EMPTY_STR;
+                Tab dataTab = this.mainView.getTabPane().getSelectionModel()
+                        .getSelectedItem();
                 if (dataTab instanceof RoadDataTab roadDataTab) {
                     try {
                         infoMessage = this.mainView.getViewModel()
                                 .saveData(dataSetId, roadDataTab.getRecentData(), 
                                         roadDataTab.getRecentQuery());
                     } catch (IOException ex) {
-                        infoMessage = "IOException occurred!";
+                        infoMessage = IOEX_OCCURRED;
                     }
                 }
                 else if (dataTab instanceof WeatherDataTab weatherDataTab) {
@@ -168,22 +190,23 @@ public class DataMenuView {
                                 .saveData(dataSetId, weatherDataTab.getRecentData(), 
                                         weatherDataTab.getRecentQuery());
                     } catch (IOException ex) {
-                        infoMessage = "IOException occurred!";
+                        infoMessage = IOEX_OCCURRED;
                     }
                 }
                 else if (dataTab instanceof CombinedDataTab combinedDataTab) {
                     try {
                         infoMessage = this.mainView.getViewModel()
-                                .saveData(dataSetId, combinedDataTab.getRecentRoadData(),
+                                .saveData(dataSetId, 
+                                        combinedDataTab.getRecentRoadData(),
                                         combinedDataTab.getRecentWeatherData(),
                                         combinedDataTab.getRecentQuery());
                     } catch (IOException ex) {
-                        infoMessage = "IOException occurred!";
+                        infoMessage = IOEX_OCCURRED;
                     }
                 }
 
-                if (infoMessage.equals("OK")) {
-                    infoLabel.setText("Data successfully saved.");
+                if (infoMessage.equals(OK)) {
+                    infoLabel.setText(SAVE_OK);
                 }
                 else {
                     infoLabel.setText(infoMessage);
@@ -193,28 +216,40 @@ public class DataMenuView {
         });
         
         loadButton.setOnAction((ActionEvent t) -> {
-            boolean isLoadSuccessful = true;
-            DataTab dataTab = (DataTab) this.mainView.getTabPane()
-                    .getSelectionModel().getSelectedItem();
+            String infoMessage;
             RoadData[] datas;
-            try {
-                datas = this.mainView.getViewModel().loadDataBase(dataSetIdField.getText());
-                DataQuery dataQuery = this.mainView.getViewModel()
-                        .loadPreferences(dataSetIdField.getText());
-                DataVisualizer dv1 = DataVisualizer
-                        .makeDataVisualizer(mainView, datas[0], dataQuery);
-                
-                if (datas.length > 1) {
-                    DataVisualizer dv2 = DataVisualizer
-                                .makeDataVisualizer(mainView, datas[1], dataQuery);
-                    this.showLoadedData(dataSetIdField.getText(), dataQuery, dv1, dv2);
+            String dataSetId = dataSetIdField.getText();
+            if (!ASCII_PATTERN.matcher(dataSetId).matches()) {
+                infoMessage = INVALID_ID;
+            } 
+            else {
+                try {
+                    datas = DataMenuView.this.mainView.getViewModel()
+                            .loadDataBase(dataSetId);
+                    DataQuery dataQuery = DataMenuView.this.mainView
+                            .getViewModel().loadPreferences(dataSetId);
+                    if (datas == null) {
+                        infoMessage = NO_DATA_FOUND;
+                    } else {
+                        DataVisualizer dv1 = DataVisualizer
+                                .makeDataVisualizer(mainView, datas[0], dataQuery);
+                        if (datas.length > 1) {
+                            DataVisualizer dv2 = DataVisualizer
+                                    .makeDataVisualizer(mainView, datas[1], 
+                                            dataQuery);
+                            DataMenuView.this
+                                    .showLoadedData(dataSetIdField.getText(), dv1, dv2);
+                        } else {
+                            DataMenuView.this
+                                    .showLoadedData(dataSetIdField.getText(), dv1);
+                        }
+                        infoMessage = LOAD_OK;
+                    }
+                }catch (IOException ex) {
+                    infoMessage = IOEX_OCCURRED;
                 }
-                else {
-                    this.showLoadedData(dataSetIdField.getText(), dataQuery, dv1);
-                }
-            } catch (IOException ex) {
-                isLoadSuccessful = false;
             }
+            infoLabel.setText(infoMessage);
         });
     }
     
@@ -225,21 +260,22 @@ public class DataMenuView {
         this.stage.show();
     }
     
-    private void showLoadedData(String dataSetId, DataQuery query, DataVisualizer... visualizers) {
+    private void showLoadedData(String dataSetId, DataVisualizer... visualizers) {
         TabPane chartTabPane = new TabPane();
         RoadDataVisualizer roadDV = null;
         WeatherDataVisualizer weatherDV = null;
         for (DataVisualizer visualizer : visualizers) {
             if (visualizer instanceof RoadDataVisualizer roadDataVisualizer) {
                 roadDV = roadDataVisualizer;
-            } else if (visualizer instanceof WeatherDataVisualizer weatherDataVisualizer) {
+            } else if (visualizer instanceof 
+                    WeatherDataVisualizer weatherDataVisualizer) {
                 weatherDV = weatherDataVisualizer;
             }
         }
-        Label trafficMsgLabel = new Label("");
+        Label trafficMsgLabel = new Label(EMPTY_STR);
         if (roadDV != null) {
             roadDV.visualizeData(chartTabPane);
-            trafficMsgLabel.setText("Amount of traffic messages: " 
+            trafficMsgLabel.setText(TRAFFIC_MSG_AMOUNT
                     + roadDV.getData().getNumberOfTrafficMessages());
             trafficMsgLabel.setAlignment(Pos.CENTER);
         }
@@ -248,10 +284,10 @@ public class DataMenuView {
         }
         Stage loadStage = new Stage();
         loadStage.initOwner(this.mainView.getStage());
-        loadStage.setTitle("Loaded data");
+        loadStage.setTitle(dataSetId);
         VBox vBox = new VBox();
         Label titleLabel = new Label(dataSetId);
-        titleLabel.setFont(new Font(16));
+        titleLabel.setFont(new Font(LARGE_FONT));
         titleLabel.setAlignment(Pos.CENTER);
         vBox.getChildren().addAll(titleLabel, chartTabPane, trafficMsgLabel);
         vBox.setAlignment(Pos.CENTER);

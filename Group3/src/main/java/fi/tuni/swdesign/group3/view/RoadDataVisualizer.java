@@ -5,14 +5,10 @@
 package fi.tuni.swdesign.group3.view;
 
 import fi.tuni.swdesign.group3.RoadTrafficData;
-import fi.tuni.swdesign.group3.RoadTrafficDataForecast;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 import javafx.geometry.Pos;
-import javafx.geometry.Side;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
@@ -110,9 +106,10 @@ public class RoadDataVisualizer extends DataVisualizer{
     
     
     /**
-     * A method for visualizing the data. Calls appropriate methods for visualizing
-     * different types of data. Overrides the abstract function of base class
-     * DataVisualizer.
+     * A method for visualizing the data.Calls appropriate methods for visualizing
+ different types of data. Overrides the abstract function of base class
+ DataVisualizer.
+     * @param chartTabPane
      */
     @Override
     public void visualizeData(TabPane chartTabPane) {
