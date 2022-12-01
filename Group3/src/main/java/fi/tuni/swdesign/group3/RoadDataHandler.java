@@ -852,7 +852,7 @@ public class RoadDataHandler {
                 
                 var combinedDataQuery = DataQueryFactory.makeDataQuery(dataType);
                 var weatherDataQuery = DataQueryFactory.makeDataQuery("Weather data");
-                var roadDataQuery = DataQueryFactory.makeDataQuery("Road Data");
+                var roadDataQuery = DataQueryFactory.makeDataQuery("Road data");
                 var castedweatherDQ = (WeatherDataQuery) weatherDataQuery;
                 var castedroadDQ = (RoadDataQuery) roadDataQuery;
                 
