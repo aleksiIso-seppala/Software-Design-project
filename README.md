@@ -42,13 +42,19 @@ Make sure you have Java JDK installed
 
 
 ### Installation
-1. Open commandline and navigate to wanted folder and clone this repository
+ 1. Open commandline and navigate to wanted folder and clone this repository
  ```sh
  cd /path/to/wantedfolder
  ```
  ```sh
  git clone git@course-gitlab.tuni.fi:comp-se-110-software-design_2022-2023/group-3.git nameyouwanttouse
  ```
+ 2. if you have the project supplied in a zip file place it to a wanted folder and unzip it with
+ ```sh
+ tar -xf archive.zip
+ ```
+ Or use the GUI to unzip the project
+
  3. Run the tests to check that everything is ok and compile the package
  ```sh
  mvn compile
@@ -57,7 +63,7 @@ Make sure you have Java JDK installed
  ```sh
  java -jar Group3/target/Group3-1.0.one-jar.jar
  ```
- Or open the project in your chosen IDE compatible with Java and Maven
+ Or open the project in your chosen IDE compatible with Java and Maven and press run project
 
 
 ## Usage
