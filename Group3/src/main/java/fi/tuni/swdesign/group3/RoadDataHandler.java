@@ -851,14 +851,29 @@ public class RoadDataHandler {
                 }
                 
                 var combinedDataQuery = DataQueryFactory.makeDataQuery(dataType);
+                var weatherDataQuery = DataQueryFactory.makeDataQuery("Weather data");
+                var roadDataQuery = DataQueryFactory.makeDataQuery("Road Data");
+                var castedweatherDQ = (WeatherDataQuery) weatherDataQuery;
+                var castedroadDQ = (RoadDataQuery) roadDataQuery;
+                
                 CombinedDataQuery castedData = (CombinedDataQuery) combinedDataQuery;
+                castedData.setSubRoadDQ(castedroadDQ);
+                castedData.setSubWeatherDQ(castedweatherDQ);
                 
                 castedData.setLocation(location);
+                castedData.setTimelineStart(timelineStart);
+                castedData.setTimelineEnd(timelineEnd);
+                
+                castedData.getSubRoadDQ().setLocation(location);
                 castedData.getSubRoadDQ().setTimelineStart(timelineStart);
-                castedData.getSubWeatherDQ().setTimelineEnd(timelineEnd);
+                castedData.getSubRoadDQ().setTimelineEnd(timelineEnd);
                 castedData.getSubRoadDQ().setSelectedTasks(tasksList);
                 castedData.getSubRoadDQ().setSelectedForecasts(ForecastsList);
                 castedData.getSubRoadDQ().setForecastTime(forecastTime);
+                
+                castedData.getSubWeatherDQ().setLocation(location);
+                castedData.getSubWeatherDQ().setTimelineStart(timelineStart);
+                castedData.getSubWeatherDQ().setTimelineEnd(timelineStart);
                 castedData.getSubWeatherDQ().setSelectedObsParams(obsList);
                 castedData.getSubWeatherDQ().setSelectedPreParams(preList);
                 castedData.getSubWeatherDQ().setSelectedPerMonthParams(preMonthList);
