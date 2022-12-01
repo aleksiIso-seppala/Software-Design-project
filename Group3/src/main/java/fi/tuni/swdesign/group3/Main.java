@@ -4,7 +4,7 @@ import fi.tuni.swdesign.group3.view.*;
 /**
  * One main to run them all, one main to find them, 
  * One main to bring them all and in to RoadCast bind them.
- * @author Amanda, Aleksi, Jukka Lauri
+ * @author Amanda, Aleksi, Jukka, Lauri
  */
 public class Main {
 
