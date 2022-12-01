@@ -575,6 +575,7 @@ public class RoadDataHandler {
      * Method for saving the preferences for data visualization from the GUI
      * @param dataQuery, object containing the preferences
      * @param datasetName, name for the file to save the preferences
+     * @return String with a message containing errors or success message
      * @throws IOException 
      */
     public String savePreferences(DataQuery dataQuery, String datasetName) throws IOException{
