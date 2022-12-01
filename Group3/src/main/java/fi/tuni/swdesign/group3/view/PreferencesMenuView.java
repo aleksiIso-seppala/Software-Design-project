@@ -161,7 +161,7 @@ public class PreferencesMenuView {
                         DataQueryValidityChecker.makeDataQueryValidityChecker(this.mainView, query);
                 String dqValidity = dQChecker.checkDataQueryValidity();
                 if (!dqValidity.equals("Data query is valid.")) {
-                    infoLabel.setText("Invalid parameters!");
+                    infoMessage = "Invalid parameters!";
                 }
                 else {
                     try {

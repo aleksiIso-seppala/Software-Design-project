@@ -6,10 +6,13 @@ package fi.tuni.swdesign.group3.view;
 
 import fi.tuni.swdesign.group3.RoadTrafficData;
 import fi.tuni.swdesign.group3.RoadWeatherData;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 
 /**
  * A subclass of DataTab for a tab in which the CombinedData parameters are set and
@@ -121,6 +124,56 @@ public class CombinedDataTab extends DataTab{
 
     @Override
     public void updateParams(DataQuery query) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        CombinedDataQuery combinedDQ = (CombinedDataQuery) query;
+        super.locationBox.getSelectionModel().select(combinedDQ.getLocation());
+        TreeItem root = this.checkBoxTree.getRoot();
+        for (Object object : root.getChildren()) {
+            TreeItem item = (TreeItem) object;
+            for (Object subObject : item.getChildren()) {
+                TreeItem subItem = (TreeItem) subObject;
+                if (item.getValue().equals("Maintenance")) {
+                    CheckBox taskBox = (CheckBox) subItem.getValue();
+                    if (combinedDQ.getSubRoadDQ().getSelectedTasks().contains(taskBox.getText())) {
+                        taskBox.setSelected(true);
+                    }
+                }
+                else if (item.getValue().equals("Condition forecast")) {
+                    if (subItem.getValue() instanceof CheckBox checkBox) {
+                        if (combinedDQ.getSubRoadDQ().getSelectedForecasts().contains(checkBox.getText())) {
+                            checkBox.setSelected(true);
+                        }
+                    }
+                    else {
+                        TreeItem toggleGroupItem = (TreeItem) subItem.getChildren().get(0);
+                        HBox hBox = (HBox) toggleGroupItem.getValue();
+                        for (var node : hBox.getChildren()) {
+                            RadioButton timeButton = (RadioButton) node;
+                            if (combinedDQ.getSubRoadDQ().getForecastTime().equals(timeButton.getText())) {
+                                timeButton.setSelected(true);
+                            }
+                        }
+                    }
+                }
+                if (item.getValue().equals("Observed values")) {
+                    CheckBox obsValueBox = (CheckBox) subItem.getValue();
+                    if (combinedDQ.getSubWeatherDQ().getSelectedObsParams().contains(obsValueBox.getText())) {
+                        obsValueBox.setSelected(true);
+                    }
+                }
+                if (item.getValue().equals("Predicted values")) {
+                    CheckBox preValueBox = (CheckBox) subItem.getValue();
+                    if (combinedDQ.getSubWeatherDQ().getSelectedPreParams().contains(preValueBox.getText())) {
+                        preValueBox.setSelected(true);
+                    }
+                }                
+                if (item.getValue().equals("Values per month")) {
+                    CheckBox dailyValueBox = (CheckBox) subItem.getValue();
+                    if (combinedDQ.getSubWeatherDQ().getSelectedPerMonthParams().contains(dailyValueBox.getText())) {
+                        dailyValueBox.setSelected(true);
+                    }
+                }
+            }
+            
+        }
     }
 }

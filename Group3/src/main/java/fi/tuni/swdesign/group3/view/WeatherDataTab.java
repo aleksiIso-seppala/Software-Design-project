@@ -5,11 +5,14 @@
 package fi.tuni.swdesign.group3.view;
 
 import fi.tuni.swdesign.group3.RoadWeatherData;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 
 /**
  * A subclass of DataTab for a tab in which the WeatherData parameters are set and
@@ -99,6 +102,33 @@ public class WeatherDataTab extends DataTab {
 
     @Override
     public void updateParams(DataQuery query) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        WeatherDataQuery weatherDQ = (WeatherDataQuery) query;
+        super.locationBox.getSelectionModel().select(weatherDQ.getLocation());
+        TreeItem root = this.checkBoxTree.getRoot();
+        for (Object object : root.getChildren()) {
+            TreeItem item = (TreeItem) object;
+            for (Object subObject : item.getChildren()) {
+                TreeItem subItem = (TreeItem) subObject;
+                if (item.getValue().equals("Observed values")) {
+                    CheckBox obsValueBox = (CheckBox) subItem.getValue();
+                    if (weatherDQ.getSelectedObsParams().contains(obsValueBox.getText())) {
+                        obsValueBox.setSelected(true);
+                    }
+                }
+                if (item.getValue().equals("Predicted values")) {
+                    CheckBox preValueBox = (CheckBox) subItem.getValue();
+                    if (weatherDQ.getSelectedPreParams().contains(preValueBox.getText())) {
+                        preValueBox.setSelected(true);
+                    }
+                }                
+                if (item.getValue().equals("Values per month")) {
+                    CheckBox dailyValueBox = (CheckBox) subItem.getValue();
+                    if (weatherDQ.getSelectedPerMonthParams().contains(dailyValueBox.getText())) {
+                        dailyValueBox.setSelected(true);
+                    }
+                }
+            }
+            
+        }
     }
 }

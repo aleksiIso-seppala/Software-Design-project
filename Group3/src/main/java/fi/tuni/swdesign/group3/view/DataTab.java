@@ -387,6 +387,7 @@ public abstract class DataTab extends Tab {
     
     /**
      * An abstract method for updating the visualization of the data.
+     * @param query
      * @param visualizers DataVisualizers used for visualizing the data.
      */
     public abstract void updateChart(DataQuery query, DataVisualizer... visualizers);
