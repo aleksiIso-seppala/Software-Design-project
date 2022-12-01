@@ -347,10 +347,10 @@ public class RoadDataHandler {
         }
         
         //saving preference
-        String errors = savePreferences(preference, datasetName);
-        if(!errors.equals("OK")){
-            return errors;
-        }
+//        String errors = savePreferences(preference, datasetName);
+//        if(!errors.equals("OK")){
+//            return errors;
+//        }
         gson.toJson(saveData, writer);
         writer.close();
         reader.close();
@@ -494,20 +494,25 @@ public class RoadDataHandler {
                 roadWeatherData.setMAXTemperature(MAXTemperaturee);
                 roadWeatherData.setMINTemperature(MINTemperature);
                 
-                JsonArray avgArray = roadData.getAsJsonArray("avgMonthlyTemp");
-                TreeMap<String, Float[]> avgMonthlyTemp = new TreeMap<>();
-                
-                for(var avgdata : avgArray){
-                    JsonObject avgO = (JsonObject) avgdata;
-                    String date = avgO.get("date").getAsString();
-                    float dailyAVG = avgO.get("dailyAVG").getAsFloat();
-                    float dailyMIN = avgO.get("dailyMIN").getAsFloat();
-                    float dailyMAX = avgO.get("dailyMAX").getAsFloat();
-                    
-                    Float[] floatList = {dailyAVG,dailyMIN,dailyMAX};
-                    avgMonthlyTemp.put(date, floatList);
+                //getting avg amounts for month
+                if(roadData.has("avgMonthlyTemp")){
+                    JsonArray avgArray = roadData.getAsJsonArray("avgMonthlyTemp");                    
+                    TreeMap<String, Float[]> avgMonthlyTemp = new TreeMap<>();
+
+                    for(var avgdata : avgArray){
+                        JsonObject avgO = (JsonObject) avgdata;
+                        String date = avgO.get("date").getAsString();
+                        float dailyAVG = avgO.get("dailyAVG").getAsFloat();
+                        float dailyMIN = avgO.get("dailyMIN").getAsFloat();
+                        float dailyMAX = avgO.get("dailyMAX").getAsFloat();
+
+                        Float[] floatList = {dailyAVG,dailyMIN,dailyMAX};
+                        avgMonthlyTemp.put(date, floatList);
+                    }
+                    roadWeatherData.setMonthlyAverage(avgMonthlyTemp);
                 }
-                roadWeatherData.setMonthlyAverage(avgMonthlyTemp);
+
+
                 
                 //getting forecast data
                 JsonArray forecastArray = roadData.getAsJsonArray("weatherForecasts");
@@ -804,6 +809,8 @@ public class RoadDataHandler {
                 castedData.setSelectedObsParams(obsList);
                 castedData.setSelectedPreParams(preList);
                 castedData.setSelectedPerMonthParams(preMonthList);
+                castedData.setTimelineStart(timelineStart);
+                castedData.setTimelineEnd(timelineEnd);
                 
                 return castedData;
                 
@@ -847,13 +854,16 @@ public class RoadDataHandler {
                 CombinedDataQuery castedData = (CombinedDataQuery) combinedDataQuery;
                 
                 castedData.setLocation(location);
+                castedData.getSubRoadDQ().setTimelineStart(timelineStart);
+                castedData.getSubWeatherDQ().setTimelineEnd(timelineEnd);
+                castedData.setTimelineEnd(timelineEnd);
                 castedData.getSubRoadDQ().setSelectedTasks(tasksList);
                 castedData.getSubRoadDQ().setSelectedForecasts(ForecastsList);
                 castedData.getSubRoadDQ().setForecastTime(forecastTime);
                 castedData.getSubWeatherDQ().setSelectedObsParams(obsList);
                 castedData.getSubWeatherDQ().setSelectedPreParams(preList);
                 castedData.getSubWeatherDQ().setSelectedPerMonthParams(preMonthList);
-                
+
                 return castedData;
             }
             
@@ -916,11 +926,11 @@ public class RoadDataHandler {
         RoadTrafficData roadData= test.fetchRoadData("Oulu");
         RoadWeatherData weatherData = test.fetchWeatherDataPast("Helsinki", "2022-11-28T14:00:00Z", "2022-11-29T14:00:00Z");
         test.saveDataBase(roadData, weatherData,null, "test2");
-//        var load = test.loadDataBase("test2");
-//        var weather2 = (RoadWeatherData) load[1];
-//        var road2 = (RoadTrafficData) load[0];
-//        test.saveDataBase(road2, weather2,null, "save3");
-          test.loadPreferences("test");
+        var load = test.loadDataBase("test2");
+        var weather2 = (RoadWeatherData) load[1];
+        var road2 = (RoadTrafficData) load[0];
+        test.saveDataBase(road2, weather2,null, "save3");
+//          test.loadPreferences("test");
         
 //        TreeMap<String, Float[]> monthlyData = test.fetchMonthlyAverages("Helsinki", "2022-11-30");
 //                monthlyData.entrySet().forEach(entry -> {
