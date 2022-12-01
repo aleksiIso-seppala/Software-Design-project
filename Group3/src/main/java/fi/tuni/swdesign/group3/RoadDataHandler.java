@@ -216,12 +216,7 @@ public class RoadDataHandler {
  * @param weatherData, weatherData object to be saved
  * @param preference, DataQyery object to be saved
  * @param datasetName, name of the dataset
-<<<<<<< HEAD
  * @return "OK" if it works, otherwise it returns an error message
-=======
- * @param preference, user GUI preferences
- * @return true if the saving was succesfull, false otherwise
->>>>>>> fdb9686a326be20f084f871a882f590aaf4cd607
  * @throws IOException 
  */
     public String saveDataBase(RoadTrafficData roadData,RoadWeatherData weatherData,
@@ -600,13 +595,8 @@ public class RoadDataHandler {
      * returns "OK" if the save was succesful, otherwise it returns the error message.
      * 
      * @param dataQuery, object containing the preferences
-<<<<<<< HEAD
      * @param datasetName the name of the dataset
      * @return a String containing the status of the save
-=======
-     * @param datasetName, name for the file to save the preferences
-     * @return String with a message containing errors or success message
->>>>>>> fdb9686a326be20f084f871a882f590aaf4cd607
      * @throws IOException 
      */
     public String savePreferences(DataQuery dataQuery, String datasetName) throws IOException{
