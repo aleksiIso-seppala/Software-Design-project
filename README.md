@@ -82,7 +82,7 @@ Make sure you have Java JDK installed
 
  Use the tabs to change the visualization
 
- ![predictedWeather.png](./Documents//Pictures/predictedWeather.png)
+ ![predictedWeather.png](/Documents//Pictures/predictedWeather.png)
 
  ![perMonth.png](./Documents//Pictures/perMonth.png)
 
