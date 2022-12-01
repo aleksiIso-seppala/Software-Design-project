@@ -823,13 +823,13 @@ public class RoadDataHandler {
 
                 JsonArray selectedPre = preferenceO.getAsJsonArray("selectedPreParams");
                 ArrayList<String> preList = new ArrayList<>();
-                for(var obs : selectedObs){
+                for(var obs : selectedPre){
                     preList.add(obs.getAsString());
                 }
                 
                 JsonArray selectedPreMonth = preferenceO.getAsJsonArray("selectedPreMonthParams");
                 ArrayList<String> preMonthList = new ArrayList<>();
-                for(var obs : selectedObs){
+                for(var obs : selectedPreMonth){
                     preMonthList.add(obs.getAsString());
                 }
                 
@@ -871,13 +871,13 @@ public class RoadDataHandler {
 
                 JsonArray selectedPre = preferenceO.getAsJsonArray("selectedPreParams");
                 ArrayList<String> preList = new ArrayList<>();
-                for(var obs : selectedObs){
+                for(var obs : selectedPre){
                     preList.add(obs.getAsString());
                 }
                 
                 JsonArray selectedPreMonth = preferenceO.getAsJsonArray("selectedPreMonthParams");
                 ArrayList<String> preMonthList = new ArrayList<>();
-                for(var obs : selectedObs){
+                for(var obs : selectedPreMonth){
                     preMonthList.add(obs.getAsString());
                 }
                 
