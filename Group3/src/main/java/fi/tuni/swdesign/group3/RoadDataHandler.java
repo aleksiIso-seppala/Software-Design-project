@@ -856,7 +856,6 @@ public class RoadDataHandler {
                 castedData.setLocation(location);
                 castedData.getSubRoadDQ().setTimelineStart(timelineStart);
                 castedData.getSubWeatherDQ().setTimelineEnd(timelineEnd);
-                castedData.setTimelineEnd(timelineEnd);
                 castedData.getSubRoadDQ().setSelectedTasks(tasksList);
                 castedData.getSubRoadDQ().setSelectedForecasts(ForecastsList);
                 castedData.getSubRoadDQ().setForecastTime(forecastTime);
