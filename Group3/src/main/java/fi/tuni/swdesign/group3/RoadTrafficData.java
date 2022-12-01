@@ -4,7 +4,6 @@
  */
 package fi.tuni.swdesign.group3;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -14,7 +13,6 @@ import java.util.HashMap;
  */
 public class RoadTrafficData extends RoadData{
     private HashMap<String,Integer> maintenanceTasks;
-    private ArrayList<String> trafficMessages;
     private int numberOfTrafficMessages;
     private double windSpeed;
     private String temperature;
@@ -33,7 +31,6 @@ public class RoadTrafficData extends RoadData{
     public RoadTrafficData(String location, String coordinates, String time){
         super(location, coordinates, time);
         this.maintenanceTasks = new HashMap<>();
-        this.trafficMessages = new ArrayList<>();
         this.forecasts = new HashMap<>();
     }
 
@@ -51,22 +48,6 @@ public class RoadTrafficData extends RoadData{
      */
     public void setMaintenanceTasks(HashMap<String,Integer> maintenanceTasks) {
         this.maintenanceTasks = maintenanceTasks;
-    }
-
-    /**
-     * Getter for the traffic messages
-     * @return ArrayList of the traffic messages
-     */
-    public ArrayList<String> getTrafficMessages() {
-        return trafficMessages;
-    }
-
-    /**
-     * Setter for the trafficmessages
-     * @param trafficMessages as an ArrayList of messages
-     */
-    public void setTrafficMessages(ArrayList<String> trafficMessages) {
-        this.trafficMessages = trafficMessages;
     }
 
     /**
