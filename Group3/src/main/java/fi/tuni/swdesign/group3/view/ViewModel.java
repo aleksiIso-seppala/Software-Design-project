@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.TreeMap;
 
 /**
@@ -125,6 +124,7 @@ public class ViewModel {
      * Method for saving data from GUI
      * @param id, name of the dataset to save
      * @param data, the object to save
+     * @param query, containing the prefences for GUI
      * @return true if saving was succesfull, false otherwise
      * @throws IOException 
      */
@@ -142,6 +142,7 @@ public class ViewModel {
      * @param id, name of the dataset to save
      * @param data1, RoadTrafficData object
      * @param data2, RoadWeatherData object
+     * @param query, containing the prefences for GUI
      * @return true if saving was succesfull, false otherwise
      * @throws IOException 
      */
@@ -162,6 +163,7 @@ public class ViewModel {
     /**
      * Method for saving the user GUI preferences
      * @param query, containing the preferences
+     * @param prefId, the name to save the preferences
      * @return true if saving was succesfull, false otherwise
      * @throws IOException 
      */
@@ -171,6 +173,7 @@ public class ViewModel {
     
     /**
      * Method for loading the user preferences from saved file
+     * @param prefId the name of the file to save to
      * @return the preferences in dataQuery object
      * @throws IOException 
      */
