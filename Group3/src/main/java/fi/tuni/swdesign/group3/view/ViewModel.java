@@ -61,11 +61,7 @@ public class ViewModel {
                     DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                     String dateQuery = LocalDate.parse(date, formatter).format(formatter2);
                     TreeMap<String, Float[]> avgs = model.getMonthlyAverages(query.location, dateQuery);
-                    data.setMonthlyAverage(avgs);
-                    
-                    data.getMonthylAverage().forEach((key, value) -> {
-                        System.out.println(key+":"+Arrays.toString(value));
-                    });
+                    data.setMonthlyAverage(avgs);              
                 }
                 
                 toReturn[0] = data;
@@ -96,12 +92,7 @@ public class ViewModel {
                     String dateQuery = LocalDate.parse(date, formatter).format(formatter2);
                     TreeMap<String, Float[]> avgs = model.getMonthlyAverages(query.location, dateQuery);
                     
-                    data2.setMonthlyAverage(avgs);
-                    
-                    data2.getMonthylAverage().forEach((key, value) -> {
-                        System.out.println(key+":"+Arrays.toString(value));
-                    });
-                    
+                    data2.setMonthlyAverage(avgs); 
                 }
                 
                 toReturn[0] = data;
