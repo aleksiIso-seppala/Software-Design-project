@@ -4,12 +4,18 @@
  */
 package fi.tuni.swdesign.group3.view;
 
+import fi.tuni.swdesign.group3.RoadData;
+import java.io.IOException;
+import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -123,21 +129,93 @@ public class DataMenuView {
         gridPane.setHgap(SHORT_H_GAP);
         Label infoLabel = new Label(SAVE_OR_LOAD);
         infoLabel.setFont(new Font(16));
-        TextField dataSetNameField = new TextField();
-        dataSetNameField.setPromptText(DATASET_NAME_PROMPT);
+        TextField dataSetIdField = new TextField();
+        dataSetIdField.setPromptText(DATASET_NAME_PROMPT);
         Button saveButton = new Button(SAVE);
         saveButton.setPrefWidth(SHORT_ELEMENT_WIDTH);
         Button loadButton = new Button(LOAD);
         loadButton.setPrefWidth(SHORT_ELEMENT_WIDTH);
         gridPane.add(infoLabel, FIRST_COL, FIRST_ROW, 
                 COL_SPAN_OF_2, ROW_SPAN_OF_1);
-        gridPane.add(dataSetNameField, FIRST_COL, SECOND_ROW, 
+        gridPane.add(dataSetIdField, FIRST_COL, SECOND_ROW, 
                 COL_SPAN_OF_2, ROW_SPAN_OF_1);
         gridPane.add(saveButton, FIRST_COL, THIRD_ROW);
         gridPane.add(loadButton, SECOND_COL, THIRD_ROW);
         Scene dataScene = new Scene(gridPane, MENU_WIDTH, MENU_HEIGHT);
         this.stage.setScene(dataScene);
         saveButton.requestFocus();
+        
+        saveButton.setOnAction((ActionEvent t) -> {
+            String dataSetId = dataSetIdField.getText();
+            if (dataSetId.equals("")) {
+                infoLabel.setText("Invalid ID");
+            }
+            else {
+                String infoMessage = "";
+                Tab dataTab = this.mainView.getTabPane().getSelectionModel().getSelectedItem();
+                if (dataTab instanceof RoadDataTab roadDataTab) {
+                    try {
+                        infoMessage = this.mainView.getViewModel()
+                                .saveData(dataSetId, roadDataTab.getRecentData(), 
+                                        roadDataTab.getRecentQuery());
+                    } catch (IOException ex) {
+                        infoMessage = "IOException occurred!";
+                    }
+                }
+                else if (dataTab instanceof WeatherDataTab weatherDataTab) {
+                    try {
+                        infoMessage = this.mainView.getViewModel()
+                                .saveData(dataSetId, weatherDataTab.getRecentData(), 
+                                        weatherDataTab.getRecentQuery());
+                    } catch (IOException ex) {
+                        infoMessage = "IOException occurred!";
+                    }
+                }
+                else if (dataTab instanceof CombinedDataTab combinedDataTab) {
+                    try {
+                        infoMessage = this.mainView.getViewModel()
+                                .saveData(dataSetId, combinedDataTab.getRecentRoadData(),
+                                        combinedDataTab.getRecentWeatherData(),
+                                        combinedDataTab.getRecentQuery());
+                    } catch (IOException ex) {
+                        infoMessage = "IOException occurred!";
+                    }
+                }
+
+                if (infoMessage.equals("OK")) {
+                    infoLabel.setText("Data successfully saved.");
+                }
+                else {
+                    infoLabel.setText(infoMessage);
+                }
+            }
+            
+        });
+        
+        loadButton.setOnAction((ActionEvent t) -> {
+            boolean isLoadSuccessful = true;
+            DataTab dataTab = (DataTab) this.mainView.getTabPane()
+                    .getSelectionModel().getSelectedItem();
+            RoadData[] datas;
+            try {
+                datas = this.mainView.getViewModel().loadDataBase(dataSetIdField.getText());
+                DataQuery dataQuery = this.mainView.getViewModel()
+                        .loadPreferences(dataSetIdField.getText());
+                DataVisualizer dv1 = DataVisualizer
+                        .makeDataVisualizer(mainView, datas[0], dataQuery);
+                
+                if (datas.length > 1) {
+                    DataVisualizer dv2 = DataVisualizer
+                                .makeDataVisualizer(mainView, datas[1], dataQuery);
+                    this.showLoadedData(dataSetIdField.getText(), dataQuery, dv1, dv2);
+                }
+                else {
+                    this.showLoadedData(dataSetIdField.getText(), dataQuery, dv1);
+                }
+            } catch (IOException ex) {
+                isLoadSuccessful = false;
+            }
+        });
     }
     
     /**
@@ -145,5 +223,40 @@ public class DataMenuView {
      */
     public void show() {
         this.stage.show();
+    }
+    
+    private void showLoadedData(String dataSetId, DataQuery query, DataVisualizer... visualizers) {
+        TabPane chartTabPane = new TabPane();
+        RoadDataVisualizer roadDV = null;
+        WeatherDataVisualizer weatherDV = null;
+        for (DataVisualizer visualizer : visualizers) {
+            if (visualizer instanceof RoadDataVisualizer roadDataVisualizer) {
+                roadDV = roadDataVisualizer;
+            } else if (visualizer instanceof WeatherDataVisualizer weatherDataVisualizer) {
+                weatherDV = weatherDataVisualizer;
+            }
+        }
+        Label trafficMsgLabel = new Label("");
+        if (roadDV != null) {
+            roadDV.visualizeData(chartTabPane);
+            trafficMsgLabel.setText("Amount of traffic messages: " 
+                    + roadDV.getData().getNumberOfTrafficMessages());
+            trafficMsgLabel.setAlignment(Pos.CENTER);
+        }
+        if (weatherDV != null) {
+            weatherDV.visualizeData(chartTabPane);
+        }
+        Stage loadStage = new Stage();
+        loadStage.initOwner(this.mainView.getStage());
+        loadStage.setTitle("Loaded data");
+        VBox vBox = new VBox();
+        Label titleLabel = new Label(dataSetId);
+        titleLabel.setFont(new Font(16));
+        titleLabel.setAlignment(Pos.CENTER);
+        vBox.getChildren().addAll(titleLabel, chartTabPane, trafficMsgLabel);
+        vBox.setAlignment(Pos.CENTER);
+        Scene scene = new Scene(vBox);
+        loadStage.setScene(scene);
+        loadStage.show();
     }
 }

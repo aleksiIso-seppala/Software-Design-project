@@ -119,19 +119,21 @@ public class WeatherDataVisualizer extends DataVisualizer{
     public RoadWeatherData getData() {
         return data;
     }
+
+    public WeatherDataQuery getQuery() {
+        return query;
+    }
     
     
     
     /**
-     * A method for visualizing the data. Calls appropriate methods for visualizing
-     * different types of data. Overrides the abstract function of base class
-     * DataVisualizer.
+     * A method for visualizing the data.Calls appropriate methods for visualizing
+ different types of data. Overrides the abstract function of base class
+ DataVisualizer.
+     * @param chartTabPane
      */
     @Override
-    public void visualizeData() {
-        DataTab dataTab = (DataTab) super.mainView.getTabPane().
-                getSelectionModel().getSelectedItem();
-        TabPane chartTabPane = dataTab.getChartTabPane();
+    public void visualizeData(TabPane chartTabPane) {
         if (!this.query.getSelectedObsParams().isEmpty()) {
             Tab observedTab = new Tab(OBSERVED_VALUES);
             observedTab.setContent(visualizeObservedValues());
