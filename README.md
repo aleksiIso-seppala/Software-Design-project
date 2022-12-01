@@ -67,32 +67,32 @@ Make sure you have Java JDK installed
  
  Start by selecting the data you want to view
  
- ![selectdata.png](./Documents//Pictures/selectdata.png)
+ ![selectdata.png](./Documents/Pictures/selectdata.png)
  
  Update parameters you want to be visualized, use the full date in dd.mm.yy format
  
- ![parameters.png](../Documents//Pictures/parameters.png)
+ ![parameters.png](./Documents/Pictures/parameters.png)
 
  Enjoy the visualization of either road conditions or weather data!
  If you are seeing NaN or empty visualization the data doesn't exist in FMI or Digitraffic
 
- ![road.png](../Documents//Pictures/road.png)
+ ![road.png](./Documents/Pictures/road.png)
 
- ![weather.png](../Documents//Pictures/weather.png)
+ ![weather.png](./Documents/Pictures/weather.png)
 
  Use the tabs to change the visualization
 
- ![predictedWeather.png](../Documents//Pictures/predictedWeather.png)
+ ![predictedWeather.png](./Documents/Pictures/predictedWeather.png)
 
- ![perMonth.png](./Documents//Pictures/perMonth.png)
+ ![perMonth.png](./Documents/Pictures/perMonth.png)
 
  You can also save and load data you've previously visualized
 
- ![save&load.png](./Documents//Pictures/save&load.png)
+ ![save&load.png](./Documents/Pictures/save&load.png)
 
  Also the visualization preferences can be saved or loaded
 
- ![dataPreferences.png](./Documents//Pictures/save&load.png)
+ ![dataPreferences.png](./Documents/Pictures/save&load.png)
  
 
 ## Contact
