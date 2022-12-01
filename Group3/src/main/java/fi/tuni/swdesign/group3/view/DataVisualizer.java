@@ -5,6 +5,7 @@
 package fi.tuni.swdesign.group3.view;
 
 import fi.tuni.swdesign.group3.*;
+import javafx.scene.control.TabPane;
 /**
  * An abstract base class for visualizing data using charts and tables.
  * @author Lauri Puoskari
@@ -133,7 +134,7 @@ public abstract class DataVisualizer {
      * A constant string representing weather value units used as a label for an
      * axis of a chart.
      */
-    protected static final String WEATHER_VALUE_AXIS_LABEL = "°C / m/s / cloud cover";
+    protected static final String WEATHER_VALUE_AXIS_LABEL = "°C / m/s";
     /**
      * A constant string representing daily values per month used as a title.
      */
@@ -142,7 +143,7 @@ public abstract class DataVisualizer {
      * A constant string representing a date used as a label for an axos of a 
      * chart.
      */
-    protected static final String DATE_AXIS_LABEL = "Date (dd.mm)";
+    protected static final String DATE_AXIS_LABEL = "Date (yyyy-mm-dd)";
     /**
      * A constant string representing average temperatures.
      */
@@ -191,5 +192,5 @@ public abstract class DataVisualizer {
     /**
      * An abstract method for visualizing the data.
      */
-    public abstract void visualizeData();
+    public abstract void visualizeData(TabPane chartTabPane);
 }

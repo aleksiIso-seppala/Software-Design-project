@@ -342,10 +342,54 @@ public abstract class DataTab extends Tab {
     public TabPane getChartTabPane() {
         return this.chartTabPane;
     }
+
+    public ChoiceBox getLocationBox() {
+        return locationBox;
+    }
+
+    public void setLocationBox(ChoiceBox locationBox) {
+        this.locationBox = locationBox;
+    }
+
+    public TextField getStartTimeField() {
+        return startTimeField;
+    }
+
+    public void setStartTimeField(TextField startTimeField) {
+        this.startTimeField = startTimeField;
+    }
+
+    public TextField getStartDateField() {
+        return startDateField;
+    }
+
+    public void setStartDateField(TextField startDateField) {
+        this.startDateField = startDateField;
+    }
+
+    public TextField getEndTimeField() {
+        return endTimeField;
+    }
+
+    public void setEndTimeField(TextField endTimeField) {
+        this.endTimeField = endTimeField;
+    }
+
+    public TextField getEndDateField() {
+        return endDateField;
+    }
+
+    public void setEndDateField(TextField endDateField) {
+        this.endDateField = endDateField;
+    }
+    
+    
     
     /**
      * An abstract method for updating the visualization of the data.
      * @param visualizers DataVisualizers used for visualizing the data.
      */
     public abstract void updateChart(DataQuery query, DataVisualizer... visualizers);
+    
+    public abstract void updateParams(DataQuery query);
 }
