@@ -28,6 +28,7 @@ public class CombinedDataTab extends DataTab{
     
     private RoadTrafficData recentRoadData;
     private RoadWeatherData recentWeatherData;
+    private CombinedDataQuery recentQuery;
     
     /**
      * A constructor in which the visual elements of the CombinedDataTab and its 
@@ -67,6 +68,20 @@ public class CombinedDataTab extends DataTab{
         return this.checkBoxTree.getRoot();
     }
 
+    public RoadTrafficData getRecentRoadData() {
+        return recentRoadData;
+    }
+
+    public RoadWeatherData getRecentWeatherData() {
+        return recentWeatherData;
+    }
+
+    public CombinedDataQuery getRecentQuery() {
+        return recentQuery;
+    }
+    
+    
+
     /**
      * A method for updating the data visualizations.Overrides the abstract
      * method in base class DataTab
@@ -86,13 +101,14 @@ public class CombinedDataTab extends DataTab{
             }
         }
         if (roadDV != null) {
-            roadDV.visualizeData();
+            roadDV.visualizeData(this.chartTabPane);
             this.recentRoadData = roadDV.getData();
         }
         if (weatherDV != null) {
-            weatherDV.visualizeData();
+            weatherDV.visualizeData(this.chartTabPane);
             this.recentWeatherData = weatherDV.getData();
         }
+        this.recentQuery = (CombinedDataQuery) query;
     }
     
     /**
@@ -101,5 +117,10 @@ public class CombinedDataTab extends DataTab{
      */
     public Label getTrafficMsgLabel() {
         return trafficMsgLabel;
+    }
+
+    @Override
+    public void updateParams(DataQuery query) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

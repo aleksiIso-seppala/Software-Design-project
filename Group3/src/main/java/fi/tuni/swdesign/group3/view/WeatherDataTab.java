@@ -23,6 +23,7 @@ public class WeatherDataTab extends DataTab {
     private TreeView checkBoxTree;
     
     private RoadWeatherData recentData;
+    private WeatherDataQuery recentQuery;
     
     /**
      * A constructor in which the visual elements of the WeatherDataTab and its 
@@ -57,6 +58,16 @@ public class WeatherDataTab extends DataTab {
         return this.checkBoxTree.getRoot();
     }
 
+    public RoadWeatherData getRecentData() {
+        return recentData;
+    }
+
+    public WeatherDataQuery getRecentQuery() {
+        return recentQuery;
+    }
+    
+    
+
     /**
      * A method for updating the data visualizations.Overrides the abstract
      * method in base class DataTab
@@ -73,8 +84,9 @@ public class WeatherDataTab extends DataTab {
 //                weatherDV.setObsTypesToVisualize(weatherDQ.getSelectedObsParams());
 //                weatherDV.setPreTypesToVisualize(weatherDQ.getSelectedPreParams());
 //                weatherDV.setPerMonthTypesToVisualize(weatherDQ.getSelectedPerMonthParams());
-                weatherDV.visualizeData();
+                weatherDV.visualizeData(this.chartTabPane);
                 this.recentData = weatherDV.getData();
+                this.recentQuery = weatherDV.getQuery();
             }
             else {
                 Tab noDataTab = new Tab("No data");
@@ -83,5 +95,10 @@ public class WeatherDataTab extends DataTab {
                 this.chartTabPane.getTabs().add(noDataTab);
             }
         
+    }
+
+    @Override
+    public void updateParams(DataQuery query) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

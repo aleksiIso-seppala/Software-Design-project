@@ -63,6 +63,7 @@ public class RoadDataParserJSON implements RoadDataParser{
      * The gathered data is put to an ArrayList with the Names of the possible
      * task names.
      * 
+     * @param textType type the parse the text to wanted format
      * @param response The starting point of the Json data Array
      * @return An ArrayList with all the names of the maintenance tasks
      */

@@ -102,6 +102,10 @@ public class RoadDataVisualizer extends DataVisualizer{
     public RoadTrafficData getData() {
         return data;
     }
+
+    public RoadDataQuery getQuery() {
+        return query;
+    }
     
     
     
@@ -111,10 +115,7 @@ public class RoadDataVisualizer extends DataVisualizer{
      * DataVisualizer.
      */
     @Override
-    public void visualizeData() {
-        DataTab dataTab = (DataTab) super.mainView.getTabPane().
-                getSelectionModel().getSelectedItem();
-        TabPane chartTabPane = dataTab.getChartTabPane();
+    public void visualizeData(TabPane chartTabPane) {
         if (!this.query.getSelectedTasks().isEmpty()) {
             Tab maintenanceTab = new Tab(MAINTENANCE_TASKS);
             if (this.data.getMaintenanceTasks() != null) {
@@ -141,7 +142,7 @@ public class RoadDataVisualizer extends DataVisualizer{
             }
             chartTabPane.getTabs().add(forecastTab);
         }
-        visualizeTrafficMsgs();
+//        visualizeTrafficMsgs();
         
     }
     
@@ -245,19 +246,19 @@ public class RoadDataVisualizer extends DataVisualizer{
         return forecastView;
     }
     
-    /**
-     * A method for visualizing the amount of traffic messages.
-     */
-    public void visualizeTrafficMsgs() {
-        if (super.mainView.getTabPane().getSelectionModel().getSelectedItem()
-                instanceof RoadDataTab rdTab) {
-            rdTab.getTrafficMsgLabel().setText(TRAFFIC_MSG_AMOUNT 
-                    + this.data.getNumberOfTrafficMessages());
-        }
-        else if (super.mainView.getTabPane().getSelectionModel().getSelectedItem()
-                instanceof CombinedDataTab cdTab) {
-            cdTab.getTrafficMsgLabel().setText(TRAFFIC_MSG_AMOUNT
-                    + this.data.getNumberOfTrafficMessages());
-        }
-    }
+//    /**
+//     * A method for visualizing the amount of traffic messages.
+//     */
+//    public void visualizeTrafficMsgs() {
+//        if (super.mainView.getTabPane().getSelectionModel().getSelectedItem()
+//                instanceof RoadDataTab rdTab) {
+//            rdTab.getTrafficMsgLabel().setText(TRAFFIC_MSG_AMOUNT 
+//                    + this.data.getNumberOfTrafficMessages());
+//        }
+//        else if (super.mainView.getTabPane().getSelectionModel().getSelectedItem()
+//                instanceof CombinedDataTab cdTab) {
+//            cdTab.getTrafficMsgLabel().setText(TRAFFIC_MSG_AMOUNT
+//                    + this.data.getNumberOfTrafficMessages());
+//        }
+//    }
 }
