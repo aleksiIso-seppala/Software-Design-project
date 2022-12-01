@@ -134,7 +134,7 @@ public class ViewModel {
         } else if (data instanceof RoadWeatherData roadWeatherData){
             return model.saveData(null, roadWeatherData, query, id);
         }
-        return "Error in ViewModel!";
+        return "No data to be saved!";
     }
     
     /**
@@ -147,7 +147,12 @@ public class ViewModel {
      * @throws IOException 
      */
     public String saveData(String id, RoadTrafficData data1, RoadWeatherData data2, DataQuery query) throws IOException{
-        return model.saveData(data1, data2, query, id);
+        if (data1 == null & data2 == null) {
+            return "No data to be saved!";
+        }
+        else {
+            return model.saveData(data1, data2, query, id);
+        }
     }
     
     /**
