@@ -308,19 +308,21 @@ public class RoadDataHandler {
             weatherPackage.addProperty("MAXTemperature",weatherData.getMAXTemperature());
             weatherPackage.addProperty("MINTemperature",weatherData.getMINTemperature());
             
-            JsonArray avgMonthlyTemp = new JsonArray();
-            for(var temp : weatherData.getMonthylAverage().entrySet()){
-                JsonObject tempO = new JsonObject();
-                tempO.addProperty("date",temp.getKey());
-                Float[] floatList = temp.getValue();
-                tempO.addProperty("dailyAVG",floatList[0].toString());
-                tempO.addProperty("dailyMIN",floatList[1].toString());
-                tempO.addProperty("dailyMAX",floatList[2].toString());
-
-                avgMonthlyTemp.add(tempO);
-            }
             
-            weatherPackage.add("avgMonthlyTemp", avgMonthlyTemp);
+            JsonArray avgMonthlyTemp = new JsonArray();
+            if(weatherData.getMonthylAverage() != null){
+                for(var temp : weatherData.getMonthylAverage().entrySet()){
+                    JsonObject tempO = new JsonObject();
+                    tempO.addProperty("date",temp.getKey());
+                    Float[] floatList = temp.getValue();
+                    tempO.addProperty("dailyAVG",floatList[0].toString());
+                    tempO.addProperty("dailyMIN",floatList[1].toString());
+                    tempO.addProperty("dailyMAX",floatList[2].toString());
+
+                    avgMonthlyTemp.add(tempO);
+                }
+                weatherPackage.add("avgMonthlyTemp", avgMonthlyTemp);                
+            }
             
             JsonArray weatherForecasts = new JsonArray();
             for(var forecast : weatherData.getForecasts().entrySet()){
@@ -911,9 +913,9 @@ public class RoadDataHandler {
     public static void main(String args[]) throws Exception{
         
         RoadDataHandler test = new RoadDataHandler();
-//        RoadTrafficData roadData= test.fetchRoadData("Oulu");
-//        RoadWeatherData weatherData = test.fetchWeatherDataPast("Helsinki", "2022-11-28T14:00:00Z", "2022-11-29T14:00:00Z");
-//        test.saveDataBase(roadData, weatherData,null, "test2");
+        RoadTrafficData roadData= test.fetchRoadData("Oulu");
+        RoadWeatherData weatherData = test.fetchWeatherDataPast("Helsinki", "2022-11-28T14:00:00Z", "2022-11-29T14:00:00Z");
+        test.saveDataBase(roadData, weatherData,null, "test2");
 //        var load = test.loadDataBase("test2");
 //        var weather2 = (RoadWeatherData) load[1];
 //        var road2 = (RoadTrafficData) load[0];
