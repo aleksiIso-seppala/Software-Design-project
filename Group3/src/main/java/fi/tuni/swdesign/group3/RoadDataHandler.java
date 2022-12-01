@@ -18,7 +18,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import fi.tuni.swdesign.group3.view.*;
-import java.util.Arrays;
 import java.util.TreeMap;
 
 /**
@@ -205,11 +204,19 @@ public class RoadDataHandler {
     }
     
 /**
- * Method for saving the database containing the weather and road data
- * @param roadData, roadData object
- * @param weatherData, weatherData object
+ * Method for saving the database containing the weather and road data, also contains 
+ * a function call to savePreferences() since they must be saved with the datasets
+ * <p>
+ * The DataQuery must not be null, but either of the RoadTrafficData or the 
+ * RoadWeatherData can be null if only one of those needs to be saved.
+ * Only if you want to save both the roadData and the weatherData do you need
+ * to input both of those parameters.
+ * 
+ * @param roadData, roadData object to be saved
+ * @param weatherData, weatherData object to be saved
+ * @param preference, DataQyery object to be saved
  * @param datasetName, name of the dataset
- * @return true if the saving was succesfull, false otherwise
+ * @return "OK" if it works, otherwise it returns an error message
  * @throws IOException 
  */
     public String saveDataBase(RoadTrafficData roadData,RoadWeatherData weatherData,
@@ -358,9 +365,18 @@ public class RoadDataHandler {
     }
     
 /**
- * Method for loading the database from a json file
+ * Method for loading the database from a json file. The function creates new RoadData
+ * Objects from the data in the json file. Has a parameter for the dataset
+ * name that was used when saving the database. If the name does not mactch, you
+ * will get a null value from the function.
+ * <p>
+ * The return value is a list with RoadData objects inside. If the saved data had
+ * both RoadWeatherData and RoadTrafficData, you will get both of them inside the list.
+ * otherwise you will get a list with only one RoadData object
+ * 
  * @param datasetName, name of the dataset to load
- * @return true if the loading was succesfull, false otherwise
+ * @return null value if unsuccesful, otherwise RoadData[] list containing the created
+ * objects
  * @throws IOException 
  */
     public RoadData[] loadDataBase(String datasetName) throws IOException{
@@ -572,8 +588,15 @@ public class RoadDataHandler {
     }
     
     /**
-     * Method for saving the preferences for data visualization from the GUI
+     * Method for saving the preferences for data visualization from the GUI. Creates
+     * a list to JsonFile so multiple datasets can be saved. Datasets are separated
+     * by the datasetName parameter.
+     * <p>
+     * returns "OK" if the save was succesful, otherwise it returns the error message.
+     * 
      * @param dataQuery, object containing the preferences
+     * @param datasetName the name of the dataset
+     * @return a String containing the status of the save
      * @throws IOException 
      */
     public String savePreferences(DataQuery dataQuery, String datasetName) throws IOException{
@@ -719,7 +742,15 @@ public class RoadDataHandler {
     }
     
     /**
-     * A method for loading the user preferences for GUI
+     * A method for loading the user preferences for GUI. LÖoads the preferences
+     * from the json file. Firstly checks if the datasetName matches anything
+     * in the json file.
+     * <p>
+     * Returns a null object if the loading was unsuccesful, otherwise returns the
+     * DataQuery object (which can be either RoadData, WeatherData or Combined Data
+     * object.
+     * 
+     * @param datasetName A string containing the name of the preference
      * @return DataQuery containing the preferences
      * @throws IOException 
      */
