@@ -46,7 +46,7 @@ public class ViewModel {
             case "Weather data" -> {
                 
                 String start = this.parseTime(query.getTimelineStart()[1], query.getTimelineStart()[0]);
-                String end = this.parseTime(query.getTimelineStart()[1], query.getTimelineStart()[0]);
+                String end = this.parseTime(query.getTimelineEnd()[1], query.getTimelineEnd()[0]);
                 
                 WeatherDataQuery wquery = (WeatherDataQuery)query;
                 
@@ -76,7 +76,7 @@ public class ViewModel {
                 CombinedDataQuery cbquery = (CombinedDataQuery) query;
                 
                 String start = this.parseTime(query.getTimelineStart()[1], query.getTimelineStart()[0]);
-                String end = this.parseTime(query.getTimelineStart()[1], query.getTimelineStart()[0]);
+                String end = this.parseTime(query.getTimelineEnd()[1], query.getTimelineEnd()[0]);
                 
                 RoadTrafficData data = model.getRoadTrafficData(cbquery.getLocation());
                 
