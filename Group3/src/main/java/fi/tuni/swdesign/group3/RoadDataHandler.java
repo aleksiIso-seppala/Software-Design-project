@@ -23,7 +23,7 @@ import java.util.TreeMap;
 /**
  * A class which handles the fetching and saving of data from the two different
  * APIs. Also provides the database for the program.
- * @author jukka
+ * @author jukka, Aleksi Iso-Seppälä
  */
 public class RoadDataHandler {
     private final HashMap<String, HashMap<String, ArrayList<RoadData>>> database;
