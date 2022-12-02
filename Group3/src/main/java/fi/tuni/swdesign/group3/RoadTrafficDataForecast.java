@@ -5,7 +5,7 @@
 package fi.tuni.swdesign.group3;
 
 /**
- *
+ * A subclass describing forecasts of roadtraffic
  * @author jukka
  */
 public class RoadTrafficDataForecast extends RoadTrafficData{

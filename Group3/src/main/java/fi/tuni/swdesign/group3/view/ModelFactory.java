@@ -1,9 +1,9 @@
 package fi.tuni.swdesign.group3.view;
 
 /**
- *
+ * Factory for Model classes
  * @author jukka
- * Factory for Models
+ * 
  */
 public class ModelFactory {
     private Model model;

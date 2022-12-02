@@ -1,9 +1,8 @@
 package fi.tuni.swdesign.group3.view;
 
 /**
- *
- * @author jukka
  * Factory class for viewModel
+ * @author jukka
  */
 public class ViewModelFactory {
     private final ViewModel viewModel;

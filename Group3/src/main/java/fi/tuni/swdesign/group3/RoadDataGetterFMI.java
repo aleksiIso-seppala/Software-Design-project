@@ -16,7 +16,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 /**
- *
+ * A class for getting weather data from Finnish meteorological institute API
  * @author Amanda Dieuaide
  */
 public class RoadDataGetterFMI implements RoadDataGetter {

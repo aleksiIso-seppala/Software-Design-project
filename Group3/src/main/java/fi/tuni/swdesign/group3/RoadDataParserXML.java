@@ -19,7 +19,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- *
+ * A class for parsing the weather data from Finnish meteorological institute API
  * @author Amanda Dieuaide
  */
 public class RoadDataParserXML implements RoadDataParser{

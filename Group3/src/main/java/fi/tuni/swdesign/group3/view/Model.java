@@ -6,7 +6,8 @@ import java.util.Collections;
 import java.util.TreeMap;
 
 /**
- *
+ * A class describing the model, which handles the domain logic between
+ * GUI and database
  * @author jukka
  */
 public class Model {

@@ -5,9 +5,8 @@
 package fi.tuni.swdesign.group3;
 
 /**
- *
- * @author jukka
  * An abstract class of RoadData. Extended by different under-modules.
+ * @author jukka
  */
 public abstract class RoadData {
     protected String location;
