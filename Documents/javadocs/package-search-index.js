@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"fi.tuni.swdesign.group3"},{"l":"fi.tuni.swdesign.group3.view"}];updateSearchResults();
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"fi.tuni.swdesign.group3"},{"l":"fi.tuni.swdesign.group3.api"},{"l":"fi.tuni.swdesign.group3.classes"},{"l":"fi.tuni.swdesign.group3.gui.model"},{"l":"fi.tuni.swdesign.group3.gui.view"},{"l":"fi.tuni.swdesign.group3.gui.viewModel"}];updateSearchResults();

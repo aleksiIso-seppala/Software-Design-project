@@ -1,2 +1,6 @@
 fi.tuni.swdesign.group3
-fi.tuni.swdesign.group3.view
+fi.tuni.swdesign.group3.api
+fi.tuni.swdesign.group3.classes
+fi.tuni.swdesign.group3.gui.model
+fi.tuni.swdesign.group3.gui.view
+fi.tuni.swdesign.group3.gui.viewModel
