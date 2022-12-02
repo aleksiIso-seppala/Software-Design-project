@@ -53,7 +53,6 @@ public class RoadDataGetterDigitraffic implements RoadDataGetter {
             gzipInput = new GZIPInputStream(con.getInputStream());
         }
         catch (IOException ex){
-            System.out.println("Something went wrong");
             return null;
         }
         InputStreamReader reader = new InputStreamReader(gzipInput, "UTF-8");
@@ -102,14 +101,7 @@ public class RoadDataGetterDigitraffic implements RoadDataGetter {
         try{
             gzipInput = new GZIPInputStream(con.getInputStream());
         }
-        catch(IOException ex){
-            int rCode = con.getResponseCode();
-            if(rCode == 200){
-                System.out.println("No maintenance tasks found.");
-            }
-            if(rCode == 400){
-                System.out.println("Invalid coordinates");
-            }    
+        catch(IOException ex){  
             return null;
         }
         InputStreamReader reader = new InputStreamReader(gzipInput, "UTF-8");
@@ -160,13 +152,6 @@ public class RoadDataGetterDigitraffic implements RoadDataGetter {
             gzipInput = new GZIPInputStream(con.getInputStream());           
         }
         catch(IOException ex){
-            int rCode = con.getResponseCode();
-            if(rCode == 200){
-                System.out.println("No Road Conditions found.");
-            }
-            if(rCode == 400){
-                System.out.println("Invalid coordinates");
-            }
             return null;
         }
         InputStreamReader reader = new InputStreamReader(gzipInput, "UTF-8");       
@@ -232,7 +217,6 @@ public class RoadDataGetterDigitraffic implements RoadDataGetter {
         }
         
         if(messageData.isEmpty()){
-            System.out.println("No traffic messages.");
             return null;
         }
         

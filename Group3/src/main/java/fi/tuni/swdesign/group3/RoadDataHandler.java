@@ -23,7 +23,7 @@ import java.util.TreeMap;
 /**
  * A class which handles the fetching and saving of data from the two different
  * APIs. Also provides the database for the program.
- * @author jukka
+ * @author jukka, Aleksi Iso-Seppälä
  */
 public class RoadDataHandler {
     private final HashMap<String, HashMap<String, ArrayList<RoadData>>> database;
@@ -74,7 +74,6 @@ public class RoadDataHandler {
             return data;
             
         } catch (IOException e){
-            System.out.print("error");
             return null;
         }
     }
@@ -100,7 +99,6 @@ public class RoadDataHandler {
             return data;
             
         } catch (IOException e){
-            System.out.println("error");
             return null;
         }
     }
@@ -124,7 +122,6 @@ public class RoadDataHandler {
                     loc.get(2).toString(), loc.get(0).toString(), time);
             return data;
         } catch (IOException e){
-            System.out.println("error");
             return null;
         }
     }
@@ -143,7 +140,6 @@ public class RoadDataHandler {
                             loc.get(3).toString(), "", "", time);
             return data;
         } catch (IOException e){
-            System.out.println("error");
             return null;
         }
     }
@@ -386,7 +382,6 @@ public class RoadDataHandler {
         Reader reader = Files.newBufferedReader(Paths.get(fileName));
         JsonArray response = gson.fromJson(reader, JsonArray.class);
         if(response == null){
-            System.out.println("no saved data was found");
             return null;
         }
         RoadData[] returnData = {null, null};
@@ -568,7 +563,6 @@ public class RoadDataHandler {
         reader.close();
         //no data matching the name
         if(returnData[0] == null && returnData[1] == null){
-            System.out.println("no data found");
             return null;
         }
         //roadTrafficData found
@@ -761,7 +755,6 @@ public class RoadDataHandler {
         Reader reader = Files.newBufferedReader(Paths.get(fileName));
         JsonArray response = gson.fromJson(reader, JsonArray.class);
         if(response == null){
-            System.out.println("no data was found.");
             return null;
         }
         for(var preference : response){
@@ -913,7 +906,6 @@ public class RoadDataHandler {
             }
             
         }
-        System.out.println("no data found with name");
         return null;
     }
     
@@ -937,7 +929,6 @@ public class RoadDataHandler {
             names = RoadDataParserJSON.readMaintenanceTaskNames(arr,"clean");
             return names;
         } catch (Exception e) {
-            System.out.println("Error in maintenanceTasknames");
         }
         return null;
     }
@@ -960,7 +951,6 @@ public class RoadDataHandler {
                             loc.get(3).toString(), parsed[0]+"-"+parsed[1]);
             return monthlyData;
         } catch (Exception e){
-            System.out.println("Error in monthlyAverages");
         }
         return null;
     }
