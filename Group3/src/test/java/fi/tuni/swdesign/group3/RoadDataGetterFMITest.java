@@ -4,6 +4,7 @@
  */
 package fi.tuni.swdesign.group3;
 
+import fi.tuni.swdesign.group3.api.RoadDataGetterFMI;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import org.junit.After;
@@ -12,7 +13,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.w3c.dom.Document;
 
 /**
  *

@@ -4,6 +4,13 @@
  */
 package fi.tuni.swdesign.group3;
 
+import fi.tuni.swdesign.group3.gui.view.DataQuery;
+import fi.tuni.swdesign.group3.gui.view.DataQueryFactory;
+import fi.tuni.swdesign.group3.gui.view.WeatherDataQuery;
+import fi.tuni.swdesign.group3.gui.view.CombinedDataQuery;
+import fi.tuni.swdesign.group3.gui.view.RoadDataQuery;
+import fi.tuni.swdesign.group3.classes.*;
+import fi.tuni.swdesign.group3.api.*;
 import com.google.gson.*;
 import com.google.gson.JsonArray;
 import java.util.List;
@@ -17,7 +24,6 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import fi.tuni.swdesign.group3.view.*;
 import java.util.TreeMap;
 
 /**

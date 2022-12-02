@@ -4,9 +4,8 @@
  */
 package fi.tuni.swdesign.group3;
 
-import com.google.gson.JsonArray;
+import fi.tuni.swdesign.group3.api.RoadDataGetterDigitraffic;
 import com.google.gson.JsonObject;
-import java.util.ArrayList;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

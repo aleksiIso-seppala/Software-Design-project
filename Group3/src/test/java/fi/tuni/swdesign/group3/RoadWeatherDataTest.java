@@ -4,7 +4,7 @@
  */
 package fi.tuni.swdesign.group3;
 
-import java.util.TreeMap;
+import fi.tuni.swdesign.group3.classes.RoadWeatherData;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

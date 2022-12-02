@@ -4,12 +4,12 @@
  */
 package fi.tuni.swdesign.group3;
 
-import fi.tuni.swdesign.group3.view.DataQuery;
+import fi.tuni.swdesign.group3.classes.RoadWeatherData;
+import fi.tuni.swdesign.group3.classes.RoadTrafficData;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.TreeMap;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

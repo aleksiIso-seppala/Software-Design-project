@@ -4,11 +4,12 @@
  */
 package fi.tuni.swdesign.group3;
 
-import com.google.gson.JsonArray;
+import fi.tuni.swdesign.group3.classes.RoadTrafficData;
+import fi.tuni.swdesign.group3.api.RoadDataGetterDigitraffic;
+import fi.tuni.swdesign.group3.api.RoadDataParserJSON;
 import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

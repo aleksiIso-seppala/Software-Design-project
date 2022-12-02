@@ -1,5 +1,5 @@
 package fi.tuni.swdesign.group3;
-import fi.tuni.swdesign.group3.view.*;
+import fi.tuni.swdesign.group3.gui.view.MainView;
 
 /**
  * One main to run them all, one main to find them, 

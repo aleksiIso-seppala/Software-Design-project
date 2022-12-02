@@ -4,6 +4,9 @@
  */
 package fi.tuni.swdesign.group3;
 
+import fi.tuni.swdesign.group3.classes.RoadWeatherData;
+import fi.tuni.swdesign.group3.api.RoadDataParserXML;
+import fi.tuni.swdesign.group3.api.RoadDataGetterFMI;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import static org.junit.Assert.*;
