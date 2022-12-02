@@ -80,25 +80,6 @@ public class RoadDataTab extends DataTab {
     public TreeItem getCbTreeRoot() {
         return this.checkBoxTree.getRoot();
     }
-
-    /**
-     * A method for updating the data visualizations.Overrides the abstract
-     * method in base class DataTab
-     * @param query the query used to fetch the data.
-     * @param visualizers the DataVisualizers used for the visualization.
-     */
-    @Override
-    public void updateChart(DataQuery query, DataVisualizer... visualizers) {
-        this.chartTabPane.getTabs().clear();
-        if (visualizers.length > 0) {
-            RoadDataVisualizer visualizer = (RoadDataVisualizer) visualizers[0];
-            visualizer.visualizeData(this.chartTabPane);
-            this.trafficMsgLabel.setText(TRAFFIC_MSG_AMOUNT 
-                    + visualizer.getData().getNumberOfTrafficMessages());
-            this.recentData = visualizer.getData();
-            this.recentQuery = visualizer.getQuery();
-        }
-    }
     
     /**
      * A getter-method for the traffic message label.
@@ -122,6 +103,25 @@ public class RoadDataTab extends DataTab {
      */
     public RoadDataQuery getRecentQuery() {
         return recentQuery;
+    }
+    
+    /**
+     * A method for updating the data visualizations.Overrides the abstract
+     * method in base class DataTab
+     * @param query the query used to fetch the data.
+     * @param visualizers the DataVisualizers used for the visualization.
+     */
+    @Override
+    public void updateChart(DataQuery query, DataVisualizer... visualizers) {
+        this.chartTabPane.getTabs().clear();
+        if (visualizers.length > 0) {
+            RoadDataVisualizer visualizer = (RoadDataVisualizer) visualizers[0];
+            visualizer.visualizeData(this.chartTabPane);
+            this.trafficMsgLabel.setText(TRAFFIC_MSG_AMOUNT 
+                    + visualizer.getData().getNumberOfTrafficMessages());
+            this.recentData = visualizer.getData();
+            this.recentQuery = visualizer.getQuery();
+        }
     }
 
     /**
