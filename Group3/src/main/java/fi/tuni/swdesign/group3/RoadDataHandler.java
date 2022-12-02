@@ -35,7 +35,7 @@ public class RoadDataHandler {
     public RoadDataHandler(){
         database = new HashMap<>();
         digiTraficLocations = new HashMap<>();
-        digiTraficLocations.put("Suomi", new ArrayList<>(List.of("19.1", "32", "59.1", "72")));
+        //digiTraficLocations.put("Suomi", new ArrayList<>(List.of("19.1", "32", "59.1", "72")));
         digiTraficLocations.put("Helsinki", new ArrayList<>(List.of("24.93545", "25", "60.16952", "61")));
         digiTraficLocations.put("Kuopio", new ArrayList<>(List.of("27.67703","28", "62.89238", "63")));
         digiTraficLocations.put("Oulu", new ArrayList<>(List.of("25.46816", "26", "65.01236", "66" )));
@@ -964,23 +964,5 @@ public class RoadDataHandler {
         }
         return null;
     }
-    
-    public static void main(String args[]) throws Exception{
-        
-        RoadDataHandler test = new RoadDataHandler();
-        RoadTrafficData roadData= test.fetchRoadData("Oulu");
-        RoadWeatherData weatherData = test.fetchWeatherDataPast("Helsinki", "2022-11-28T14:00:00Z", "2022-11-29T14:00:00Z");
-        test.saveDataBase(roadData, weatherData,null, "test2");
-        var load = test.loadDataBase("test2");
-        var weather2 = (RoadWeatherData) load[1];
-        var road2 = (RoadTrafficData) load[0];
-        test.saveDataBase(road2, weather2,null, "save3");
-//          test.loadPreferences("test");
-        
-//        TreeMap<String, Float[]> monthlyData = test.fetchMonthlyAverages("Helsinki", "2022-11-30");
-//                monthlyData.entrySet().forEach(entry -> {
-//            System.out.println(entry.getKey() + " " + Arrays.toString(entry.getValue()));
-//        });
-
-    }
 }
+

@@ -229,31 +229,4 @@ public class RoadDataParserXML implements RoadDataParser{
         
         return monthlyData;
     }
-
-    public static void main(String[] args) throws Exception {
-        //Test: Parsing Observed and Predicted Weather Data using data fetched by RoadDataGetterFMI
-        System.out.println("\nEx: Observed temperature, wind speed and cloudiness for the coordinate area [23,61,24,62] between 10am and 10pm on 2022-11-16 in 2h intervals");
-        org.w3c.dom.Document observationDOM = RoadDataGetterFMI.getDOMDocument("fmi::observations::weather::simple", "23", "61", "24", "62", "", "", "2022-11-16T10:00:00Z", "2022-11-16T22:00:00Z", "t2m,ws_10min,n_man,TA_PT1H_AVG,TA_PT1H_MAX,TA_PT1H_MIN");
-        RoadWeatherData test = getDOMParsedDocument(observationDOM, "Tampere", "23", "61", "24", "62", "", "", "2022-11-16T10:00:00Z");
-        if(test != null){
-            System.out.println(test.toString());
-            System.out.println(test.getForecasts());
-        }
-                
-        System.out.println("\nEx: Forecast for the temperature and the wind speed in 2h intervals for Tampere area (coordinates 61.49911 and 23.78712) for 30/11/2022 (! starting time has to be in the future else values are NaN) using the HARMONIE weather model");
-        org.w3c.dom.Document forecastDOM = RoadDataGetterFMI.getDOMDocument("fmi::forecast::harmonie::surface::point::simple", "", "", "", "", "61.49911", "23.78712", "2022-11-30T06:00:00Z", "2022-11-30T18:00:00Z", "temperature,windspeedms");
-        RoadWeatherData test2 = getDOMParsedDocument(forecastDOM, "Tampere", "", "", "", "", "61.49911", "23.78712", "2022-11-30T06:00:00Z");
-        if(test2 != null){
-            System.out.println(test2.toString());
-            System.out.println(test2.getForecasts());
-        }
-        
-        //Ex: Observed daily temperature for a whole month in a specific location
-        System.out.println("\nEx: Observed daily temperature for a whole month in a specific location");
-        TreeMap<String, Float[]> monthlyData = getMonthlyTemperatureData("Helsinki", "24.93545", "60.16952", "25", "61","2022-11");
-        monthlyData.entrySet().forEach(entry -> {
-            System.out.println(entry.getKey() + " " + Arrays.toString(entry.getValue()));
-        });
-        
-    }
 }
